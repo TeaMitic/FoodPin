@@ -1,0 +1,2 @@
+U bussines logic folderu se nalaze fajlovi sa funkcijama za obradu biznis logike
+U ovom folderu se nalaze dva podfoldera, za asinhronu i sinhronu komunikaciju. U njima se nalaze konkretni fajlovi za implementaciju biznis logike
