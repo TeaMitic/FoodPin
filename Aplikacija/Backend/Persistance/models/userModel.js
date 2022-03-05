@@ -18,7 +18,6 @@ neo4j.model('User', {
         type: 'string',
         required: true, // Creates an Exists Constraint in Enterprise mode
         unique: true,
-        indexed: true
     },
     password: 'string', // Simple schema definition of property : type
 
