@@ -1,4 +1,4 @@
-const  neo4j  = require('../../config/neo4j_config');
+const  neo4j  = require('../../config/neo4j-config');
 
 
 neo4j.model('User', {
@@ -10,6 +10,7 @@ neo4j.model('User', {
     },
     name: {
         type: 'string',
+        required: true
     },
     surname: {
         type: 'string',
@@ -20,7 +21,9 @@ neo4j.model('User', {
         unique: true,
     },
     password: {
-        type: 'string'
+        type: 'string',
+        required: true
+
     },
     email: { 
         type: 'string',
