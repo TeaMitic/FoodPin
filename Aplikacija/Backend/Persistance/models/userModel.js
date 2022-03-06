@@ -1,4 +1,4 @@
-const  neo4j  = require('../config/neo4j_config');
+const  neo4j  = require('../../config/neo4j_config');
 
 
 neo4j.model('User', {
@@ -19,6 +19,18 @@ neo4j.model('User', {
         required: true, // Creates an Exists Constraint in Enterprise mode
         unique: true,
     },
-    password: 'string', // Simple schema definition of property : type
+    password: {
+        type: 'string'
+    },
+    email: { 
+        type: 'string',
+        // unique: true
+    },
+    about: { 
+        type: 'string'
+    },
+    website: { 
+        type: 'string'
+    }
 
 });

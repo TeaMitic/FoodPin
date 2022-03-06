@@ -1,8 +1,8 @@
 const  neo4j  = require('../../config/neo4j_config');
 
 
-neo4j.model('Board', {
-    boardID: { 
+neo4j.model('Tag', {
+    tagID: { 
         primary: true,
         required: true,
         unique: true,
@@ -10,9 +10,7 @@ neo4j.model('Board', {
     },
     name: {
         type: 'string',
-        default: "Unnamed board"
-    },
-    public: { 
-        type: 'boolean'
+        required: true,
+        unique: true
     }
 });

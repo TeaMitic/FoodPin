@@ -1,4 +1,4 @@
-const  neo4j  = require('../config/neo4j_config');
+const  neo4j  = require('../../config/neo4j_config');
 
 
 neo4j.model('Recipe', {
@@ -8,13 +8,26 @@ neo4j.model('Recipe', {
         required: true,
         unique: true
     },
-    picture: { 
+    pictureName: { 
         type: "string",
+        required: true
+    },
+    title: {  
+        type: 'string',
+        required: true
     },
     description: { 
+        type: 'string'
+    },
+    instruction: { 
         type: "string",
     },
-    // tags : { //da necemo mozda da imamo i ove tagove kao pojedinacne objekte
-    //     type: Array
-    // }
+    ingredients: { 
+        type: 'string'
+    },
+    likes: { 
+        type: 'number',
+        default: 0
+    }
+    
 });

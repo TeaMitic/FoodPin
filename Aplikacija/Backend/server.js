@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 //jwt 
-const neo4j = require('./Persistance/config/neo4j_config');
+const neo4j = require('./config/neo4j_config');
 
 const user = require('./Api service/routes/user');
 const recipe = require('./Api service/routes/recipe');
