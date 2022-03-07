@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const resHelper = require('../Helper/responseHelper')
 
-const {getTokenID} = require('../config/token')
+const {getTokenID} = require('./token')
 const auth = (req, res, next) =>{
     if(req.headers ["authorization"] != "") {
         try{

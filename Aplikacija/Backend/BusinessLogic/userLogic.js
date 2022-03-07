@@ -1,5 +1,5 @@
 const   dataProvider  = require( '../Persistance/DataProvider/userDataProvider')
-const  token  = require('../config/token')
+const  token  = require('../middleware/token')
 const dtoHelper = require('../Helper/dtoHelper')
 const validation = require('../Helper/validation')
 
