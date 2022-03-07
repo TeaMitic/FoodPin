@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const resHelper = require('../Helper/responseHelper')
 
 const {getTokenID} = require('../config/token')
 const auth = (req, res, next) =>{
@@ -7,10 +8,10 @@ const auth = (req, res, next) =>{
             req.body.userID = getTokenID(req)
             next();
         }catch (error){
-            res.status(401).send("Error: Unauthorized user.")
+            resHelper.UnauthorizedResponse("Error: Unauthorized user.",res)
         }
     }else{
-        res.status(401).send("Error: Authorization header missing.")
+        resHelper.UnauthorizedResponse("Error: Authorization header missing.",res)
     }
 }
 module.exports = auth
