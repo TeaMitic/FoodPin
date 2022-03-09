@@ -6,7 +6,7 @@ const validation = require('../Helper/validation')
 const login_register = async(userInfo,func) => { 
     try {
         let result = await func(userInfo) 
-        if (result.successful) { 
+        if (result.success) { 
             let webToken = token.generateAccessToken(result.content)
             result.content = dtoHelper.attachToken(result.content,webToken)
         }
@@ -19,7 +19,7 @@ const login_register = async(userInfo,func) => {
 
 const registerUser = async (userInfo) => { 
     try {
-        let validateString = validation.login(userInfo) //same information are sent
+        let validateString = validation.forRegister(userInfo) //same information are sent
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation Failed",
@@ -35,7 +35,7 @@ const registerUser = async (userInfo) => {
 
 const loginUser = async(loginInfo) => { 
     try {
-        let validateString = validation.login(loginInfo)
+        let validateString = validation.forLogin(loginInfo)
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation Failed",
@@ -49,7 +49,24 @@ const loginUser = async(loginInfo) => {
     }
 }
 
+const getUserById = async(id) => { 
+    try {
+        let validateString = validation.forString(id)
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation Failed",
+                text: validateString
+            },false)         
+        }
+        return dataProvider.getUserById(id)
+    } catch (error) {
+        throw error
+    }
+
+}
+
 module.exports = { 
     registerUser,
-    loginUser
+    loginUser,
+    getUserById
 }

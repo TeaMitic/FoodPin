@@ -4,7 +4,7 @@ const resHelper = require('../../Helper/responseHelper')
 const  createUser = async (req,res) => { 
     try {
         let result = await logic.registerUser(req.body)
-        if (result.successful) { 
+        if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -20,7 +20,7 @@ const  createUser = async (req,res) => {
 const login = async(req,res) => { 
     try {
         let result = await logic.loginUser(req.body)
-        if (result.successful) { 
+        if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -32,7 +32,23 @@ const login = async(req,res) => {
     }
 }
 
+const getById = async(req,res) => { 
+    try {
+        let result = await logic.getUserById(req.params.id)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 module.exports = { 
     createUser,
-    login
+    login,
+    getById
 }

@@ -13,6 +13,7 @@ neo4j.model('Board', {
         default: "Unnamed board"
     },
     public: { 
-        type: 'boolean'
+        type: 'boolean',
+        default: false
     }
 });

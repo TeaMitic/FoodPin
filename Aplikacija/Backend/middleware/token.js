@@ -1,8 +1,7 @@
 
 const jwt = require("jsonwebtoken")
-
-
 let token_secret = "secretstringzajsonwebtoken"
+
 const generateAccessToken = (user) => { 
     return jwt.sign({ 
         username: user.username, 
@@ -13,20 +12,25 @@ const generateAccessToken = (user) => {
         expiresIn: '1800s'
     })
 }
-const getDecodedToken = (request) =>  { 
-    const token = request.headers["authorization"].split(' ')[1];        
-    decodedToken = jwt.verify(token,token_secret) 
-    return decodedToken
+const verifyToken = (request) =>  { 
+
+    const token = request.headers["authorization"]; 
+    try { 
+        let decodedToken = jwt.verify(token,token_secret) 
+        return true
+    }
+    catch(error) { 
+        return false
+    }
 }
-const getTokenID = (request) => { 
-    return getDecodedToken(request).id
-}
+
 
 
 
 
 module.exports = { 
     generateAccessToken,
-    getTokenID,
+    verifyToken
+    // getTokenID,
 }
 

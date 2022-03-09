@@ -1,13 +1,19 @@
 const jwt = require('jsonwebtoken')
 const resHelper = require('../Helper/responseHelper')
 
-const {getTokenID} = require('./token')
+const {verifyToken} = require('./token')
 const auth = (req, res, next) =>{
-    if(req.headers ["authorization"] != "") {
+    if(req.headers["authorization"] != "") {
         try{
-            req.body.userID = getTokenID(req)
-            next();
+            let verified = verifyToken(req)
+            if (verified) { 
+                next();
+            }
+            else { 
+                throw new Error("UnAuthorized error.")
+            }
         }catch (error){
+            console.log(error.message)
             resHelper.UnauthorizedResponse("Error: Unauthorized user.",res)
         }
     }else{

@@ -33,7 +33,7 @@ const login = async (userInfo) => {
                 text: `User with username '${userInfo.username}' doesn't exist.`
             },false)
         }
-        user = dtoHelper.userToJson(userDB)
+        let user = dtoHelper.userToJson(userDB)
         let result = await bcrypt.compare(userInfo.password, user.password)
         if (result) { 
             user = dtoHelper.shortUserToJson(userDB)
@@ -51,7 +51,26 @@ const login = async (userInfo) => {
     }
 }
 
+const getUserById = async (id) => {
+    try {
+        let userDB = await neo4j.model('User').find(id)
+        if (userDB) { 
+            let user = dtoHelper.noPasswordUser(userDB)
+            return dtoHelper.createResObject(user,true)
+        }
+        else { 
+            return dtoHelper.createResObject({ 
+                name: "Query error",
+                text: `User with username '${userInfo.username}' doesn't exist.`
+            })
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = { 
     register,
-    login
+    login,
+    getUserById
 }

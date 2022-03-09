@@ -9,9 +9,10 @@ module.exports = {
             userID: object.userID
         }
     },
-    attachToken(object, token) { 
-        object.token = token
-        return object
+    noPasswordUser(userModel) { 
+        let user = this.userToJson(userModel)
+        delete user.password 
+        return user
     },
     userToModel(userJson) { 
         return { 
@@ -24,9 +25,13 @@ module.exports = {
             website: userJson.website != undefined ? userJson.website : null,
         }
     },
+    attachToken(object, token) { 
+        object.token = token
+        return object
+    },
     createResObject(content,success) { 
         return {
-            successful: success,   
+            success: success,   
             content: content
         }
     }
