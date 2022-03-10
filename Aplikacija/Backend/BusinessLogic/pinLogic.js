@@ -1,6 +1,7 @@
 const dtoHelper = require("../Helper/dtoHelper")
 const dataProvider = require('../Persistance/DataProvider/pinDataProvider')
 const validation = require('../Helper/validation')
+
 const createPin = async (pinInfo) => { 
     try {
         let validateString = validation.forPin(pinInfo)

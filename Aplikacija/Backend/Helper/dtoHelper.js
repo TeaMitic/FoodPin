@@ -47,6 +47,16 @@ module.exports = {
     },
     pinToJson(pinModel) { 
         return  Object.fromEntries(pinModel._properties)
+    },
+    boardToModel(boardJson) { 
+        return { 
+            name: boardJson.boardName != undefined ? boardJson.boardName : null,
+            public: boardJson.public != undefined ? boardJson.public : null,
+        }
+    },
+    boardToJson(boardModel) { 
+        return  Object.fromEntries(boardModel._properties)
+
     }
 
 

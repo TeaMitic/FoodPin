@@ -22,7 +22,7 @@ const  register = async (userInfo) => {
         let result = await neo4j.writeCypher(`
             MATCH (u:User {username: '${userInfo.username}'}), (b:Board {name: 'All pins'})
             CREATE (u) -[:HAS_BOARD]-> (b)`
-            )
+        )
             neo4j.transaction()
         user = dtoHelper.shortUserToJson(userDB)
         return dtoHelper.createResObject(user,true)

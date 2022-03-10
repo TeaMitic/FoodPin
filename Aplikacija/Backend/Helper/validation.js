@@ -13,8 +13,8 @@ module.exports = {
         if (object.name == null || object.name == "") return "Name cannot be null or empty string."
         return 'ok'
     },
-    forString(word) { 
-        if (word == null || word == "") return "Value cannot be null or empty string."
+    forString(word, label) { 
+        if (word == null || word == "") return `Value of '${label}' cannot be null or empty string.`
         return "ok" 
     },
     forPin(object) { 
@@ -29,6 +29,12 @@ module.exports = {
         if (object.boardName == null || object.boardName == "") return "Board name  cannot null or be empty string."
         if (object.tags == undefined) return "Tags field not found."
         if (object.tags.length == 0) return "Tags field cannot be empty."
+        return "ok"
+    },
+    forBoard(object) { 
+        if (object.userID == undefined) return "UserID field not found."
+        if (object.userID == null || object.userID == "") return "UserID  cannot null or be empty string."
+       
         return "ok"
     }
 

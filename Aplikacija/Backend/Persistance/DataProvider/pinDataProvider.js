@@ -27,14 +27,14 @@ const createPin = async (pinInfo) => {
                 MATCH (p:Pin {pinID: '${pin.pinID}'})
                 WITH [${tags}] as tags,p
                 FOREACH (tag IN tags | MERGE (t:Tag {name: tag}) <-[:HAS]-(p))
-            `)
+        `)
 
         //create relationship with chosen board  - third
         result = await neo4j.writeCypher(`
                 MATCH (b:Board {name: '${boardName}'}) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}),
                       (p:Pin {pinID: '${pin.pinID}'})
                 CREATE (p)-[:BELONGS]->(b)
-            `)
+        `)
         return dtoHelper.createResObject({},true)
     } catch (error) {
         throw error
