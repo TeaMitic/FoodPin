@@ -2,14 +2,14 @@ const  neo4j  = require('../neo4j-config');
 
 
 
-neo4j.model('Recipe', {
-    recipeID: { 
+neo4j.model('Pin', {
+    pinID: { 
         type: 'uuid',
         primary: true,
         required: true,
         unique: true
     },
-    pictureName: { 
+    imgName: { 
         type: "string",
         required: true
     },

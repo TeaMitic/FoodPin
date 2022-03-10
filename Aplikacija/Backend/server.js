@@ -1,21 +1,18 @@
 const express = require('express');
 const cors = require('cors');
-//jwt 
 const neo4j = require('./Persistance/neo4j-config');
-
 const user = require('./ApiService/routes/user');
-// const recipe = require('./ApiService/routes/recipe');
+const pin = require('./ApiService/routes/pin');
 
 neo4j.withDirectory(__dirname + '\\Persistance\\neo4j-models');
 
 const app = express();
-
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 app.use(cors());
 
 app.use('/api/user',user);
-// app.use('/api/recipe',recipe);
+app.use('/api/pin',pin)
 
 
 /*koristiti neku od ovih funkcija samo kad je potrebno izmeniti schemu, u ostalim situacijama nema potrebe*/
@@ -28,3 +25,4 @@ app.use('/api/user',user);
 app.listen(5000,() => {
    console.log('Server is listening on port 5000...');
 });
+

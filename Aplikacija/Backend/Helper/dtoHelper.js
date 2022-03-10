@@ -34,7 +34,21 @@ module.exports = {
             success: success,   
             content: content
         }
+    },
+    pinToModel(pinJson) { 
+        return { 
+            imgName: pinJson.imgName != undefined ? pinJson.imgName : null,
+            title: pinJson.title != undefined ? pinJson.title : null,
+            description: pinJson.description != undefined ? pinJson.description : null,
+            instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
+            ingredients: pinJson.ingredients != undefined ? pinJson.ingredients : null,
+            likes: pinJson.likes != undefined ? pinJson.likes : null,
+        }
+    },
+    pinToJson(pinModel) { 
+        return  Object.fromEntries(pinModel._properties)
     }
+
 
     
 }

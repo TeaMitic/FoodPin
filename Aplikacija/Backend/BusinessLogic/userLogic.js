@@ -1,5 +1,5 @@
-const   dataProvider  = require( '../Persistance/DataProvider/userDataProvider')
-const  token  = require('../middleware/token')
+const dataProvider  = require( '../Persistance/DataProvider/userDataProvider')
+const token  = require('../middleware/token')
 const dtoHelper = require('../Helper/dtoHelper')
 const validation = require('../Helper/validation')
 
@@ -22,12 +22,12 @@ const registerUser = async (userInfo) => {
         let validateString = validation.forRegister(userInfo) //same information are sent
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
-                name: "Validation Failed",
+                name: "Validation failed",
                 text: validateString
             },false)   
         }
 
-        return login_register(userInfo,dataProvider.register)
+        return await login_register(userInfo,dataProvider.register)
     } catch (error) {
         throw error
     }
@@ -38,12 +38,12 @@ const loginUser = async(loginInfo) => {
         let validateString = validation.forLogin(loginInfo)
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
-                name: "Validation Failed",
+                name: "Validation failed",
                 text: validateString
             },false)   
         }
 
-        return login_register(loginInfo,dataProvider.login)
+        return await login_register(loginInfo,dataProvider.login)
     } catch (error) {
         throw error
     }
@@ -54,11 +54,11 @@ const getUserById = async(id) => {
         let validateString = validation.forString(id)
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
-                name: "Validation Failed",
+                name: "Validation failed",
                 text: validateString
             },false)         
         }
-        return dataProvider.getUserById(id)
+        return await dataProvider.getUserById(id)
     } catch (error) {
         throw error
     }

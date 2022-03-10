@@ -1,7 +1,7 @@
-const  logic = require('../../BusinessLogic/userLogic');
+const  logic = require('../../BusinessLogic/userLogic')
 const resHelper = require('../../Helper/responseHelper')
 
-const  createUser = async (req,res) => { 
+const  create = async (req,res) => { 
     try {
         let result = await logic.registerUser(req.body)
         if (result.success) { 
@@ -48,7 +48,7 @@ const getById = async(req,res) => {
 }
 
 module.exports = { 
-    createUser,
+    create,
     login,
     getById
 }

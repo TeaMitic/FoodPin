@@ -10,7 +10,8 @@ neo4j.model('Board', {
     },
     name: {
         type: 'string',
-        default: "Unnamed board"
+        default: "All pins"
+        
     },
     public: { 
         type: 'boolean',

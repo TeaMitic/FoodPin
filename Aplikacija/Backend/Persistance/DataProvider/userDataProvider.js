@@ -8,7 +8,7 @@ const  register = async (userInfo) => {
     try {
         userInfo = dtoHelper.userToModel(userInfo)
         let hashPassword = await bcrypt.hash(userInfo.password, saltRounds)
-        let user = await neo4j.model("User").create({
+        let userDB = await neo4j.model("User").create({
             name: userInfo.name,  
             surname: userInfo.surname,
             username: userInfo.username,
@@ -17,7 +17,14 @@ const  register = async (userInfo) => {
             about: userInfo.about,
             website: userInfo.website
         })
-        user = dtoHelper.shortUserToJson(user)
+        //creating All pins board 
+        let board = await neo4j.model('Board').create({public: false})
+        let result = await neo4j.writeCypher(`
+            MATCH (u:User {username: '${userInfo.username}'}), (b:Board {name: 'All pins'})
+            CREATE (u) -[:HAS_BOARD]-> (b)`
+            )
+            neo4j.transaction()
+        user = dtoHelper.shortUserToJson(userDB)
         return dtoHelper.createResObject(user,true)
     } catch (error) {
         throw error
