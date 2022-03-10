@@ -5,5 +5,9 @@ module.exports = {
             unwinded.push(`'${element}'`)
         });
         return unwinded
+    },
+    unwindSet(set) { 
+        return this.unwind(Array.from(set))
+
     }
 }

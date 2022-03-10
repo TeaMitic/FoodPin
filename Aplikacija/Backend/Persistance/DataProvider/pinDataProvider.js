@@ -12,18 +12,18 @@ const createPin = async (pinInfo) => {
         //     },
         //     tags: [tag,tag]
         // }
-        //extracting and preparing data 
+
         let userID = pinInfo.userID
         let pin = dtoHelper.pinToModel(pinInfo.pin)
         let boardName = pinInfo.boardName
-        let tags = arrayHelper.unwind(pinInfo.tags)
-
-
+        
+        
         //create pin - first 
         let pinDB = await neo4j.model('Pin').create(pin)
         pin = dtoHelper.pinToJson(pinDB)
-
+        
         //create relationship with tags - second 
+        let tags = arrayHelper.unwind(pinInfo.tags)
         let result = await neo4j.writeCypher(`
                 MATCH (p:Pin {pinID: '${pin.pinID}'})
                 WITH [${tags}] as tags,p
@@ -37,10 +37,14 @@ const createPin = async (pinInfo) => {
         // validation if wanted board exist in db can be avoided because we will show only existing boards
 
         //create relationship with chosen board  - third
+        let boards = new Set()
+        boards.add('All pins')
+        boards.add(boardName)
+        boards = arrayHelper.unwindSet(boards)
         result = await neo4j.writeCypher(`
                 MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}),
                 (p:Pin {pinID: '${pin.pinID}'})
-                WHERE b.name in ['${boardName}','All pins']
+                WHERE b.name in [${boards}]
                 WITH  b, p
                 CREATE (p)-[:BELONGS]->(b)
         `)
