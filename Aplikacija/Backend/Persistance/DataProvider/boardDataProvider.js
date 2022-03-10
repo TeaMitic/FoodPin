@@ -32,6 +32,35 @@ const createBoard = async (boardInfo) => {
     }
 }
 
+const updateBoard = async (boardInfo, boardID) => { 
+    try {
+        let board = dtoHelper.boardToModel(boardInfo)
+        let userID = boardInfo.userID
+        let userDB = await neo4j.model('User').find(userID)
+        if (!userDB) {
+            return dtoHelper.createResObject({
+                name: "Client error",
+                text: `User with id: '${userID}' doesn't exist in database.`
+            },false)
+        }
+        let boardDB = await neo4j.model('Board').find(boardID)
+        if (!boardDB) {
+            return dtoHelper.createResObject({
+                name: "Client error",
+                text: `Board with id: '${boardID}' doesn't exist in database.`
+            },false)
+        }
+        await boardDB.update({
+            public: board.public,
+            name: board.name
+        })
+        return dtoHelper.createResObject({},true)
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = { 
-    createBoard
+    createBoard,
+    updateBoard
 }
