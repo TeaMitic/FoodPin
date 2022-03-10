@@ -18,11 +18,12 @@ const  register = async (userInfo) => {
             website: userInfo.website
         })
         //creating All pins board 
-        let board = await neo4j.model('Board').create({public: false})
+        let boardDB = await neo4j.model('Board').create({public: false})
+        let board = dtoHelper.boardToJson(boardDB)
         let result = await neo4j.writeCypher(`
-            MATCH (u:User {username: '${userInfo.username}'}), (b:Board {name: 'All pins'})
+            MATCH (u:User {username: '${userInfo.username}'}), (b:Board {boardID: '${board.boardID}'})
             CREATE (u) -[:HAS_BOARD]-> (b)`
-            )
+        )
             neo4j.transaction()
         user = dtoHelper.shortUserToJson(userDB)
         return dtoHelper.createResObject(user,true)

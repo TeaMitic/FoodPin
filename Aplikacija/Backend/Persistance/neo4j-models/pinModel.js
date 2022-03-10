@@ -27,7 +27,7 @@ neo4j.model('Pin', {
         type: 'string'
     },
     likes: { 
-        type: 'number',
+        type: 'int',
         default: 0
     }
     

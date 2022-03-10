@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/authentication')
-const pin = require('../controllers/pinController');
+const board = require('../controllers/boardController');
 
-router.post('/',auth,pin.create);
-router.put('/like/:id',auth,pin.like)
-
+router.post('/',auth,board.create);
+router.put('/update/:id',auth,board.update)
 module.exports = router;

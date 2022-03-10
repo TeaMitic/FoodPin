@@ -51,7 +51,7 @@ const loginUser = async(loginInfo) => {
 
 const getUserById = async(id) => { 
     try {
-        let validateString = validation.forString(id)
+        let validateString = validation.forString(id, "ID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",

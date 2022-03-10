@@ -1,9 +1,8 @@
-const logic = require('../../BusinessLogic/pinLogic')
+const logic = require('../../BusinessLogic/boardLogic')
 const resHelper = require('../../Helper/responseHelper')
-
 const create = async (req,res) => { 
     try {
-        let result = await logic.createPin(req.body)
+        let result = await logic.createBoard(req.body)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -15,12 +14,11 @@ const create = async (req,res) => {
         console.log(error);
         resHelper.ErrorResponse(error,res)
     }  
-        
 }
 
-const like = async (req,res) => { 
+const update = async (req,res) => { 
     try {
-        let result = await logic.likePin(req.params.id)
+        let result = await logic.updateBoard(req.body,req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -29,12 +27,13 @@ const like = async (req,res) => {
             resHelper.BadRequestResponse(result.content,res)
         }
     } catch (error) {
-        console.log(error);
+        console.log(error)
         resHelper.ErrorResponse(error,res)
-    }  
+
+    }
 }
 
 module.exports = { 
     create,
-    like
+    update
 }

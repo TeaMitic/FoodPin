@@ -42,11 +42,21 @@ module.exports = {
             description: pinJson.description != undefined ? pinJson.description : null,
             instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
             ingredients: pinJson.ingredients != undefined ? pinJson.ingredients : null,
-            likes: pinJson.likes != undefined ? pinJson.likes : null,
+            likes: pinJson.likes != undefined ? pinJson.likes : 0,
         }
     },
     pinToJson(pinModel) { 
         return  Object.fromEntries(pinModel._properties)
+    },
+    boardToModel(boardJson) { 
+        return { 
+            name: boardJson.boardName != undefined ? boardJson.boardName : null,
+            public: boardJson.public != undefined ? boardJson.public : null,
+        }
+    },
+    boardToJson(boardModel) { 
+        return  Object.fromEntries(boardModel._properties)
+
     }
 
 
