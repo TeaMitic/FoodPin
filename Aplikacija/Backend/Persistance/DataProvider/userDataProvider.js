@@ -68,7 +68,24 @@ const getUserById = async (id) => {
         else { 
             return dtoHelper.createResObject({ 
                 name: "Query error",
-                text: `User with username '${userInfo.username}' doesn't exist.`
+                text: `User doesn't exist.`
+            })
+        }
+    } catch (error) {
+        throw error
+    }
+}
+const followUser= async(ids)=>{ 
+    try {
+        let currentDB = await neo4j.model('User').find(ids.currentUser)
+        let followedDB = await neo4j.model('User').find(ids.followedUser)
+        if(currentDB){
+            
+        }
+        else { 
+            return dtoHelper.createResObject({ 
+                name: "Query error",
+                text: `User doesn't exist.`
             })
         }
     } catch (error) {
@@ -79,5 +96,6 @@ const getUserById = async (id) => {
 module.exports = { 
     register,
     login,
-    getUserById
+    getUserById,
+    followUser
 }
