@@ -31,10 +31,9 @@ const createPin = async (pinInfo) => {
                     MERGE  (t:Tag {name: tag})
                     CREATE (t) <-[:HAS]-(p))
         `)
-                    // WITH t
-                    // MERGE (t) <-[:HAS]-(p))
 
-        // validation if wanted board exist in db can be avoided because we will show only existing boards
+
+        // validation wheter wanted board exist in db can be avoided because we will show only existing boards
 
         //create relationship with chosen board  - third
         let boards = new Set()
@@ -54,6 +53,26 @@ const createPin = async (pinInfo) => {
     }
 }
 
+
+const likePin = async (pinID) => { 
+    try {
+        let pinDB = await neo4j.model('Pin').find(pinID)
+        if (!pinDB) { 
+            return dtoHelper.createResObject({
+                name: "Client error",
+                text: `Pin with id: '${pinID}' doesn't exist in database.`
+            },false)
+        }
+        let pin = dtoHelper.pinToJson(pinDB) 
+        await pinDB.update({
+            likes:  +pin.likes + 1
+        })
+        return dtoHelper.createResObject({},true)
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
-    createPin
+    createPin,
+    likePin
 }
