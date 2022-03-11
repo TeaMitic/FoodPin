@@ -59,6 +59,12 @@ module.exports = {
             text: `You already have board with name '${boardName}'.`
         }
     },
+    LoginError(property) { 
+        return { 
+            name: "Login error",
+            text: `Wrong ${property}.`
+        }
+    }
     
 
 }

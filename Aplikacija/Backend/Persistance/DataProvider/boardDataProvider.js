@@ -4,7 +4,6 @@ const neo4j = require("../neo4j-config")
 const createBoard = async (boardInfo) => { 
     try {
         // boardInfo = { 
-        //     userID: string,
         //     boardName: string,
         //     public: bool
         // }

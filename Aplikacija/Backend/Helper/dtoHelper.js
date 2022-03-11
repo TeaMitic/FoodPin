@@ -2,11 +2,10 @@ module.exports = {
     userToJson(userModel) {
         return Object.fromEntries(userModel._properties)
     },
-    shortUserToJson(userModel) { 
-        let object = this.userToJson(userModel)
+    shortUserToJson(userJson) { 
         return { 
-            username: object.username,
-            userID: object.userID
+            username: userJson.username,
+            userID: userJson.userID
         }
     },
     noPasswordUser(userModel) { 

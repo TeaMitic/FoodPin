@@ -1,16 +1,16 @@
-const dataProvider  = require( '../Persistance/DataProvider/userDataProvider')
+const userDataProvider  = require( '../Persistance/DataProvider/userDataProvider')
+const resHelper = require('../Helper/responseHelper')
 const token  = require('../middleware/token')
 const dtoHelper = require('../Helper/dtoHelper')
 const validation = require('../Helper/validation')
+const boardLogic = require('./boardLogic')
 
-const login_register = async(userInfo,func) => { 
+const attachToken = (userInfo) => { 
     try {
-        let result = await func(userInfo) 
-        if (result.success) { 
-            let webToken = token.generateAccessToken(result.content)
-            result.content = dtoHelper.attachToken(result.content,webToken)
-        }
-        return result
+        let webToken = token.generateAccessToken(userInfo)
+        userInfo = dtoHelper.attachToken(userInfo,webToken)
+        
+        return userInfo
         
     } catch (error) {
         throw error
@@ -19,15 +19,33 @@ const login_register = async(userInfo,func) => {
 
 const registerUser = async (userInfo) => { 
     try {
-        let validateString = validation.forRegister(userInfo) //same information are sent
+        //validation
+        let validateString = validation.forRegister(userInfo) 
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
                 text: validateString
             },false)   
         }
-
-        return await login_register(userInfo,dataProvider.register)
+        //user creation
+        let user = await userDataProvider.create(userInfo) 
+        if (!user) { 
+            throw new Error("Couldn't create user account.")
+        }
+        user = dtoHelper.shortUserToJson(user)
+        //creating All pins board - default board 
+        let result = await boardLogic.createBoard({
+            userID: user.userID,
+            boardName: 'All pins',
+            public: false
+        })
+        if (result.success) { 
+            return dtoHelper.createResObject(
+                attachToken(user),
+                true
+            ) 
+        }
+        return result //returnig error object 
     } catch (error) {
         throw error
     }
@@ -43,7 +61,25 @@ const loginUser = async(loginInfo) => {
             },false)   
         }
 
-        return await login_register(loginInfo,dataProvider.login)
+        let user = await userDataProvider.getUserByUsername(loginInfo.username)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.LoginError("username"),
+                false
+            )
+        }
+        let correctPass = await bcrypt.compare(userInfo.password, user.password)
+        if (correctPass) { 
+            user = dtoHelper.shortUserToJson(user)
+            user = attachToken(user)
+            return dtoHelper.createResObject(user,true)
+        }
+        else { 
+            return dtoHelper.createResObject(
+                resHelper.LoginError("password"),
+                false
+            )
+        }
     } catch (error) {
         throw error
     }
