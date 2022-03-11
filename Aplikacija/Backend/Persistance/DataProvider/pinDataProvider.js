@@ -91,10 +91,54 @@ const likePin = async (pinID) => {
         throw error
     }
 }
+const updatePin= async(pinID, pin)=>{
+    try {
+        let pinDB = await neo4j.model('Pin').find(pinID)
+        if (!pinDB) { 
+            return dtoHelper.createResObject({
+                name: "Client error",
+                text: `Pin with id: '${pinID}' doesn't exist in database.`
+            },false)
+        }
+        await pinDB.update({
+            imgName: pin.imgName,
+            title: pin.title,
+            description: pin.description,
+            instruction: pin.instruction,
+            ingredients: pin.ingredients
+        })
+        return dtoHelper.createResObject({},true)
+        
+    } catch (error) {
+        throw error
+    }
+}
+const dislikePin = async(pinID)=>{
+    try {
+        let pinDB = await neo4j.model('Pin').find(pinID)
+        if (!pinDB) { 
+            return dtoHelper.createResObject({
+                name: "Client error",
+                text: `Pin with id: '${pinID}' doesn't exist in database.`
+            },false)
+        }
+        let pin = dtoHelper.pinToJson(pinDB) 
+        await pinDB.update({
+            likes:  +pin.likes - 1
+        })
+        return dtoHelper.createResObject({},true)
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = { 
     createPin,
     likePin,
     connectWithTags,
     deletePin,
-    connectWithBoards
+    connectWithBoards,
+    dislikePin,
+    updatePin
 }

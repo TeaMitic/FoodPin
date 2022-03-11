@@ -46,9 +46,28 @@ const getById = async(req,res) => {
         resHelper.ErrorResponse(error,res)
     }
 }
+const followUser = async(req,res)=>{
+    try {
+        ids={
+            currentUser: req.body.currentUser,
+            followedUser: req.body.followedUser
+        }
+        let result = await logic.followUser(ids)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
 
 module.exports = { 
     create,
     login,
-    getById
+    getById,
+    followUser
 }

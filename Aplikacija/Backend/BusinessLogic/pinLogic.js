@@ -87,9 +87,46 @@ const likePin = async (pinID) => {
     } catch (error) {
         throw error
     }
- }
+}
+const updatePin = async(pinID, pin)=>{
+    try {
+        let validateString = validation.forString(pinID,"pinID")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        }  
+        return await dataProvider.updatePin(pinID, pin)
+        
+    } catch (error) {
+        throw error
+    }
+
+}
+const dislikePin = async (pinID) => {
+    try {
+        /*
+            Left room for notifying pin's user 
+            And 
+            For updating some metadata for user who liked the photos for recommendation system
+        */
+        let validateString = validation.forString(pinID,"pinID")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        }  
+        return await dataProvider.dislikePin(pinID)
+    } catch (error) {
+        throw error
+    }
+}
 
 module.exports = { 
     createPin,
-    likePin
+    likePin,
+    updatePin,
+    dislikePin
 }

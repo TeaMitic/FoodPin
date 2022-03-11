@@ -100,9 +100,31 @@ const getUserById = async(id) => {
     }
 
 }
+const followUser= async(ids)=>{
+    try {
+        let validateString1 = validation.forString(ids.currentUser)
+        let validateString2 = validation.forString(ids.followedUser)
+        if (validateString1 != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString1
+            },false)         
+        }
+        if (validateString2 != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString2
+            },false)         
+        }
+        return await dataProvider.followUser(ids)
+    } catch (error) {
+        throw error
+    }
+}
 
 module.exports = { 
     registerUser,
     loginUser,
-    getUserById
+    getUserById,
+    followUser
 }

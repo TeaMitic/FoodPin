@@ -33,10 +33,43 @@ const like = async (req,res) => {
         resHelper.ErrorResponse(error,res)
     }  
 }
+const update = async(req, res)=>{
+    try {
+        let result = await logic.updatePin(req.params.id, req.body)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+        
+    } catch (error) {
+        //console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+const dislike = async (req,res) => { 
+    try {
+        let result = await logic.dislikePin(req.params.id)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }  
+}
 
 
 
 module.exports = { 
     create,
     like,
+    update,
+    dislike
 }
