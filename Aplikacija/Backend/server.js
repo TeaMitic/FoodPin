@@ -5,6 +5,7 @@ const neo4j = require('./Persistance/neo4j-config');
 const user = require('./ApiService/routes/user');
 const pin = require('./ApiService/routes/pin');
 const board = require('./ApiService/routes/board');
+const test = require('./ApiService/routes/test')
 
 neo4j.withDirectory(__dirname + '\\Persistance\\neo4j-models');
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use('/api/user',user);
 app.use('/api/pin',pin)
 app.use('/api/board',board);
+app.use('/api/test',test);
 
 /*koristiti neku od ovih funkcija samo kad je potrebno izmeniti schemu, u ostalim situacijama nema potrebe*/
 /*sluzi za instaliranje scheme definisane modelima na bazu u cloud-u*/

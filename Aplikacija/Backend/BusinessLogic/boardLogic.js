@@ -1,17 +1,45 @@
 const validation = require("../Helper/validation")
 const dtoHelper = require("../Helper/dtoHelper")
-const dataProvider = require('../Persistance/DataProvider/boardDataProvider')
+const resHelper = require('../Helper/responseHelper')
+const boardDataProvider = require('../Persistance/DataProvider/boardDataProvider')
+const userDataProvider = require('../Persistance/DataProvider/userDataProvider')
 
 const createBoard = async (boardInfo) => { 
     try {
+        //object validation
         let validateString = validation.forBoard(boardInfo)
         if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
-            },false)
+            return dtoHelper.createResObject(
+                resHelper.ValidationError(validateString),
+                false
+            )
         }  
-        return await dataProvider.createBoard(boardInfo)
+        //existing board validation 
+        let board = await boardDataProvider.getBoardByName(boardInfo.boardName,boardInfo.userID)
+        if (board) { 
+            return dtoHelper.createResObject(
+                resHelper.ExistingBoardError(boardInfo.boardName),
+                false
+            )
+        }
+        //user validation 
+        let user = await userDataProvider.getUserById(boardInfo.userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(boardInfo.userID),
+                false
+            )
+        }
+        //connecting board with user
+        board = await boardDataProvider.createBoard(boardInfo)
+        let result = await boardDataProvider.connectWithUser(board.boardID, user.userID)
+        if (result) { 
+            dtoHelper.createResObject({},true)
+        } 
+        else { 
+            throw new Error(`Couldn't create relationship between board: '${boardInfo.boardName}' and user id: '${user.userID}'.`)
+        }
+
     } catch (error) {
         throw error
     }
@@ -19,20 +47,80 @@ const createBoard = async (boardInfo) => {
 
 const updateBoard = async (boardInfo,boardID) => { 
     try {
-        let validateString = validation.forBoardUpdate(boardInfo)
+        //body validation 
+        let validateString = validation.forBoardUpdate(boardInfo,boardID)
         if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
-            },false)
-        }  
-        return await dataProvider.updateBoard(boardInfo, boardID)
+            return dtoHelper.createResObject(
+                resHelper.ValidationError(validateString),
+                false
+            )
+        }
+        let userID = boardInfo.userID
+        let boardName = boardInfo.boardName
+        //user validation  
+        let user = await userDataProvider.getUserById(userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID),
+                false
+            )
+        }
+        //board validation 
+        let board = await boardDataProvider.getBoardByName(boardName,userID)
+        if (!board) { 
+            return dtoHelper.createResObject(
+                resHelper.NoBoardError(userID,boardName),
+                false
+            )
+        }
+
+        let result = await boardDataProvider.updateBoard(board.boardID,boardInfo) 
+        if (result) { 
+            dtoHelper.createResObject({},true)
+        }
+        throw new Error(`Couldn't update board '${boardName}'.`)
     } catch (error) {
         throw error
     }
 }
 
+
+const deleteBoard = async (boardInfo) => { 
+    try {
+        //objects validation 
+        let validateString = validation.forBoardDelete(boardInfo)
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject(
+                resHelper.ValidationError(validateString),
+                false
+            )
+        }  
+        let boardName = boardInfo.boardName
+        let userID  = boardInfo.userID
+        //user validation
+        let user = await userDataProvider.getUserById(userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID),
+                false
+            )
+        }
+        //board validation
+        let board = await boardDataProvider.getBoardByName(boardName,userID)
+        if (!board) {    
+            return dtoHelper.createResObject(
+                resHelper.NoBoardError(userID,boardName),
+                false
+            )
+        } 
+        //deletion
+        return await boardDataProvider.deleteBoard(userID,boardName)
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     createBoard,
-    updateBoard
+    updateBoard,
+    deleteBoard
 }

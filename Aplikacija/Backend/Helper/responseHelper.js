@@ -30,6 +30,35 @@ module.exports = {
             console.log(error)
             throw error 
         }
-    }
+    },
+
+    
+    //message generator - used in logic.js files for creating content for 
+    // response messages from this module 
+    NoUserError(userID) { 
+        return { 
+            name: "Client error",
+            text: `User with id: '${userID}' not found in database.`
+        }
+    },
+    NoBoardError(userID,boardName) { 
+        return { 
+            name: "Client error",
+            text: `Board with name '${boardName}' for user with id: '${userID}' not found in database.`
+        }
+    },
+    ValidationError(validateString) { 
+        return { 
+            name: "Validation failed",
+            text: validateString
+        }
+    },
+    ExistingBoardError(boardName) { 
+        return { 
+            name: "Client error",
+            text: `You already have board with name '${boardName}'.`
+        }
+    },
+    
 
 }

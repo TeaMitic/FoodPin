@@ -23,6 +23,8 @@ const likePin = async (pinID) => {
             Left room for notifying pin's user 
             And 
             For updating some metadata for user who liked the photos for recommendation system
+            And 
+            For logging data in SQL 
         */
         let validateString = validation.forString(pinID,"pinID")
         if (validateString != 'ok') { 

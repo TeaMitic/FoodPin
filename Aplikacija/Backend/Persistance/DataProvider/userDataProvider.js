@@ -59,18 +59,18 @@ const login = async (userInfo) => {
     }
 }
 
+
 const getUserById = async (id) => {
+    
     try {
         let userDB = await neo4j.model('User').find(id)
         if (userDB) { 
             let user = dtoHelper.noPasswordUser(userDB)
-            return dtoHelper.createResObject(user,true)
+            return user
         }
         else { 
-            return dtoHelper.createResObject({ 
-                name: "Query error",
-                text: `User with username '${userInfo.username}' doesn't exist.`
-            })
+            console.log("PROVIDER:",userDB)
+            return null
         }
     } catch (error) {
         throw error

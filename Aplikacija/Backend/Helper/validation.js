@@ -37,13 +37,24 @@ module.exports = {
        
         return "ok"
     },
-    forBoardUpdate(object) { 
+    forBoardUpdate(object,boardID) { 
         let validateString = this.forBoard(object)
+        if (validateString != 'ok') return validateString
+        validateString = this.forString(boardID,"boardID")
         if (validateString != 'ok') return validateString
         if (object.boardName == undefined) return "Board name field not found."
         if (object.boardName == null || object.boardName == "") return "Board name be cannot null or  empty string."
         if (object.public == undefined) return "Public board field not found."
         if (object.public == null) return "Public board cannot be null."
+        return 'ok'
+    },
+    forBoardDelete(object)  { 
+        if (object.userID == undefined) return "UserID field not found."
+        let validateString = this.forString(object.userID,"userID")
+        if (validateString != 'ok') return validateString
+        if (object.boardName == undefined) return "BoardName field not found."
+        validateString = this.forString(object.boardName,"boardName")
+        if (validateString != 'ok') return validateString
         return 'ok'
     }
 

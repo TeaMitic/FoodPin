@@ -56,7 +56,19 @@ module.exports = {
     },
     boardToJson(boardModel) { 
         return  Object.fromEntries(boardModel._properties)
-
+    },
+    fromCypher(cypherResult) { 
+        /**
+         * ako u cypher query ima return N onda su svi elementi tipa N
+         * ako je return P Q onda su elementi u nizu PQ PQ PQ PQ  
+         */
+        let arr = []
+        cypherResult.records.forEach(element => {
+            element._fields.forEach(el => { 
+                arr.push(el.properties)
+            })
+        });
+        return arr
     }
 
 
