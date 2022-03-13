@@ -19,16 +19,20 @@ const createPin = async (pinInfo) => {
 
 const connectWithBoards = async (pinID,boards,userID) => { 
     try {
-        
-        boards = arrayHelper.unwindSet(boards)
+        let boards2 = new Set()
+        boards.forEach(element => { 
+            boards2.add({name: element})
+        }) 
+        boards2 = arrayHelper.unwindSet(boards2)
         let result = await neo4j.writeCypher(`
                 MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}),
                 (p:Pin {pinID: '${pinID}'})
-                WHERE b.name in [${boards}]
+                WHERE b.name in [${boards2}]
                 WITH  b, p
                 CREATE (p)-[r:BELONGS]->(b)
                 RETURN p,r,b
         `)
+        console.log(result)
         if (result.records.length === 0) { 
             return null
         }
@@ -52,6 +56,7 @@ const connectWithTags = async (pinID,tags) => {
                 CREATE (t) <-[:HAS]-(p))
             RETURN p,tags
     `)
+    console.log(result)
     if (result.records.length === 0) { 
         return null
     }
@@ -75,17 +80,20 @@ const deletePin = async (pinID) => {
 }
 const likePin = async (pinID) => { 
     try {
-        let pinDB = await neo4j.model('Pin').find(pinID)
-        if (!pinDB) { 
-            return dtoHelper.createResObject({
-                name: "Client error",
-                text: `Pin with id: '${pinID}' doesn't exist in database.`
-            },false)
-        }
-        let pin = dtoHelper.pinToJson(pinDB) 
-        await pinDB.update({
-            likes:  +pin.likes + 1
-        })
+        let result = await neo4j.writeCypher(`
+            MATCH (p:Pin {pinID: '${pinID}'}) SET p.likes = p.likes+1
+        `)
+        // let pinDB = await neo4j.model('Pin').find(pinID)
+        // if (!pinDB) { 
+        //     return dtoHelper.createResObject({
+        //         name: "Client error",
+        //         text: `Pin with id: '${pinID}' doesn't exist in database.`
+        //     },false)
+        // }
+        // let pin = dtoHelper.pinToJson(pinDB) 
+        // await pinDB.update({
+        //     likes:  +pin.likes + 1
+        // })
         return dtoHelper.createResObject({},true)
     } catch (error) {
         throw error
@@ -115,17 +123,20 @@ const updatePin= async(pinID, pin)=>{
 }
 const dislikePin = async(pinID)=>{
     try {
-        let pinDB = await neo4j.model('Pin').find(pinID)
-        if (!pinDB) { 
-            return dtoHelper.createResObject({
-                name: "Client error",
-                text: `Pin with id: '${pinID}' doesn't exist in database.`
-            },false)
-        }
-        let pin = dtoHelper.pinToJson(pinDB) 
-        await pinDB.update({
-            likes:  +pin.likes - 1
-        })
+        // let pinDB = await neo4j.model('Pin').find(pinID)
+        // if (!pinDB) { 
+        //     return dtoHelper.createResObject({
+        //         name: "Client error",
+        //         text: `Pin with id: '${pinID}' doesn't exist in database.`
+        //     },false)
+        // }
+        // let pin = dtoHelper.pinToJson(pinDB) 
+        // await pinDB.update({
+        //     likes:  +pin.likes - 1
+        // })
+        let result = await neo4j.writeCypher(`
+            MATCH (p:Pin {pinID: '${pinID}'}) SET p.likes = p.likes-1
+        `)
         return dtoHelper.createResObject({},true)
         
     } catch (error) {

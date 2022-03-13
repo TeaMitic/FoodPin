@@ -21,10 +21,10 @@ app.use('/api/test',test);
 
 /*koristiti neku od ovih funkcija samo kad je potrebno izmeniti schemu, u ostalim situacijama nema potrebe*/
 /*sluzi za instaliranje scheme definisane modelima na bazu u cloud-u*/
-// neo4j.schema.install().then(() => console.log('Schema installed!'))
+//neo4j.schema.install().then(() => console.log('Schema installed!'))
 
 /*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
-// neo4j.schema.drop().then(() => console.log('Schema dropped!'))
+//neo4j.schema.drop().then(() => console.log('Schema dropped!'))
 
 app.listen(5000,() => {
    console.log('Server is listening on port 5000...');

@@ -95,7 +95,7 @@ const getUserById = async(id) => {
                 text: validateString
             },false)         
         }
-        return await dataProvider.getUserById(id)
+        return await userDataProvider.getUserById(id)
     } catch (error) {
         throw error
     }
@@ -117,7 +117,19 @@ const followUser= async(ids)=>{
                 text: validateString2
             },false)         
         }
-        return await dataProvider.followUser(ids)
+        let currentUser = await userDataProvider.getUserById(ids.currentUser)
+        let followedUser = await userDataProvider.getUserById(ids.followedUser)
+        if(!currentUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.currentUser), false
+            )
+        }
+        if(!followedUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.followedUser), false
+            )
+        }
+        return await userDataProvider.followUser(ids)
     } catch (error) {
         throw error
     }
