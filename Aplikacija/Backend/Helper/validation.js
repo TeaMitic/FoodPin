@@ -25,11 +25,22 @@ module.exports = {
         if (object.pin.title == null || object.pin.title == "") return "Title cannot be null or  empty string."
         if (object.userID == undefined) return "UserID field not found."
         if (object.userID == null || object.userID == "") return "UserID cannot be null or  empty string."
+        if (object.creatorID == undefined) return "CreatorID field not found."
+        if (object.creatorID == null || object.creatorID == "") return "CreatorID cannot be null or  empty string."
         if (object.boardName == undefined) return "Board name field not found."
         if (object.boardName == null || object.boardName == "") return "Board name cannot be null or  empty string."
         if (object.tags == undefined) return "Tags field not found."
         if (object.tags.length == 0) return "Tags field cannot be empty."
         return "ok"
+    },
+    forPinSave(object) { 
+        if (object.pinID == undefined) return "PinID field not found."
+        if (object.pinID == null || object.pinID == "") "PinID cannot be null or empty string."
+        if (object.userID == undefined) return "UserID field not found."
+        if (object.userID == null || object.userID == "") return "UserID cannot be null or  empty string."
+        if (object.boardName == undefined) return "Board name field not found."
+        if (object.boardName == null || object.boardName == "") return "Board name cannot be null or  empty string." 
+        return 'ok'
     },
     forBoard(object) { 
         if (object.userID == undefined) return "UserID field not found."

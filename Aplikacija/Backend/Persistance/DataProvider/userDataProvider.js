@@ -34,11 +34,10 @@ const getUserById = async (id) => {
     try {
         let userDB = await neo4j.model('User').find(id)
         if (userDB) { 
-            let user = dtoHelper.noPasswordUser(userDB)
+            let user = dtoHelper.userToJson(userDB)
             return user
         }
         else { 
-            console.log("PROVIDER:",userDB)
             return null
         }
     } catch (error) {
@@ -49,21 +48,11 @@ const getUserById = async (id) => {
 const getUserByUsername = async(username) => { 
     try {
         let userDB = await neo4j.model('User').first('username',username)
-        if (!userDB) { 
-            return null
-
+        if (userDB) { 
+            let user = dtoHelper.userToJson(userDB)
+            return user
         }
-        // let userDB = await neo4j.model('User').find(id)
-        // if (userDB) { 
-        //     let user = dtoHelper.noPasswordUser(userDB)
-        //     return dtoHelper.createResObject(user,true)
-        // }
-        // else { 
-        //     return dtoHelper.createResObject({ 
-        //         name: "Query error",
-        //         text: `User doesn't exist.`
-        //     })
-        // }
+        return null 
     } catch (error) {
         throw error
     }
@@ -74,14 +63,11 @@ const followUser= async(ids)=>{
         let followedDB = await neo4j.model('User').find(ids.followedUser)
         let current = dtoHelper.userToJson(currentDB)
         let followed = dtoHelper.userToJson(followedDB)
-        // console.log(currentDB)
-        // console.log(followedDB)
         if(followedDB){
             let result = await neo4j.writeCypher(`
             MATCH (a:User {username: '${current.username}'}), (b:User {username: '${followed.username}'})
             CREATE (a) -[:FOLLOWS]-> (b)`
             )
-            // console.log(result)
             neo4j.transaction()
             user = dtoHelper.shortUserToJson(followedDB)
             return dtoHelper.createResObject(user,true)
@@ -99,7 +85,6 @@ const followUser= async(ids)=>{
 }
 module.exports = { 
     create,
-    login,
     getUserById,
     getUserByUsername,
     followUser

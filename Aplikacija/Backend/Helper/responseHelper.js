@@ -47,6 +47,12 @@ module.exports = {
             text: `Board with name '${boardName}' for user with id: '${userID}' not found in database.`
         }
     },
+    NoPinError(pinID) { 
+        return { 
+            name: "Client error",
+            text: `Pin with id: '${pinID}' not found in database.`
+        }
+    },
     ValidationError(validateString) { 
         return { 
             name: "Validation failed",

@@ -4,12 +4,8 @@ const arrayHelper = require('../../Helper/arrayHelper')
 
 const createPin = async (pinInfo) => { 
     try {
-        
-
         let pin = dtoHelper.pinToModel(pinInfo)
-        
-        
-        //create pin - first 
+
         let pinDB = await neo4j.model('Pin').create(pin)
         if (!pinDB) { 
             return null
@@ -45,7 +41,9 @@ const connectWithBoards = async (pinID,boards,userID) => {
 }
 
 const connectWithTags = async (pinID,tags) => { 
-    let tags = arrayHelper.unwind(pinInfo.tags)
+    
+    tags = arrayHelper.unwind(tags)
+    console.log('tags-posle:',tags)
     let result = await neo4j.writeCypher(`
             MATCH (p:Pin {pinID: '${pinID}'})
             WITH [${tags}] as tags,p
@@ -58,15 +56,17 @@ const connectWithTags = async (pinID,tags) => {
         return null
     }
     let connection = dtoHelper.fromCypher(result)
-    console.log(connection)
     return connection
 }
 
 const deletePin = async (pinID) => { 
     try {
         let result = await neo4j.writeCypher(`
-            MATCH (p:Pin {pinID: '${pinID}'})
-            DETACH DELETE p
+            MATCH (p:Pin {pinID: '${pinID}'}) -[r:HAS]->(t:Tag)
+            DETACH DELETE  p
+            WITH t
+            WHERE NOT  (t)--()
+            DELETE t
         `)
         return true
     } catch (error) {
@@ -133,6 +133,36 @@ const dislikePin = async(pinID)=>{
     }
 }
 
+const getPinById = async (pinID) => { 
+    try {
+        let pinDB = await neo4j.model('Pin').find(pinID)
+        if (pinDB) { 
+            let pin = dtoHelper.pinToJson(pinDB) 
+            return pin
+        }
+        return null
+    } catch (error) {
+        throw error
+    }
+}
+
+const getPinWithTags = async (pinID) =>  { 
+    let pin = await getPinById(pinID)
+    if (!pin) { 
+        return null
+    }
+    let result = await neo4j.readCypher(`
+        MATCH (p:Pin {pinID: '${pinID}'}) -[:HAS]-> (t:Tag) 
+        RETURN t
+    `)
+    if (result.records.length === 0) { 
+        return null
+    }
+    tags = dtoHelper.fromCypher(result)
+    pin.tags = tags
+    return pin
+}
+
 module.exports = { 
     createPin,
     likePin,
@@ -140,5 +170,7 @@ module.exports = {
     deletePin,
     connectWithBoards,
     dislikePin,
-    updatePin
+    updatePin,
+    getPinById,
+    getPinWithTags
 }

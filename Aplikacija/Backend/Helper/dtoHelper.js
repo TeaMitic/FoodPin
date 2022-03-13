@@ -36,6 +36,7 @@ module.exports = {
     },
     pinToModel(pinJson) { 
         return { 
+            creatorID: pinJson.creatorID != undefined ? pinJson.creatorID : null,
             imgName: pinJson.imgName != undefined ? pinJson.imgName : null,
             title: pinJson.title != undefined ? pinJson.title : null,
             description: pinJson.description != undefined ? pinJson.description : null,

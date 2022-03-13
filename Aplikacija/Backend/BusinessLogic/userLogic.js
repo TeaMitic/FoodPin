@@ -4,6 +4,8 @@ const token  = require('../middleware/token')
 const dtoHelper = require('../Helper/dtoHelper')
 const validation = require('../Helper/validation')
 const boardLogic = require('./boardLogic')
+const bcrypt = require('bcrypt')
+
 
 const attachToken = (userInfo) => { 
     try {
@@ -60,7 +62,6 @@ const loginUser = async(loginInfo) => {
                 text: validateString
             },false)   
         }
-
         let user = await userDataProvider.getUserByUsername(loginInfo.username)
         if (!user) { 
             return dtoHelper.createResObject(
@@ -68,7 +69,7 @@ const loginUser = async(loginInfo) => {
                 false
             )
         }
-        let correctPass = await bcrypt.compare(userInfo.password, user.password)
+        let correctPass = await bcrypt.compare(loginInfo.password, user.password)
         if (correctPass) { 
             user = dtoHelper.shortUserToJson(user)
             user = attachToken(user)

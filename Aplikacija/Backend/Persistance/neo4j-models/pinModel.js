@@ -9,6 +9,10 @@ neo4j.model('Pin', {
         required: true,
         unique: true
     },
+    creatorID: { 
+        type: 'string',
+        required: true
+    },
     imgName: { 
         type: "string",
         required: true

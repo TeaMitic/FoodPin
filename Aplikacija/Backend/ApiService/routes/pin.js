@@ -7,5 +7,7 @@ router.post('/',auth,pin.create);
 router.put('/like/:id',auth,pin.like)
 router.put('/update/:id',auth, pin.update)
 router.put('/dislike/:id',auth,pin.dislike)
+router.delete('/delete/:id',auth,pin.deletePin)
+router.post('/save',auth,pin.savePin)
 
 module.exports = router;

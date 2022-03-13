@@ -45,7 +45,7 @@ const update = async(req, res)=>{
         }
         
     } catch (error) {
-        //console.log(error);
+        console.log(error);
         resHelper.ErrorResponse(error,res)
     }
 }
@@ -65,11 +65,44 @@ const dislike = async (req,res) => {
     }  
 }
 
+const deletePin = async (req,res) => {
+    try {
+        let result = await logic.deletePin(req.params.id)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }   
+}
+
+const savePin = async (req,res) => { 
+    try {
+        let result = await logic.savePin(req.body)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }   
+}
 
 
 module.exports = { 
     create,
     like,
     update,
-    dislike
+    dislike,
+    deletePin,
+    savePin
 }
