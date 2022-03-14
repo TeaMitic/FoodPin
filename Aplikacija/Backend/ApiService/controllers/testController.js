@@ -1,6 +1,6 @@
 const resHelper = require('../../Helper/responseHelper');
-const boardDataProvider = require('../../Persistance/DataProvider/boardDataProvider')
-const userDataProvider = require('../../Persistance/DataProvider/userDataProvider')
+const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
+const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
 //test done
 const getBoardByName = async (req,res) => { 
     try {

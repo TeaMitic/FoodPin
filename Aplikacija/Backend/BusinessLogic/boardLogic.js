@@ -1,8 +1,8 @@
 const validation = require("../Helper/validation")
 const dtoHelper = require("../Helper/dtoHelper")
 const resHelper = require('../Helper/responseHelper')
-const boardDataProvider = require('../Persistance/DataProvider/boardDataProvider')
-const userDataProvider = require('../Persistance/DataProvider/userDataProvider')
+const boardDataProvider = require('../Persistance/neo4j/DataProvider/boardDataProvider')
+const userDataProvider = require('../Persistance/neo4j/DataProvider/userDataProvider')
 
 const createBoard = async (boardInfo) => { 
     try {

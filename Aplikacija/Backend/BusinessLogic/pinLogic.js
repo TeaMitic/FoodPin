@@ -1,7 +1,7 @@
 const dtoHelper = require("../Helper/dtoHelper")
-const pinDataProvider = require('../Persistance/DataProvider/pinDataProvider')
-const userDataProvider = require('../Persistance/DataProvider/userDataProvider')
-const boardDataProvider = require('../Persistance/DataProvider/boardDataProvider')
+const pinDataProvider = require('../Persistance/neo4j/DataProvider/pinDataProvider')
+const userDataProvider = require('../Persistance/neo4j/DataProvider/userDataProvider')
+const boardDataProvider = require('../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../Helper/validation')
 const resHelper = require('../Helper/responseHelper')
 
