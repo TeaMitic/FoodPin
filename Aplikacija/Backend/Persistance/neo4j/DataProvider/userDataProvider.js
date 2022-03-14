@@ -59,26 +59,26 @@ const getUserByUsername = async(username) => {
 }
 const followUser= async(ids)=>{ 
     try {
-        let currentDB = await neo4j.model('User').find(ids.currentUser)
-        let followedDB = await neo4j.model('User').find(ids.followedUser)
-        let current = dtoHelper.userToJson(currentDB)
-        let followed = dtoHelper.userToJson(followedDB)
-        if(followedDB){
+        // let currentDB = await neo4j.model('User').find(ids.currentUser)
+        // let followedDB = await neo4j.model('User').find(ids.followedUser)
+        // let current = dtoHelper.userToJson(currentDB)
+        // let followed = dtoHelper.userToJson(followedDB)
+        // if(followedDB){
             let result = await neo4j.writeCypher(`
-            MATCH (a:User {username: '${current.username}'}), (b:User {username: '${followed.username}'})
+            MATCH (a:User {userID: '${ids.currentUser}'}), (b:User {userID: '${ids.followedUser}'})
             CREATE (a) -[:FOLLOWS]-> (b)`
             )
-            neo4j.transaction()
-            user = dtoHelper.shortUserToJson(followedDB)
-            return dtoHelper.createResObject(user,true)
-        }
-        else { 
-            return dtoHelper.createResObject({ 
-                name: "Query error",
-                text: `User doesn't exist.`
-            })
-        }
-        return dtoHelper.userToJson(userDB)
+            //neo4j.transaction()
+            // user = dtoHelper.shortUserToJson(followedDB)
+            return dtoHelper.createResObject(ids.followedUser,true)
+        // }
+        // else { 
+        //     return dtoHelper.createResObject({ 
+        //         name: "Query error",
+        //         text: `User doesn't exist.`
+        //     })
+        // }
+        // //return dtoHelper.userToJson(userDB)
     } catch (error) {
         throw error
     }

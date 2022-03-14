@@ -29,6 +29,7 @@ const createPin = async (pinInfo) => {
         pinInfo.pin.creatorID = userID
         //user validation 
         let user = await userDataProvider.getUserById(userID)
+        // console.log(user)
         if (!user) { 
             return dtoHelper.createResObject(
                 resHelper.NoUserError(userID),
@@ -86,8 +87,15 @@ const likePin = async (pinID) => {
                 name: "Validation failed",
                 text: validateString
             },false)
-        }  
-        return await dataProvider.likePin(pinID)
+        } 
+        let pin = await pinDataProvider.getPinById(pinID)
+        if(!pin){
+            return dtoHelper.createResObject(
+                resHelper.NoPinError(pinID), false
+            )
+        } 
+
+        return await pinDataProvider.likePin(pinID)
     } catch (error) {
         throw error
     }
@@ -101,7 +109,7 @@ const updatePin = async(pinID, pin)=>{
                 text: validateString
             },false)
         }  
-        return await dataProvider.updatePin(pinID, pin)
+        return await pinDataProvider.updatePin(pinID, pin)
         
     } catch (error) {
         throw error
@@ -121,8 +129,14 @@ const dislikePin = async (pinID) => {
                 name: "Validation failed",
                 text: validateString
             },false)
-        }  
-        return await dataProvider.dislikePin(pinID)
+        } 
+        let pin = await pinDataProvider.getPinById(pinID)
+        if(!pin){
+            return dtoHelper.createResObject(
+                resHelper.NoPinError(pinID), false
+            )
+        } 
+        return await pinDataProvider.dislikePin(pinID)
     } catch (error) {
         throw error
     }

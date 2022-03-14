@@ -34,7 +34,7 @@ const createBoard = async (boardInfo) => {
         board = await boardDataProvider.createBoard(boardInfo)
         let result = await boardDataProvider.connectWithUser(board.boardID, user.userID)
         if (result) { 
-            dtoHelper.createResObject({},true)
+            return dtoHelper.createResObject({},true)
         } 
         else { 
             throw new Error(`Couldn't create relationship between board: '${boardInfo.boardName}' and user id: '${user.userID}'.`)
