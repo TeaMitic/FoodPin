@@ -238,6 +238,22 @@ const  savePin = async (info) => {
         throw error
     }
 }
+const getByID =async(pinID)=>{
+    try {
+        let validateString = validation.forString(pinID, "ID")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        let pin =await pinDataProvider.getPinById(pinID)
+        return dtoHelper.createResObject(pin,true)
+        
+    } catch (error) {
+        throw error
+    }
+}
 
 
 module.exports = { 
@@ -246,6 +262,7 @@ module.exports = {
     updatePin,
     dislikePin,
     deletePin,
-    savePin
+    savePin,
+    getByID
 
 }

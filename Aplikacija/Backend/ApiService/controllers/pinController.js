@@ -96,7 +96,23 @@ const savePin = async (req,res) => {
         resHelper.ErrorResponse(error,res)
     }   
 }
-
+const  getByID = async(req,res)=>{
+    try {
+        let result = await logic.getByID(req.params.id)
+       // console.log("PIN iz controlera: ")
+        if (result.success) { 
+            //console.log(result.content)
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
 
 module.exports = { 
     create,
@@ -104,5 +120,6 @@ module.exports = {
     update,
     dislike,
     deletePin,
-    savePin
+    savePin,
+    getByID
 }

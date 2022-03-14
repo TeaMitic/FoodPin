@@ -146,9 +146,17 @@ const dislikePin = async(pinID)=>{
 
 const getPinById = async (pinID) => { 
     try {
+        //console.log(pinID)
         let pinDB = await neo4j.model('Pin').find(pinID)
+        //let pinDB= await neo4j.readCypher(`MATCH (p:PIN {pinID: '${pinID}'}) return p`)
+        //console.log(pinDB)
         if (pinDB) { 
-            let pin = dtoHelper.pinToJson(pinDB) 
+            let pinJson = dtoHelper.pinToJson(pinDB) 
+           // console.log("PIN json: ")
+            //console.log(pinJson)
+            let pin = dtoHelper.pinToModel(pinJson)
+           // console.log("PIN iz provider-a: ")
+            //console.log(pin)
             return pin
         }
         return null

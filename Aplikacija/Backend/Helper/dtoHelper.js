@@ -42,7 +42,7 @@ module.exports = {
             description: pinJson.description != undefined ? pinJson.description : null,
             instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
             ingredients: pinJson.ingredients != undefined ? pinJson.ingredients : null,
-            likes: pinJson.likes != undefined ? pinJson.likes : 0,
+            likes: pinJson.likes.low != undefined ? pinJson.likes.low : 0,
         }
     },
     pinToJson(pinModel) { 

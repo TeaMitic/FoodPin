@@ -35,6 +35,7 @@ const getUserById = async (id) => {
         let userDB = await neo4j.model('User').find(id)
         if (userDB) { 
             let user = dtoHelper.userToJson(userDB)
+            console.log("USER iz provider-a " +user)
             return user
         }
         else { 
