@@ -1,4 +1,4 @@
-const userDataProvider  = require( '../Persistance/DataProvider/userDataProvider')
+const userDataProvider  = require( '../Persistance/neo4j/DataProvider/userDataProvider')
 const resHelper = require('../Helper/responseHelper')
 const token  = require('../middleware/token')
 const dtoHelper = require('../Helper/dtoHelper')

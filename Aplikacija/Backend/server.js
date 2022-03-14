@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
-const neo4j = require('./Persistance/neo4j-config');
+const neo4j = require('./Persistance/neo4j/config');
+const sequelize = require('./Persistance/sqlServer/config')
 
 const user = require('./ApiService/routes/user');
 const pin = require('./ApiService/routes/pin');
 const board = require('./ApiService/routes/board');
 const test = require('./ApiService/routes/test')
 
-neo4j.withDirectory(__dirname + '\\Persistance\\neo4j-models');
+neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
 
 const app = express();
 app.use(express.json());

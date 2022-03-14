@@ -1,6 +1,6 @@
-const dtoHelper = require('../../Helper/dtoHelper')
-const neo4j = require('../neo4j-config')
-const arrayHelper = require('../../Helper/arrayHelper')
+const dtoHelper = require('../../../Helper/responseHelper')
+const neo4j = require('../config')
+const arrayHelper = require('../../../Helper/arrayHelper')
 
 const createPin = async (pinInfo) => { 
     try {

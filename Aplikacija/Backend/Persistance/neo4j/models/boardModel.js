@@ -1,4 +1,4 @@
-const  neo4j  = require('../neo4j-config');
+const  neo4j  = require('../config');
 
 
 neo4j.model('Board', {

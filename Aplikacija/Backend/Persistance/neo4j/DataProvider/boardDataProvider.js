@@ -1,5 +1,5 @@
-const dtoHelper = require("../../Helper/dtoHelper")
-const neo4j = require("../neo4j-config")
+const dtoHelper = require('../../../Helper/responseHelper')
+const neo4j = require("../config")
 
 const createBoard = async (boardInfo) => { 
     try {
