@@ -1,4 +1,4 @@
-const dtoHelper = require('../../../Helper/responseHelper')
+const dtoHelper = require('../../../Helper/dtoHelper')
 const neo4j = require('../config')
 const arrayHelper = require('../../../Helper/arrayHelper')
 
