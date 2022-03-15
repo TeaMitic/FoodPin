@@ -1,4 +1,4 @@
-const logic = require('../../BusinessLogic/boardLogic')
+const logic = require('../../BusinessLogic/SyncLogic/boardLogic')
 const resHelper = require('../../Helper/responseHelper')
 
 const create = async (req,res) => { 

@@ -1,8 +1,8 @@
-const userDataProvider  = require( '../Persistance/neo4j/DataProvider/userDataProvider')
-const resHelper = require('../Helper/responseHelper')
-const token  = require('../middleware/token')
-const dtoHelper = require('../Helper/dtoHelper')
-const validation = require('../Helper/validation')
+const userDataProvider  = require( '../../Persistance/neo4j/DataProvider/userDataProvider')
+const resHelper = require('../../Helper/responseHelper')
+const token  = require('../../middleware/token')
+const dtoHelper = require('../../Helper/dtoHelper')
+const validation = require('../../Helper/validation')
 const boardLogic = require('./boardLogic')
 const bcrypt = require('bcrypt')
 
