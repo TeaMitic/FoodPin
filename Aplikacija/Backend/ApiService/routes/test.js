@@ -5,5 +5,6 @@ const test = require('../controllers/testController')
 router.get('/board/getByName',test.getBoardByName)
 router.post('/board/connect',test.connectBoardAndUser)
 router.get('/user/get/:id',test.getUserById)
+router.post('/message',test.createMessage)
 
 module.exports = router
