@@ -2,6 +2,11 @@ const {DataTypes} = require('sequelize')
 const sequelize = require('../config')
 
 const Follow = sequelize.define('Follow', { 
+    id: { 
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     receiverID: { 
         type: DataTypes.STRING,
         allowNull: false
@@ -14,6 +19,10 @@ const Follow = sequelize.define('Follow', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    createdAt: { 
+        type: DataTypes.DATE,
+        allowNull: false,
     }
 })
 

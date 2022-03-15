@@ -1,32 +1,13 @@
 const Message = require('../models/messageModel')
-const Follow = require('../models/followModel')
-const Like = require('../models/likeModel')
-const Comment = require('../models/commentModel')
+const sequelize = require('../config/mySql-config')
 
-const createMessage = async () => { 
+const createMessage = async (messageInfo) => { 
     try {
-        const testMsg = await Message.create({
-            receiverID: 'test-receiverID',
-            senderID: 'test-senderID',
-            text: 'test-text'
-        })
-        const testFollow = await Follow.create({
-            receiverID: 'test-receiverID',
-            senderID: 'test-senderID',
-        })
-        const testLike = await Like.create({
-            receiverID: 'test-receiverID',
-            senderID: 'test-senderID',
-            pinID: 'test-pinID'
-        })
-        const testComment = await Comment.create({
-            receiverID: 'test-receiverID',
-            senderID: 'test-senderID',
-            pinID: 'test-pinID',
-            text: 'test-text'
-        })
-        return true
-    
+        await sequelize.sync()
+        // let message = await Message.create(messageInfo) 
+
+        //create function throws error if anything bad happens 
+        // return message.toJSON()
     } catch (error) {
         throw error    
     }

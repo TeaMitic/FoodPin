@@ -1,9 +1,10 @@
-const  logic = require('../../BusinessLogic/SyncLogic/userLogic')
+const  syncLogic = require('../../BusinessLogic/SyncLogic/userLogic')
+const asyncLogic = require('../../BusinessLogic/AsyncLogic/userLogicAsync')
 const resHelper = require('../../Helper/responseHelper')
 
 const  create = async (req,res) => { 
     try {
-        let result = await logic.registerUser(req.body)
+        let result = await syncLogic.registerUser(req.body)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -19,7 +20,7 @@ const  create = async (req,res) => {
 
 const login = async(req,res) => { 
     try {
-        let result = await logic.loginUser(req.body)
+        let result = await syncLogic.loginUser(req.body)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -34,7 +35,7 @@ const login = async(req,res) => {
 
 const getById = async(req,res) => { 
     try {
-        let result = await logic.getUserById(req.params.id)
+        let result = await syncLogic.getUserById(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -52,7 +53,7 @@ const followUser = async(req,res)=>{
             currentUser: req.body.currentUser,
             followedUser: req.body.followedUser
         }
-        let result = await logic.followUser(ids)
+        let result = await syncLogic.followUser(ids)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -67,7 +68,7 @@ const followUser = async(req,res)=>{
 
 const sendMessage = async (req,res) => { 
     try {
-        //mySql logic 
+        //mySql async logic 
         let result = await logic.getUserById(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)

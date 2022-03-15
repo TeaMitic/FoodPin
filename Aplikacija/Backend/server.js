@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const neo4j = require('./Persistance/neo4j/config');
-const sequelize = require('./Persistance/mySql/config')
+const sequelize = require('./Persistance/mySql/config/mySql-config')
 
 const user = require('./ApiService/routes/user');
 const pin = require('./ApiService/routes/pin');

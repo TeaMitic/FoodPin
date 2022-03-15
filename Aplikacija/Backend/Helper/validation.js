@@ -67,6 +67,15 @@ module.exports = {
         validateString = this.forString(object.boardName,"boardName")
         if (validateString != 'ok') return validateString
         return 'ok'
+    },
+    forMessage(object) { 
+        if (object.receiverID == undefined) return "ReceiverID field not found."
+        let validateString = this.forString(object.receiverID, "receiverID")
+        if (object.senderID == undefined) return "SenderID field not found."
+        validateString = this.forString(object.senderID, "senderID")
+        if (object.text == undefined) return "Text field not found."
+        validateString = this.forString(object.text, "text")
+        return 'ok'
     }
 
     

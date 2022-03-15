@@ -5,7 +5,7 @@ const messageDataProvider = require('../../Persistance/mySql/DataProvider/messag
 
 const createMessage = async (req,res) => { 
     try {
-        let result = await messageDataProvider.createMessage()
+        let result = await messageDataProvider.createMessage({})
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res) 

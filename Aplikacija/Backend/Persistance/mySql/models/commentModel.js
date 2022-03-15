@@ -2,6 +2,11 @@ const {DataTypes} = require('sequelize')
 const sequelize = require('../config')
 
 const Comment = sequelize.define('Comment', { 
+    id: { 
+        type: Sequelize.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     receiverID: { 
         type: DataTypes.STRING,
         allowNull: false
@@ -22,7 +27,11 @@ const Comment = sequelize.define('Comment', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
-    }
+    },
+    createdAt: { 
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+    } 
 })
 // Comment.sync() //- This creates the table if it doesn't exist (and does nothing if it already exists)
 //  Comment.sync({ force: true }) //- This creates the table, dropping it first if it already existed

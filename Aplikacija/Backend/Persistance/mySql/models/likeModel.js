@@ -1,7 +1,12 @@
 const {DataTypes} = require('sequelize')
-const sequelize = require('../config')
+const sequelize = require('../config/mySql-config')
 
 const Like = sequelize.define('Like', { 
+    id: { 
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     receiverID: { 
         type: DataTypes.STRING,
         allowNull: false
@@ -18,6 +23,10 @@ const Like = sequelize.define('Like', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+    },
+    createdAt: { 
+        type: DataTypes.DATE,
+        allowNull: false,
     }
 })
 
