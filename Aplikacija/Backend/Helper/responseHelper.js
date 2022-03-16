@@ -47,6 +47,12 @@ module.exports = {
             text: `Board with name '${boardName}' for user with id: '${userID}' not found in database.`
         }
     },
+    AllPinsBoardError() { 
+        return { 
+            name: "Client error",
+            text: `Board with name 'All pins' cannot be deleted.`
+        }
+    },
     NoPinError(pinID) { 
         return { 
             name: "Client error",

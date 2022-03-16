@@ -106,6 +106,12 @@ const deleteBoard = async (boardInfo) => {
             )
         }
         //board validation
+        if (boardName == 'All pins') { 
+            return dtoHelper.createResObject(
+                resHelper.AllPinsBoardError(userID,boardName),
+                false
+            )
+        }
         let board = await boardDataProvider.getBoardByName(boardName,userID)
         if (!board) {    
             return dtoHelper.createResObject(
