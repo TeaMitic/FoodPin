@@ -67,18 +67,18 @@ const updateBoard = async (boardInfo,boardID) => {
         }
         //board validation 
         let board = await boardDataProvider.getBoardByName(boardName,userID)
-        if (!board) { 
+        if (board) { 
             return dtoHelper.createResObject(
-                resHelper.NoBoardError(userID,boardName),
+                resHelper.ExistingBoardError(userID,boardName),
                 false
             )
         }
 
-        let result = await boardDataProvider.updateBoard(board.boardID,boardInfo) 
+        let result = await boardDataProvider.updateBoard(boardID,boardInfo) 
         if (result) { 
             dtoHelper.createResObject({},true)
         }
-        throw new Error(`Couldn't update board '${boardName}'.`)
+        throw new Error(`Couldn't update board with id:'${boardID}'.`)
     } catch (error) {
         throw error
     }
