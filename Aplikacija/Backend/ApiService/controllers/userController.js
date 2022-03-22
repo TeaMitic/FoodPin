@@ -69,6 +69,27 @@ const followUser = async(req,res)=>{
     }
 }
 
+const unfollowUser = async(req, res)=>{
+    try {
+        ids={
+            currentUser: req.body.currentUser,
+            followedUser: req.body.followedUser
+        }
+        let result = await syncLogic.unfollowUser(ids)
+        if (result.success) { 
+            //result = await asyncLogic.followAsync(ids)
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+        
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 const sendMessage = async (req,res) => { 
     try {
         //mySql async logic 
@@ -89,5 +110,5 @@ module.exports = {
     create,
     login,
     getById,
-    followUser
-}
+    followUser,
+    unfollowUser}

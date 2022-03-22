@@ -84,9 +84,20 @@ const followUser= async(ids)=>{
         throw error
     }
 }
+
+const unfollowUser = async(ids)=>{
+    try {
+        let result = await neo4j.writeCypher(`MATCH (a:User {userID: '${ids.currentUser}'})-[r:FOLLOWS]->(b:User {userID: '${ids.followedUser}'})
+        DELETE r`)
+        return dtoHelper.createResObject(ids.followedUser,true)        
+    } catch (error) {
+        throw error        
+    }
+}
 module.exports = { 
     create,
     getUserById,
     getUserByUsername,
-    followUser
+    followUser,
+    unfollowUser
 }
