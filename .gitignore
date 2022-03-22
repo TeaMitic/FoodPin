@@ -348,10 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-Aplikacija/Frontend/foodpin-app/package-lock.json
-Aplikacija/Frontend/foodpin-app/package-lock.json
-Aplikacija/Frontend/foodpin-app/package-lock.json
 *.jpg
 
-Aplikacija/Backend/package-lock.json
-Aplikacija/Backend/package-lock.json
+
