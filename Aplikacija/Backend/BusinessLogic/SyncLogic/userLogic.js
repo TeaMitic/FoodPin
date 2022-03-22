@@ -103,8 +103,8 @@ const getUserById = async(id) => {
 }
 const followUser= async(ids)=>{
     try {
-        let validateString1 = validation.forString(ids.currentUser)
-        let validateString2 = validation.forString(ids.followedUser)
+        let validateString1 = validation.forString(ids.currentUser,"currentUser")
+        let validateString2 = validation.forString(ids.followedUser,"followUser")
         if (validateString1 != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",

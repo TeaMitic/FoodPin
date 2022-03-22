@@ -85,6 +85,7 @@ const savePin = async (req,res) => {
     try {
         let result = await logic.savePin(req.body)
         if (result.success) { 
+            
             resHelper.OkResponse(result.content,res)
         }
         else { 
