@@ -44,7 +44,8 @@ const followAsync = async (followInfo) => {
             receiverID: followedUser.userID,
             senderID: currentUser.userID
         }
-        
+
+        let result = await followDataProvider.follow(fMSG)
 
 
         if(!rabbit.send(msg, followedUser.userID)){

@@ -57,6 +57,7 @@ const followUser = async(req,res)=>{
         }
         let result = await syncLogic.followUser(ids)
         if (result.success) { 
+            result = await asyncLogic.followAsync(ids)
             resHelper.OkResponse(result.content,res)
         }
         else { 
