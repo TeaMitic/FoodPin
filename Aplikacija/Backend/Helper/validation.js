@@ -19,8 +19,6 @@ module.exports = {
     },
     forPin(object) { 
         if (object.pin == undefined) "Pin object not found."
-        if (object.pin.imgName == undefined) return "Image name field not found."
-        if (object.pin.imgName == null || object.pin.imgName == "") return "Image name cannot be null or  empty string."
         if (object.pin.title == undefined) return "Title field not found."
         if (object.pin.title == null || object.pin.title == "") return "Title cannot be null or  empty string."
         if (object.userID == undefined) return "UserID field not found."

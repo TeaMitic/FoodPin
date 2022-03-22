@@ -34,6 +34,11 @@ neo4j.model('User', {
     },
     website: { 
         type: 'string'
-    }
+    },
+    imgName: { 
+        type: "string",
+        default: "defaultImgName",
+        required: true
+    },
 
 });

@@ -22,6 +22,7 @@ module.exports = {
             email: userJson.email != undefined ? userJson.email : null,
             about: userJson.about != undefined ? userJson.about : null,
             website: userJson.website != undefined ? userJson.website : null,
+            imgName: userJson.imgName != undefined ? userJson.imgName : "defaultImgName"
         }
     },
     attachToken(object, token) { 
