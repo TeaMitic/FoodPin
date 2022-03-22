@@ -99,15 +99,9 @@ const likePin = async (pinID) => {
         throw error
     }
 }
-const updatePin= async(pinID, pin)=>{
+const updatePin= async(pin,pinID)=>{
     try {
         let pinDB = await neo4j.model('Pin').find(pinID)
-        if (!pinDB) { 
-            return dtoHelper.createResObject({
-                name: "Client error",
-                text: `Pin with id: '${pinID}' doesn't exist in database.`
-            },false)
-        }
         await pinDB.update({
             imgName: pin.imgName,
             title: pin.title,

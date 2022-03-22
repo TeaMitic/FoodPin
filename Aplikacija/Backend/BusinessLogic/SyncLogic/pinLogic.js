@@ -70,6 +70,28 @@ const createPin = async (pinInfo) => {
     }
 }
 
+const addImage = async(imgName,pinID) => { 
+    try {
+        let validateString = validation.forString(imgName,"imageName")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        } 
+        let pin = await pinDataProvider.getPinById(pinID)
+        if(!pin){
+            return dtoHelper.createResObject(
+                resHelper.NoPinError(pinID), false
+            )
+        } 
+        pin.imgName = imgName
+        return await pinDataProvider.updatePin(pin,pinID)
+    } catch (error) {
+        throw error
+    }
+}
+
 const likePin = async (pinID) => {
     try {
         /*
@@ -109,7 +131,13 @@ const updatePin = async(pinID, pin)=>{
                 text: validateString
             },false)
         }  
-        return await pinDataProvider.updatePin(pinID, pin)
+        let pinDB = await pinDataProvider.getPinById(pinID)
+        if(!pinDB){
+            return dtoHelper.createResObject(
+                resHelper.NoPinError(pinID), false
+            )
+        } 
+        return await pinDataProvider.updatePin(pin, pinID)
         
     } catch (error) {
         throw error
@@ -263,6 +291,7 @@ module.exports = {
     dislikePin,
     deletePin,
     savePin,
-    getByID
+    getByID,
+    addImage
 
 }
