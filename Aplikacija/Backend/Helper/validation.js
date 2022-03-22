@@ -76,7 +76,8 @@ module.exports = {
         if (object.text == undefined) return "Text field not found."
         validateString = this.forString(object.text, "text")
         return 'ok'
-    }
+    },
+
 
     
 }

@@ -19,3 +19,4 @@ amqp.connect('amqp://localhost', (error0,connection) => {
         process.exit(0)
     },500)
 })
+

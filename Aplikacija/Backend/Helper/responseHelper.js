@@ -76,6 +76,12 @@ module.exports = {
             name: "Login error",
             text: `Wrong ${property}.`
         }
+    },
+    NotificationError(userID){
+        return{
+            name: "Notification error",
+            text: `Notification for user ${userID} was not sent`
+        }
     }
     
 
