@@ -101,6 +101,7 @@ const likePin = async (pinID) => {
 }
 const updatePin= async(pin,pinID)=>{
     try {
+        //dto helper 
         let pinDB = await neo4j.model('Pin').find(pinID)
         await pinDB.update({
             imgName: pin.imgName,

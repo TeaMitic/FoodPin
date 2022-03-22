@@ -20,7 +20,6 @@ const create = async (req,res) => {
 
 const addImage = async (req,res) => { 
     try {
-        console.log("CONSOLE:",req.file)
         let result = await logic.addImage(req.file.filename,req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)

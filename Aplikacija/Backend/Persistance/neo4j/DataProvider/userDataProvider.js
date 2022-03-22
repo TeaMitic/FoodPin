@@ -35,7 +35,6 @@ const getUserById = async (id) => {
         let userDB = await neo4j.model('User').find(id)
         if (userDB) { 
             let user = dtoHelper.userToJson(userDB)
-            console.log("USER iz provider-a " +user)
             return user
         }
         else { 
@@ -84,9 +83,29 @@ const followUser= async(ids)=>{
         throw error
     }
 }
+
+const updateProfle = async(user,userID) => { 
+    try {
+        user = dtoHelper.userToModel(user)
+        let userDB = await neo4j.model('User').find(userID)
+        await userDB.update({
+            name: user.name,
+            surname: user.surname,
+            username: user.username,
+            email: user.email,
+            about: user.about,
+            website: user.website,
+            imgName: user.imgName
+        })
+        return dtoHelper.createResObject({},true)
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     create,
     getUserById,
     getUserByUsername,
-    followUser
+    followUser,
+    updateProfle
 }

@@ -4,10 +4,10 @@ const multer = require('multer');
 
 const fileStorageEngine = multer.diskStorage({
     destination: (req,file,cb) => { 
-        cb(null,'./images/pins')
+        cb(null,'./images/profiles')
     },
     filename: (req,file,cb) => { 
-        cb(null,Date.now()+ '--' + file.originalname)
+        cb(null,Date.now()+ '--' + req.params.username)
     }
 })
 const upload = multer({storage: fileStorageEngine})

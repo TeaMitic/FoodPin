@@ -135,9 +135,54 @@ const followUser= async(ids)=>{
     }
 }
 
+const   addImage = async(imgName,username) => { 
+    try {
+        let validateString = validation.forString(imgName,"imageName")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        } 
+        let user = await userDataProvider.getUserByUsername(username)
+        if(!user){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(user.userID), false
+            )
+        } 
+        user.imgName = imgName
+        return await userDataProvider.updateProfle(user,user.userID)
+    } catch (error) {
+        throw error
+    }
+}
+
+const updateProfile = async (user,userID) => { 
+    try {
+        let validateString = validation.forString(imgName,"imageName")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        } 
+        let userDB = await userDataProvider.getUserById(pinID)
+        if(!userDB){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID), false
+            )
+        } 
+        let result = await userDataProvider.updateProfile(user,userID)
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = { 
     registerUser,
     loginUser,
     getUserById,
-    followUser
+    followUser,
+    addImage,
+    updateProfile
 }

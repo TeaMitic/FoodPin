@@ -79,6 +79,7 @@ const   addImage = async(imgName,pinID) => {
                 text: validateString
             },false)
         } 
+        
         let pin = await pinDataProvider.getPinById(pinID)
         if(!pin){
             return dtoHelper.createResObject(

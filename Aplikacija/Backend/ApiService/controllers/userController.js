@@ -1,4 +1,4 @@
-const  syncLogic = require('../../BusinessLogic/SyncLogic/userLogic')
+const syncLogic = require('../../BusinessLogic/SyncLogic/userLogic')
 const asyncLogic = require('../../BusinessLogic/AsyncLogic/userLogicAsync')
 const resHelper = require('../../Helper/responseHelper')
 
@@ -66,25 +66,59 @@ const followUser = async(req,res)=>{
     }
 }
 
-const sendMessage = async (req,res) => { 
+//NOT DONE 
+// const sendMessage = async (req,res) => { 
+//     try {
+//         //mySql async logic 
+//         let result = await logic.getUserById(req.params.id)
+//         if (result.success) { 
+//             resHelper.OkResponse(result.content,res)
+//         }
+//         else { 
+//             resHelper.BadRequestResponse(result.content,res)
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         resHelper.ErrorResponse(error,res)
+//     }
+// }
+
+const addImage = async (req,res) => { 
     try {
-        //mySql async logic 
-        let result = await logic.getUserById(req.params.id)
+        let result = await syncLogic.addImage(req.file.filename,req.params.username)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
         else { 
+            console.log(result)
             resHelper.BadRequestResponse(result.content,res)
         }
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res)
-    }
+    }  
 }
 
+const update = async (req,res) => { 
+    try {
+        let result = await syncLogic.updateProfile(req.body,req.params.id)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }  
+}
 module.exports = { 
     create,
     login,
     getById,
-    followUser
+    followUser,
+    addImage,
+    update
 }
