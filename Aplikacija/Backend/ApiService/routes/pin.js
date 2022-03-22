@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/authentication')
 const pin = require('../controllers/pinController');
-const multer = require('../../middleware/multer/multer')
+const multer = require('../../middleware/multer/multerPins')
 
 router.post('/',auth,pin.create);
 router.post('/addImage/:id',[auth,multer.single('image')],pin.addImage)

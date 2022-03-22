@@ -70,7 +70,7 @@ const createPin = async (pinInfo) => {
     }
 }
 
-const addImage = async(imgName,pinID) => { 
+const   addImage = async(imgName,pinID) => { 
     try {
         let validateString = validation.forString(imgName,"imageName")
         if (validateString != 'ok') { 
