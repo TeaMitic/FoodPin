@@ -351,3 +351,5 @@ MigrationBackup/
 Aplikacija/Frontend/foodpin-app/package-lock.json
 Aplikacija/Frontend/foodpin-app/package-lock.json
 Aplikacija/Frontend/foodpin-app/package-lock.json
+*.jpg
+
