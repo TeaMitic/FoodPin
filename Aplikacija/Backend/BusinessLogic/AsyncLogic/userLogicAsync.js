@@ -2,8 +2,8 @@ const validation = require("../../Helper/validation")
 const userDataProvider  = require( '../../Persistance/neo4j/DataProvider/userDataProvider')
 const resHelper = require('../../Helper/responseHelper')
 const dtoHelper = require('../../Helper/dtoHelper')
-const validation = require('../../Helper/validation')
 const rabbit = require('./rabbit/rabbit')
+const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
 
 const followAsync = async (followInfo) => { 
     try {
@@ -38,15 +38,21 @@ const followAsync = async (followInfo) => {
             content: "has started following you.",
             usernameCurrent: currentUser.username,
         }
+        //msg treba da se zapamti u mysql
+        //ovo je poruka koja se salje u mysql
+        let fMSG={
+            receiverID: followedUser.userID,
+            senderID: currentUser.userID
+        }
+        
+
 
         if(!rabbit.send(msg, followedUser.userID)){
             return dtoHelper.createResObject(
                 resHelper.NotificationError(followedUser.userID), false
             )
         }
-        else{
-            return dtoHelper.createResObject({},true)
-        }
+        return dtoHelper.createResObject({},true)
 
 
         //fje getUserByID - provera
@@ -59,3 +65,6 @@ const followAsync = async (followInfo) => {
 }
 
 
+module.exports={
+    followAsync
+}

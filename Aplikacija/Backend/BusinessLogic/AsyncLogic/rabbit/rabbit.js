@@ -8,7 +8,7 @@ const connect= async()=>{
 
 
 }
-const connection = await connect()
+const connection = connect()
 
 const send = async(msg, queueName) =>{
     const channel = await connection.createChannel()

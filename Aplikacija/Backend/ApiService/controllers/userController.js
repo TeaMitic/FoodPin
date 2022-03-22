@@ -6,6 +6,7 @@ const  create = async (req,res) => {
     try {
         let result = await syncLogic.registerUser(req.body)
         if (result.success) { 
+            //create queue for notif
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -22,6 +23,7 @@ const login = async(req,res) => {
     try {
         let result = await syncLogic.loginUser(req.body)
         if (result.success) { 
+            //create queue for notif
             resHelper.OkResponse(result.content,res)
         }
         else { 

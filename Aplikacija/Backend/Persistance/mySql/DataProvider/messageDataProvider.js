@@ -1,6 +1,8 @@
 const Message = require('../models/messageModel')
 const sequelize = require('../config/mySql-config')
 
+//not done
+
 const createMessage = async (messageInfo) => { 
     try {
         await sequelize.sync()
