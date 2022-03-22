@@ -1,5 +1,5 @@
 const {DataTypes} = require('sequelize')
-const sequelize = require('../config')
+const sequelize = require('../config/mySql-config')
 
 const Follow = sequelize.define('Follow', { 
     id: { 
@@ -20,10 +20,13 @@ const Follow = sequelize.define('Follow', {
         allowNull: false,
         defaultValue: false
     },
-    createdAt: { 
-        type: DataTypes.DATE,
-        allowNull: false,
-    }
+    // createdAt: { 
+    //     type: DataTypes.DATE,
+    //     allowNull: false,
+    // }
+},{
+    freezeTableName:true,
+    timestamps:true
 })
 
 // Follow.sync() //- This creates the table if it doesn't exist (and does nothing if it already exists)

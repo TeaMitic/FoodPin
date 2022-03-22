@@ -24,7 +24,13 @@ module.exports = {
       createdAt: { 
           type: Sequelize.DataTypes.DATE,
           allowNull: false,
+      },
+      updatedAt: { 
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
       } 
+    },{
+      timestamp:true
     })
   },
 
