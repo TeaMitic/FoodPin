@@ -16,6 +16,8 @@ const createMessage = async (req,res) => {
 const getBoardByName = async (req,res) => { 
     try {
         let board = await boardDataProvider.getBoardByName(req.body.name,req.body.userID)
+        resHelper.OkResponse(board,res)
+        
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res)
