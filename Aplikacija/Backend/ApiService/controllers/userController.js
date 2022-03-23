@@ -6,6 +6,7 @@ const  create = async (req,res) => {
     try {
         let result = await syncLogic.registerUser(req.body)
         if (result.success) { 
+            //create queue for notif
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -22,6 +23,7 @@ const login = async(req,res) => {
     try {
         let result = await syncLogic.loginUser(req.body)
         if (result.success) { 
+            //create queue for notif
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -55,11 +57,33 @@ const followUser = async(req,res)=>{
         }
         let result = await syncLogic.followUser(ids)
         if (result.success) { 
+            result = await asyncLogic.followAsync(ids)
             resHelper.OkResponse(result.content,res)
         }
         else { 
             resHelper.BadRequestResponse(result.content,res)
         }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
+const unfollowUser = async(req, res)=>{
+    try {
+        ids={
+            currentUser: req.body.currentUser,
+            followedUser: req.body.followedUser
+        }
+        let result = await syncLogic.unfollowUser(ids)
+        if (result.success) { 
+            //result = await asyncLogic.followAsync(ids)
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+        
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res)
@@ -119,6 +143,7 @@ module.exports = {
     login,
     getById,
     followUser,
+    unfollowUser,
     addImage,
     update
 }

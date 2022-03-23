@@ -24,10 +24,14 @@ const Message = sequelize.define('Message', {
         allowNull: false,
         defaultValue: false
     },
-    createdAt: { 
-        type: DataTypes.DATE,
-        allowNull: false,
-    }
+    // createdAt: { 
+    //     type: DataTypes.DATE,
+    //     allowNull: false,
+    // }
+},{
+    freezeTableName:true,
+    timestamps:true
+
 })
 // Message.sync() //- This creates the table if it doesn't exist (and does nothing if it already exists)
 //  Message.sync({ force: true }) //- This creates the table, dropping it first if it already existed

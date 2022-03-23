@@ -135,6 +135,39 @@ const followUser= async(ids)=>{
     }
 }
 
+const unfollowUser = async(ids)=>{
+    try {
+        let validateString1 = validation.forString(ids.currentUser)
+        let validateString2 = validation.forString(ids.followedUser)
+        if (validateString1 != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString1
+            },false)         
+        }
+        if (validateString2 != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString2
+            },false)         
+        }
+        let currentUser = await userDataProvider.getUserById(ids.currentUser)
+        let followedUser = await userDataProvider.getUserById(ids.followedUser)
+        if(!currentUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.currentUser), false
+            )
+        }
+        if(!followedUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.followedUser), false
+            )
+        }
+        return await userDataProvider.unfollowUser(ids)
+    } catch (error) {
+        throw error
+    }
+}
 const   addImage = async(imgName,username) => { 
     try {
         let validateString = validation.forString(imgName,"imageName")
@@ -176,13 +209,14 @@ const updateProfile = async (user,userID) => {
     } catch (error) {
         throw error
     }
-}
+} 
 
 module.exports = { 
     registerUser,
     loginUser,
     getUserById,
     followUser,
+    unfollowUser,
     addImage,
     updateProfile
 }

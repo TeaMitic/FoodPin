@@ -2,6 +2,7 @@ const resHelper = require('../../Helper/responseHelper');
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
 const messageDataProvider = require('../../Persistance/mySql/DataProvider/messageDataProvider')
+const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
 
 const createMessage = async (req,res) => { 
     try {
@@ -44,9 +45,25 @@ const getUserById = async (req,res) => {
         resHelper.ErrorResponse(error,res)
     }
 }
+
+const followUser = async (req, res)=>{
+    try {
+        let msg={
+            receiverID: req.body.followedUser,
+            senderID: req.body.currentUser
+        }
+        let fUser = await followDataProvider.follow(msg)
+        
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 module.exports = { 
     getBoardByName,
     connectBoardAndUser,
     getUserById,
-    createMessage
+    createMessage,
+    followUser
 }

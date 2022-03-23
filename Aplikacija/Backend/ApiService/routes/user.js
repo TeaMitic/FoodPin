@@ -13,5 +13,7 @@ router.post('/addImage/:username',middlewares,user.addImage)
 router.post('/login',user.login)
 router.get('/get/:id',auth,user.getById)
 router.post('/follow',auth,user.followUser)
+router.post('/unfollow',auth,user.unfollowUser)
 router.put('/update/:id',auth,user.update)
+
 module.exports = router;

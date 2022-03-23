@@ -24,10 +24,14 @@ const Like = sequelize.define('Like', {
         allowNull: false,
         defaultValue: false
     },
-    createdAt: { 
-        type: DataTypes.DATE,
-        allowNull: false,
-    }
+    // createdAt: { 
+    //     type: DataTypes.DATE,
+    //     allowNull: false,
+    // }
+},{
+    freezeTableName:true,
+    timestamps:true
+
 })
 
 // Like.sync() //- This creates the table if it doesn't exist (and does nothing if it already exists)

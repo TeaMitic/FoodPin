@@ -30,8 +30,12 @@ module.exports = {
           defaultValue: false
       },
       createdAt: { 
-          type: Sequelize.DataTypes.DATE,
-          allowNull: false,
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+      },
+      updatedAt: { 
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
       } 
     })
   },
