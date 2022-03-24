@@ -1,18 +1,23 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="message">Message: <br></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+const rabbit = require('./helper/rabbit/rabbit')
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data() {
+    return {
+      message: ""
+    }
+  },
+  async created() {
+    this.message = await rabbit.receive("7e72bbfe-8ebf-4956-9e72-a5d8b5cc2913",conneciton)
+  },
 }
 </script>
 
@@ -24,5 +29,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.message { 
+  border: 1px solid black;
 }
 </style>
