@@ -17,7 +17,7 @@ const send = async(msg, queueName) =>{
 
     return true
 }
-S
+
 const createQueue = async(queueName)=>{
     const channel = await connection.createChannel()
     await channel.assertQueue(queueName, {durable:false, autoDelete:true, expires:18000000})

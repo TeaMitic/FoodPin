@@ -18,6 +18,7 @@ const receive = async(queueName) => {
         message = msg.content
         let notification = `${message.usernameCurrent} ${message.content}`
         return notification
+        // callback
     }, {
         noAck: true
     })

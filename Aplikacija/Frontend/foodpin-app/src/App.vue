@@ -16,7 +16,9 @@ export default {
     }
   },
   async created() {
-    this.message = await rabbit.receive("7e72bbfe-8ebf-4956-9e72-a5d8b5cc2913",conneciton)
+    this.message = await rabbit.receive("7e72bbfe-8ebf-4956-9e72-a5d8b5cc2913",conneciton, { 
+      //postavi notif u computed
+    })
   },
 }
 </script>
