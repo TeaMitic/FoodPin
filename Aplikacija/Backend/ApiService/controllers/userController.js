@@ -77,7 +77,7 @@ const unfollowUser = async(req, res)=>{
         }
         let result = await syncLogic.unfollowUser(ids)
         if (result.success) { 
-            //result = await asyncLogic.followAsync(ids)
+            result = await asyncLogic.unfollowAsync(ids)
             resHelper.OkResponse(result.content,res)
         }
         else { 
