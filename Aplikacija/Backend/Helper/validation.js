@@ -86,6 +86,16 @@ module.exports = {
         if (validateString != 'ok') return validateString
         return 'ok'
     },
+    forUserNotification(object) { 
+        if (object.senderID == undefined) return "SenderID field not found."
+        let validateString = this.forString(object.senderID,"senderID")
+        if (validateString != 'ok') return validateString
+
+        if (object.receiverID == undefined) return "ReceiverID field not found."
+        validateString = this.forString(object.receiverID,"receiverID")
+        if (validateString != 'ok') return validateString
+        return 'ok'
+    },
     forComment(object) { 
         if (object.text == undefined) return "Text field not found."
         let validateString = this.forString(object.text,"comment")
@@ -95,7 +105,7 @@ module.exports = {
         if (validateString != 'ok') return validateString
 
         return 'ok'
-    }
+    },
 
 
     

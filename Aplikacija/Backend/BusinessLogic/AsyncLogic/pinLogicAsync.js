@@ -60,6 +60,27 @@ const dislikePin = async(pinID, likeInfo)=>{
                 text: validateString
             },false)
         }
+        let validate = validation.forUserNotification(likeInfo)
+        if (validate != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validate
+            },false)
+        }
+
+        let senderID = await userDataProvider.getUserById(likeInfo.senderID)
+        let receiverID = await userDataProvider.getUserById(likeInfo.receiverID)
+        if(!senderID){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(likeInfo.senderID), false
+            )
+        }
+        if(!receiverID){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(likeInfo.receiverID), false
+            )
+        }
+
         let pin= await pinDataProvider.getPinById(pinID)
         if(!pin){
             return dtoHelper.createResObject(
