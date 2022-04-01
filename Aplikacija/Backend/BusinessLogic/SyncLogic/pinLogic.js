@@ -4,6 +4,8 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../../Helper/validation')
 const resHelper = require('../../Helper/responseHelper')
+const fs = require('fs')
+const path = require('path')
 
 const createPin = async (pinInfo) => { 
     try {
@@ -273,6 +275,15 @@ const getByID =async(pinID)=>{
             },false)         
         }
         let pin =await pinDataProvider.getPinById(pinID)
+
+        let filePath 
+        let image
+        if (pin.imgName != undefined ) { 
+            filePath = path.join(__dirname,'..','..','images','pins',pin.imgName)
+            image= fs.readFileSync(filePath)
+            pin.photo = image
+        } 
+
         return dtoHelper.createResObject(pin,true)
         
     } catch (error) {

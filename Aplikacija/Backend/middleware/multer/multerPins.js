@@ -1,5 +1,5 @@
 const multer = require('multer'); 
-
+const path = require('path')
 //config for pin photos 
 const fileStorageEngine = multer.diskStorage({
     destination: (req,file,cb) => { 
@@ -11,7 +11,17 @@ const fileStorageEngine = multer.diskStorage({
         cb(null,req.params.id + '.' + ext) //no duplicates in file system
     }
 })
-const upload = multer({storage: fileStorageEngine})
+const upload = multer({
+    storage: fileStorageEngine,
+    fileFilter: function(req,file,cb) { 
+        let ext = path.extname(file.originalname)
+        if (ext !== '.jpg') { return cb(new Error("Only '.jpg' files are allowed."))}
+        cb(null,true)
+    },
+    limits: { 
+        fileSize: 1024 * 1024 * 3 // 3MB max size 
+    }
+})
 
 
 
