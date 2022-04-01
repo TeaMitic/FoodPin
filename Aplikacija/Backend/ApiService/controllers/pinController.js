@@ -40,7 +40,7 @@ const like = async (req,res) => {
     try {
         let result = await syncLogic.likePin(req.params.id)
         if (result.success) { 
-            result= await asyncLogic.likePin(req.params.id)
+            result= await asyncLogic.likePin(req.params.id, req.body)
             resHelper.OkResponse(result.content,res)
         }
         else { 
