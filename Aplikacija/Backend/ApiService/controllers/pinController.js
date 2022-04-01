@@ -1,4 +1,3 @@
-//const logic = require('../../BusinessLogic/SyncLogic/pinLogic')
 const resHelper = require('../../Helper/responseHelper')
 const syncLogic = require('../../BusinessLogic/SyncLogic/pinLogic')
 const asyncLogic = require('../../BusinessLogic/AsyncLogic/pinLogicAsync')
@@ -106,6 +105,7 @@ const savePin = async (req,res) => {
     try {
         let result = await syncLogic.savePin(req.body)
         if (result.success) { 
+            
             //mysql
             resHelper.OkResponse(result.content,res)
         }
