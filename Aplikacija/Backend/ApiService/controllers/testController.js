@@ -4,6 +4,8 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const messageDataProvider = require('../../Persistance/mySql/DataProvider/messageDataProvider')
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
 const redisClient = require('../../BusinessLogic/AsyncLogic/pushNotif/redis-config')
+const pinDataProvider = require('../../Persistance/neo4j/DataProvider/pinDataProvider');
+const { randomUUID } = require('crypto');
 
 const createMessage = async (req,res) => { 
     try {
@@ -99,6 +101,21 @@ const getPic = async (req,res) => {
     }
 }
 
+const commentPin = async (req,res) => { 
+    try {
+        await pinDataProvider.commentPin({
+            senderID: '7e72bbfe-8ebf-4956-9e72-a5d8b5cc2913',
+            pinID: 'fa72cfe2-778c-4016-b402-3287d16a3cd9',
+            createdAt: new Date().toISOString(),
+            text: 'Nice food!',
+            
+        })
+        res.status(200).send(randomUUID())
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
 module.exports = { 
     getBoardByName,
     connectBoardAndUser,
@@ -106,5 +123,6 @@ module.exports = {
     createMessage,
     followUser,
     testWs,
-    getPic
+    getPic,
+    commentPin
 }

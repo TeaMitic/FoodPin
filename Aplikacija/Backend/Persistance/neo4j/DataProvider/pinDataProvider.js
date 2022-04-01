@@ -1,6 +1,7 @@
 const dtoHelper = require('../../../Helper/dtoHelper')
 const neo4j = require('../config')
 const arrayHelper = require('../../../Helper/arrayHelper')
+const { randomUUID } = require('crypto');
 
 const createPin = async (pinInfo) => { 
     try {
@@ -177,6 +178,31 @@ const getPinWithTags = async (pinID) =>  {
     return pin
 }
 
+const commentPin = async (commentInfo) => { 
+    try {
+        let senderID = commentInfo.senderID
+        let pinId = commentInfo.pinID
+        let createdAt = commentInfo.createdAt
+        let text = commentInfo.text
+
+        let result = await neo4j.writeCypher(`
+            MATCH (u:User {userID: '${senderID}'}),
+                  (p:Pin {pinID: '${pinId}'})-[:BELONGS]->(b:Board)<-[:HAS_BOARD]-(q:User)
+            CREATE (u)-[r:COMMENT {
+                    createdAt: '${createdAt}',
+                    text: '${text}',
+                    uuid: '${randomUUID()}' 
+                }]->(p)
+            RETURN q
+        `)
+        if (result.records.length === 0) { 
+            return null
+        }
+        return dtoHelper.fromCypher(result) //vracam receiver-a da ga prosledim u async logiku 
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     createPin,
     likePin,
@@ -186,5 +212,6 @@ module.exports = {
     dislikePin,
     updatePin,
     getPinById,
-    getPinWithTags
+    getPinWithTags,
+    commentPin
 }

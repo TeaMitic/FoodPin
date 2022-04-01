@@ -136,6 +136,30 @@ const  getByID = async(req,res)=>{
     }
 }
 
+const commentPin = async (req,res) => { 
+    try {
+        let result = await syncLogic.commentPin(req.body)
+        if (result.success) { 
+            //in result.content se nalazi receiverID 
+            result = await asyncLogic.commentPin({
+                senderID: req.body.senderID,
+                text: req.body.text,
+                receiverID: result.content.receiverID,
+                pinID: req.body.pinID
+            })
+            if (!result.success) return resHelper.ErrorResponse(result.content,res)
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 module.exports = { 
     create,
     like,
@@ -144,5 +168,6 @@ module.exports = {
     deletePin,
     savePin,
     getByID,
-    addImage
+    addImage,
+    commentPin
 }

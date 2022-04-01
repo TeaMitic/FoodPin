@@ -291,6 +291,37 @@ const getByID =async(pinID)=>{
     }
 }
 
+const commentPin = async(commentInfo) => { 
+    try {
+        let validateString = validation.forComment(commentInfo)
+        if (validateString != 'ok') {
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false) 
+        }
+        let sender = await userDataProvider.getUserById(commentInfo.senderID)
+        if (!sender) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(commentInfo.senderID),false
+            )
+        }   
+        let pin = await pinDataProvider.getPinById(commentInfo.pinID)
+        if (!pin) { 
+            return dtoHelper.createResObject(
+                resHelper.NoPinError(commentInfo.pinID),false
+            )
+        } 
+        commentInfo.createdAt = new Date().toISOString()
+
+        let result = await pinDataProvider.commentPin(commentInfo) 
+        return dtoHelper.createResObject({
+            receiverID: result[0].userID
+        },true) 
+    } catch (error) {
+        throw error
+    }
+}  
 
 module.exports = { 
     createPin,
@@ -300,6 +331,7 @@ module.exports = {
     deletePin,
     savePin,
     getByID,
-    addImage
+    addImage,
+    commentPin
 
 }

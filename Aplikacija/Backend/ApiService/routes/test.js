@@ -9,4 +9,5 @@ router.post('/message',test.createMessage)
 router.post('/follow',test.followUser)
 router.post('/ws',test.testWs)
 router.get('/getPic',test.getPic)
+router.post('/comment',test.commentPin)
 module.exports = router

@@ -3,7 +3,7 @@ const sequelize = require('../config/mySql-config')
 
 const Comment = sequelize.define('Comment', { 
     id: { 
-        type: Sequelize.DataTypes.INTEGER,
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },

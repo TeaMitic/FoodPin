@@ -17,5 +17,6 @@ router.put('/dislike/:id',auth,pin.dislike)
 router.delete('/delete/:id',auth,pin.deletePin)
 router.post('/save',auth,pin.savePin)
 router.get('/get/:id',auth,pin.getByID)
+router.post('/comment',auth,pin.commentPin)
 
 module.exports = router;
