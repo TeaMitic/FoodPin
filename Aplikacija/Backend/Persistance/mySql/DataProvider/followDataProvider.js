@@ -14,14 +14,41 @@ const follow = async(msg)=>{
 
 const unfollow = async(id)=>{
     try {
-        
+        let row= await Follow.destroy({
+            where: {
+                senderID: id.currentUser,
+                receiverID: id.followedUser
+            }
+        })
+        console.log(row);
+        return true
+
     } catch (error) {
         throw error
     }
 
 }
 
+const like= async()=>{
+    try {
+        
+    } catch (error) {
+        throw error        
+    }
+}
+
+const dislike = async()=>{
+    try {
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports= {
-    follow, unfollow
+    follow,
+    unfollow,
+    like,
+    dislike
 }
 
