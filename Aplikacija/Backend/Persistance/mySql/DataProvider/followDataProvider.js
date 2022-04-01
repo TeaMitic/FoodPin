@@ -12,11 +12,16 @@ const follow = async(msg)=>{
     }
 }
 
-const unfollow = async(msg)=>{
+const unfollow = async(id)=>{
+    try {
+        
+    } catch (error) {
+        throw error
+    }
 
 }
 
 module.exports= {
-    follow
+    follow, unfollow
 }
 

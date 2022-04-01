@@ -13,6 +13,12 @@ const followAsync = async (followInfo) => {
         //     userID followed - queue name
         //}
         let validateString = validation.forString(followInfo.currentUser, "currentUser")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        }
         validateString = validation.forString(followInfo.followedUser, "followedUser")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
@@ -63,8 +69,42 @@ const followAsync = async (followInfo) => {
         throw error
     }
 }
+const unfollowAsync=async(ids)=>{
+    try {        
+        let validateString = validation.forString(ids.currentUser, "currentUser")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        }
+        let currentUser = await userDataProvider.getUserById(ids.currentUser)
+        if(!currentUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.currentUser), false
+            )
+        }
+    
+        let result = await followDataProvider.unfollow(ids.currentUser)
+        if(result){
+            return dtoHelper.createResObject({},true)
+        }
+        else{
+            return dtoHelper.createResObject({},false)
+        }
+        
+    } catch (error) {
+        throw error
+    }
+
+}
+
+
+
 
 
 module.exports={
-    followAsync
+    followAsync,
+    unfollowAsync
+    
 }
