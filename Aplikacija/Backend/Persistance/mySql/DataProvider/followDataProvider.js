@@ -14,7 +14,15 @@ const follow = async(msg)=>{
 
 const unfollow = async(id)=>{
     try {
-        
+        let row= await Follow.destroy({
+            where: {
+                senderID: id.currentUser,
+                receiverID: id.followedUser
+            }
+        })
+        console.log(row);
+        return true
+
     } catch (error) {
         throw error
     }
@@ -22,6 +30,8 @@ const unfollow = async(id)=>{
 }
 
 module.exports= {
-    follow, unfollow
+    follow,
+    unfollow,
+   
 }
 

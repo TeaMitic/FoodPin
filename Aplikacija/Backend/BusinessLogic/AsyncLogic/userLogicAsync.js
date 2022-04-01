@@ -53,11 +53,11 @@ const followAsync = async (followInfo) => {
         let result = await followDataProvider.follow(fMSG)
 
         
-        if(!rabbit.send(msg, followedUser.userID)){
-            return dtoHelper.createResObject(
-                resHelper.NotificationError(followedUser.userID), false
-            )
-        }
+        // if(!rabbit.send(msg, followedUser.userID)){
+        //     return dtoHelper.createResObject(
+        //         resHelper.NotificationError(followedUser.userID), false
+        //     )
+        // }
         return dtoHelper.createResObject({},true)
 
 
@@ -78,14 +78,27 @@ const unfollowAsync=async(ids)=>{
                 text: validateString
             },false)
         }
+        validateString = validation.forString(ids.followedUser, "currentUser")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)
+        }
         let currentUser = await userDataProvider.getUserById(ids.currentUser)
         if(!currentUser){
             return dtoHelper.createResObject(
                 resHelper.NoUserError(ids.currentUser), false
             )
         }
+        let followedUser = await userDataProvider.getUserById(ids.followedUser)
+        if(!followedUser){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(ids.followedUser), false
+            )
+        }
     
-        let result = await followDataProvider.unfollow(ids.currentUser)
+        let result = await followDataProvider.unfollow(ids)
         if(result){
             return dtoHelper.createResObject({},true)
         }
@@ -103,8 +116,10 @@ const unfollowAsync=async(ids)=>{
 
 
 
+
+
 module.exports={
     followAsync,
-    unfollowAsync
+    unfollowAsync,
     
 }
