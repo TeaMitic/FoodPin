@@ -29,26 +29,9 @@ const unfollow = async(id)=>{
 
 }
 
-const like= async()=>{
-    try {
-        
-    } catch (error) {
-        throw error        
-    }
-}
-
-const dislike = async()=>{
-    try {
-        
-    } catch (error) {
-        throw error
-    }
-}
-
 module.exports= {
     follow,
     unfollow,
-    like,
-    dislike
+   
 }
 
