@@ -5,6 +5,8 @@ const dtoHelper = require('../../Helper/dtoHelper')
 const validation = require('../../Helper/validation')
 const boardLogic = require('./boardLogic')
 const bcrypt = require('bcrypt')
+const fs = require('fs')
+const path = require('path')
 
 
 const attachToken = (userInfo) => { 
@@ -95,7 +97,20 @@ const getUserById = async(id) => {
                 text: validateString
             },false)         
         }
-        return await userDataProvider.getUserById(id)
+        //get user from neo4j db
+        let user = await userDataProvider.getUserById(id)
+        //get image filename and load image and attach do object
+        let filePath 
+        let image
+        if (user.imgName != undefined ) { 
+            filePath = path.join(__dirname,'..','..','images','profiles',user.imgName)
+            image= fs.readFileSync(filePath)
+            user.photo = image
+        }
+        
+        return dtoHelper.createResObject(user,true)
+
+        
     } catch (error) {
         throw error
     }

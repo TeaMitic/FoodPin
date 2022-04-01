@@ -79,15 +79,20 @@ const testWs = async (req,res) => {
 
 const getPic = async (req,res) => { 
     try {
+        const fs = require('fs')
         const path = require('path')
-        let options = { 
-            root: "images\\profiles"
+        const imgCb = async (err,data) => { 
+            if (err) throw err;
+            resHelper.OkResponse({
+                photo: data
+            },res)
+
         }
-        let filename = "tea.jpg"
-        res.sendFile(filename,options, function (err) { 
-            if (err) { console.log(err); resHelper.ErrorResponse(err,res) }
-            else { console.log('Sent: ', filename)}
-        })
+        let filePath = path.join(__dirname,'..','..','images','profiles','tea.jpg')
+        res.sendFile(filePath)
+        // fs.readFile(filePath,imgCb)
+        // resHelper.OkResponse({},res)
+        // throw Error("NOT IMPLEMENTED")
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res)
