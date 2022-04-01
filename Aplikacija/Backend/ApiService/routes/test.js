@@ -8,4 +8,5 @@ router.get('/user/get/:id',test.getUserById)
 router.post('/message',test.createMessage)
 router.post('/follow',test.followUser)
 router.post('/ws',test.testWs)
+router.get('/getPic',test.getPic)
 module.exports = router

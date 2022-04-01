@@ -7,7 +7,9 @@ const fileStorageEngine = multer.diskStorage({
         cb(null,'./images/profiles')
     },
     filename: (req,file,cb) => { 
-        cb(null,Date.now()+ '--' + req.params.username)
+        let ext = file.originalname.split('.')
+        ext = ext[ext.length - 1]
+        cb(null,req.params.username + '.' + ext) //no duplicates in file system
     }
 })
 const upload = multer({storage: fileStorageEngine})

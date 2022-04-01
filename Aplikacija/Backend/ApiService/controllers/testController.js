@@ -37,6 +37,7 @@ const connectBoardAndUser = async (req,res) => {
     }
 }
 
+//test done
 const getUserById = async (req,res) => { 
     try {
         let user = await userDataProvider.getUserById(req.params.id)
@@ -61,6 +62,7 @@ const followUser = async (req, res)=>{
     }
 }
 
+//test done 
 const testWs = async (req,res) => { 
     try {
        redisClient.publish('app:notif', JSON.stringify({
@@ -75,11 +77,29 @@ const testWs = async (req,res) => {
     }
 }
 
+const getPic = async (req,res) => { 
+    try {
+        const path = require('path')
+        let options = { 
+            root: "images\\profiles"
+        }
+        let filename = "tea.jpg"
+        res.sendFile(filename,options, function (err) { 
+            if (err) { console.log(err); resHelper.ErrorResponse(err,res) }
+            else { console.log('Sent: ', filename)}
+        })
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 module.exports = { 
     getBoardByName,
     connectBoardAndUser,
     getUserById,
     createMessage,
     followUser,
-    testWs
+    testWs,
+    getPic
 }
