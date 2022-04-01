@@ -12,18 +12,15 @@ const followAsync = async (followInfo) => {
         //     usernameCurrent
         //     userID followed - queue name
         //}
-        let validateString = validation.forString(followInfo.currentUser, "currentUser")
-        if (validateString != 'ok') { 
+        let obj={
+            senderID: ids.currentUser,
+            receiverID: ids.followedUser
+        } 
+        let validate = validation.forUserNotification(obj)
+        if (validate != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
-                text: validateString
-            },false)
-        }
-        validateString = validation.forString(followInfo.followedUser, "followedUser")
-        if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
+                text: validate
             },false)
         }
 
@@ -70,19 +67,16 @@ const followAsync = async (followInfo) => {
     }
 }
 const unfollowAsync=async(ids)=>{
-    try {        
-        let validateString = validation.forString(ids.currentUser, "currentUser")
-        if (validateString != 'ok') { 
+    try {       
+        let obj={
+            senderID: ids.currentUser,
+            receiverID: ids.followedUser
+        } 
+        let validate = validation.forNotification(obj)
+        if (validate != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
-                text: validateString
-            },false)
-        }
-        validateString = validation.forString(ids.followedUser, "currentUser")
-        if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
+                text: validate
             },false)
         }
         let currentUser = await userDataProvider.getUserById(ids.currentUser)
