@@ -73,6 +73,7 @@ const dislike = async (req,res) => {
         let result = await syncLogic.dislikePin(req.params.id)
         if (result.success) { 
             //mysql
+            result= await asyncLogic.dislikePin(req.params.id, req.body)
             resHelper.OkResponse(result.content,res)
         }
         else { 

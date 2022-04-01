@@ -16,8 +16,16 @@ const like= async(likeInfo)=>{
     }
 }
 
-const dislike = async()=>{
+const dislike = async(info)=>{
     try {
+        let row = await Like.destroy({
+            where: {
+                pinID: info.pinID,
+                senderID: info.senderID,
+                receiverID: info.receiverID
+            }
+        })
+        return true
         
     } catch (error) {
         throw error
