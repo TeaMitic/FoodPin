@@ -1,24 +1,49 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <div class="message">Message: <br></div>
+    <div class="message">Message: <br> {{MessageTracker}}</div>
   </div>
 </template>
 
 <script>
-const rabbit = require('./helper/rabbit/rabbit')
 
 export default {
   name: 'App',
+  computed: {
+    MessageTracker() { 
+      return this.message
+    }
+  },
   data() {
     return {
       message: ""
     }
   },
   async created() {
-    this.message = await rabbit.receive("7e72bbfe-8ebf-4956-9e72-a5d8b5cc2913",conneciton, { 
-      //postavi notif u computed
-    })
+    //testiramo
+    let wsUrl = 'ws://localhost:3000/'
+    let ws = new WebSocket(wsUrl)
+    ws.onopen = async () => { 
+      ws.send(JSON.stringify({
+        userID: "15", //userID,
+        init: true
+      }))
+    }
+    ws.onmessage = async (event) => { 
+      let message = JSON.parse(event.data)
+      //message from backend
+      console.log(message)
+      this.message = message
+      if (message.type == 'Chat') { 
+          //notify client about new message
+          //send chat message 
+      }
+      else { 
+          //notify client abotu new notification 
+          //enable red dot 
+
+      }
+    }
   },
 }
 </script>

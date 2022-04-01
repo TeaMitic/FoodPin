@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.8.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.2",
@@ -19,8 +18,9 @@
     "mysql2": "^2.3.3",
     "neode": "^0.4.7",
     "nodemon": "^2.0.15",
+    "redis": "^4.0.4",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1",
-    "tedious": "^14.3.0"
+    "ws": "^8.5.0"
   }
 }

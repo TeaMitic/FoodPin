@@ -3,6 +3,7 @@ const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDat
 const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
 const messageDataProvider = require('../../Persistance/mySql/DataProvider/messageDataProvider')
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
+const redisClient = require('../../BusinessLogic/AsyncLogic/pushNotif/redis-config')
 
 const createMessage = async (req,res) => { 
     try {
@@ -60,10 +61,25 @@ const followUser = async (req, res)=>{
     }
 }
 
+const testWs = async (req,res) => { 
+    try {
+       redisClient.publish('app:notif', JSON.stringify({
+           userID: "15",
+       }))
+       console.log();
+       resHelper.OkResponse({},res)
+        
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 module.exports = { 
     getBoardByName,
     connectBoardAndUser,
     getUserById,
     createMessage,
-    followUser
+    followUser,
+    testWs
 }

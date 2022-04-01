@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const neo4j = require('./Persistance/neo4j/config');
 const sequelize = require('./Persistance/mySql/config/mySql-config')
-
+const redisServer = require('./BusinessLogic/AsyncLogic/pushNotif/redis-config')
+const ws = require('./BusinessLogic/AsyncLogic/pushNotif/ws-config')
 const user = require('./ApiService/routes/user');
 const pin = require('./ApiService/routes/pin');
 const board = require('./ApiService/routes/board');
@@ -26,6 +27,7 @@ app.use('/api/test',test);
 
 /*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
 //neo4j.schema.drop().then(() => console.log('Schema dropped!'))
+
 
 app.listen(5000,() => {
    console.log('Server is listening on port 5000...');

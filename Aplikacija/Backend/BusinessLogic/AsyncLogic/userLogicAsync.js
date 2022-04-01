@@ -2,7 +2,6 @@ const validation = require("../../Helper/validation")
 const userDataProvider  = require( '../../Persistance/neo4j/DataProvider/userDataProvider')
 const resHelper = require('../../Helper/responseHelper')
 const dtoHelper = require('../../Helper/dtoHelper')
-const rabbit = require('./rabbit/rabbit')
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
 
 const followAsync = async (followInfo) => { 
