@@ -53,7 +53,7 @@ const followAsync = async (followInfo) => {
 
         let result = await followDataProvider.follow(fMSG)
 
-
+        
         if(!rabbit.send(msg, followedUser.userID)){
             return dtoHelper.createResObject(
                 resHelper.NotificationError(followedUser.userID), false
