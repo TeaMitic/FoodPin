@@ -1,9 +1,9 @@
-const logic = require('../../BusinessLogic/SyncLogic/pinLogic')
+const syncLogic = require('../../BusinesssyncLogic/SyncLogic/pinLogic')
 const resHelper = require('../../Helper/responseHelper')
 
 const create = async (req,res) => { 
     try {
-        let result = await logic.createPin(req.body)
+        let result = await syncLogic.createPin(req.body)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -20,7 +20,7 @@ const create = async (req,res) => {
 
 const addImage = async (req,res) => { 
     try {
-        let result = await logic.addImage(req.file.filename,req.params.id)
+        let result = await syncLogic.addImage(req.file.filename,req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -36,7 +36,7 @@ const addImage = async (req,res) => {
 
 const like = async (req,res) => { 
     try {
-        let result = await logic.likePin(req.params.id)
+        let result = await syncLogic.likePin(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -51,7 +51,7 @@ const like = async (req,res) => {
 }
 const update = async(req, res)=>{
     try {
-        let result = await logic.updatePin(req.params.id, req.body)
+        let result = await syncLogic.updatePin(req.params.id, req.body)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -67,7 +67,7 @@ const update = async(req, res)=>{
 }
 const dislike = async (req,res) => { 
     try {
-        let result = await logic.dislikePin(req.params.id)
+        let result = await syncLogic.dislikePin(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -83,7 +83,7 @@ const dislike = async (req,res) => {
 
 const deletePin = async (req,res) => {
     try {
-        let result = await logic.deletePin(req.params.id)
+        let result = await syncLogic.deletePin(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -99,10 +99,9 @@ const deletePin = async (req,res) => {
 
 const savePin = async (req,res) => { 
     try {
-        let result = await logic.savePin(req.body)
+        let result = await syncLogic.savePin(req.body)
         if (result.success) { 
             
-            resHelper.OkResponse(result.content,res)
         }
         else { 
             console.log(result)
@@ -115,7 +114,7 @@ const savePin = async (req,res) => {
 }
 const  getByID = async(req,res)=>{
     try {
-        let result = await logic.getByID(req.params.id)
+        let result = await syncLogic.getByID(req.params.id)
        // console.log("PIN iz controlera: ")
         if (result.success) { 
             //console.log(result.content)
