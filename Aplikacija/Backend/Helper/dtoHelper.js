@@ -1,9 +1,9 @@
-const toJSON = (obj) => { 
-    //converts from neode model to json
-    return Object.fromEntries(obj._properties)
-}
+
 
 module.exports = {
+    toJSON(obj) { 
+        return Object.fromEntries(obj._properties)
+    },
     userToJson(userModel) {
         return this.toJSON(userModel)
     },
@@ -27,7 +27,6 @@ module.exports = {
             email: userJson.email != undefined ? userJson.email : null,
             about: userJson.about != undefined ? userJson.about : null,
             website: userJson.website != undefined ? userJson.website : null,
-            imgName: userJson.imgName != undefined ? userJson.imgName : "defaultImgName"
         }
     },
     attachToken(object, token) { 
@@ -42,13 +41,13 @@ module.exports = {
     },
     pinToModel(pinJson) { 
         return { 
+            pinID: pinJson.pinID != undefined ? pinJson.pinID : null,
             creatorID: pinJson.creatorID != undefined ? pinJson.creatorID : null,
-            imgName: pinJson.imgName != undefined ? pinJson.imgName : null,
             title: pinJson.title != undefined ? pinJson.title : null,
             description: pinJson.description != undefined ? pinJson.description : null,
             instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
             ingredients: pinJson.ingredients != undefined ? pinJson.ingredients : null,
-            likes: pinJson.likes.low != undefined ? pinJson.likes.low : 0,
+            likes: pinJson.likes != undefined ? pinJson.likes.low : 0,
         }
     },
     pinToJson(pinModel) { 
@@ -80,7 +79,8 @@ module.exports = {
         return { 
             imgName: imgJson.imgName != undefined ? imgJson.imgName : null,
             imgExt: imgJson.imgExt != undefined ? imgJson.imgExt : null,
-            type: imgJson.type != undefined ? imgJson.type : null
+            type: imgJson.type != undefined ? imgJson.type : null,
+            filename: imgJson.filename != undefined ? imgJson.filename : 'noFilename.error'
         }
     },
     imgToJson(imgModel) { 

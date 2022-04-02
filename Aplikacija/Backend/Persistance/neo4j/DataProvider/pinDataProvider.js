@@ -6,7 +6,7 @@ const { randomUUID } = require('crypto');
 const createPin = async (pinInfo) => { 
     try {
         let pin = dtoHelper.pinToModel(pinInfo)
-
+        delete pin.pinID
         let pinDB = await neo4j.model('Pin').create(pin)
         if (!pinDB) { 
             return null

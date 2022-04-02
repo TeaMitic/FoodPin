@@ -1,4 +1,5 @@
 const userDataProvider  = require( '../../Persistance/neo4j/DataProvider/userDataProvider')
+const imageDataProvider  = require( '../../Persistance/neo4j/DataProvider/imageDataProvider')
 const resHelper = require('../../Helper/responseHelper')
 const token  = require('../../middleware/token')
 const dtoHelper = require('../../Helper/dtoHelper')
@@ -7,6 +8,7 @@ const boardLogic = require('./boardLogic')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const path = require('path')
+const logicHelper = require('../../Helper/logicHelper')
 
 
 const attachToken = (userInfo) => { 
@@ -183,23 +185,22 @@ const unfollowUser = async(ids)=>{
         throw error
     }
 }
-const   addImage = async(imgName,username) => { 
+const   addImage = async(imgFile,username) => { 
     try {
-        let validateString = validation.forString(imgName,"imageName")
-        if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
-            },false)
-        } 
+        
         let user = await userDataProvider.getUserByUsername(username)
         if(!user){
             return dtoHelper.createResObject(
                 resHelper.NoUserError(user.userID), false
             )
         } 
-        user.imgName = imgName
-        return await userDataProvider.updateProfle(user,user.userID)
+        //add image 
+        return await logicHelper.addImage(imgFile,{
+            userID: user.userID,
+            type: 'User'
+        })
+       
+
     } catch (error) {
         throw error
     }

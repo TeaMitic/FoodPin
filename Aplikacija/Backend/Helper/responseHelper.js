@@ -82,6 +82,12 @@ module.exports = {
             name: "Notification error",
             text: `Notification for user ${userID} was not sent`
         }
+    },
+    ImageError() { 
+        return { 
+            name: "Image error",
+            text: "There was some error with creating image."
+        }
     }
     
 

@@ -8,10 +8,13 @@ const fileStorageEngine = multer.diskStorage({
     },
     filename: (req,file,cb) => { 
         try { 
+            
             let ext = file.originalname.split('.')
             ext = ext[ext.length - 1]
-            console.log(file)
-            cb(null,req.params.username + '.' + ext) //no duplicates in file system
+            let filename = req.params.username + '.' + ext
+            file.basename = req.params.username
+            file.ext = ext
+            cb(null,filename) //no duplicates in file system
         }
         catch(error) { 
             console.log(error)
