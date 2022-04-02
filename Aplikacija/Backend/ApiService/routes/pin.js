@@ -9,14 +9,18 @@ let middlewares = [
     multer.single('image')
 ]
 
+router.get('/get/:skip', auth, pin.getPins)
+router.get('/get/:id',auth,pin.getByID)
+
 router.post('/',auth,pin.create);
 router.post('/addImage/:id',middlewares,pin.addImage)
+router.post('/save',auth,pin.savePin)
+router.post('/comment',auth,pin.commentPin)
+
 router.put('/like/:id',auth,pin.like)
 router.put('/update/:id',auth, pin.update)
 router.put('/dislike/:id',auth,pin.dislike)
+
 router.delete('/delete/:id',auth,pin.deletePin)
-router.post('/save',auth,pin.savePin)
-router.get('/get/:id',auth,pin.getByID)
-router.post('/comment',auth,pin.commentPin)
 
 module.exports = router;

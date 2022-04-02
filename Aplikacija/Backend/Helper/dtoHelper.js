@@ -36,6 +36,9 @@ module.exports = {
         }
     },
     pinToModel(pinJson) { 
+        // console.log("dtoHelper pintomodel");
+        // console.log( pinJson.likes);
+        // console.log(pinJson.likes.low);
         return { 
             creatorID: pinJson.creatorID != undefined ? pinJson.creatorID : null,
             imgName: pinJson.imgName != undefined ? pinJson.imgName : null,
@@ -43,7 +46,7 @@ module.exports = {
             description: pinJson.description != undefined ? pinJson.description : null,
             instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
             ingredients: pinJson.ingredients != undefined ? pinJson.ingredients : null,
-            likes: pinJson.likes.low != undefined ? pinJson.likes.low : 0,
+            likes: pinJson.likes != undefined ? pinJson.likes.low : 0,
         }
     },
     pinToJson(pinModel) { 
