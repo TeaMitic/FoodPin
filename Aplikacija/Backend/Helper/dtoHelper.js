@@ -1,6 +1,11 @@
+const toJSON = (obj) => { 
+    //converts from neode model to json
+    return Object.fromEntries(obj._properties)
+}
+
 module.exports = {
     userToJson(userModel) {
-        return Object.fromEntries(userModel._properties)
+        return this.toJSON(userModel)
     },
     shortUserToJson(userJson) { 
         return { 
@@ -47,7 +52,7 @@ module.exports = {
         }
     },
     pinToJson(pinModel) { 
-        return  Object.fromEntries(pinModel._properties)
+        return  this.toJSON(pinModel)
     },
     boardToModel(boardJson) { 
         return { 
@@ -56,7 +61,7 @@ module.exports = {
         }
     },
     boardToJson(boardModel) { 
-        return  Object.fromEntries(boardModel._properties)
+        return  this.toJSON(boardModel)
     },
     fromCypher(cypherResult) { 
         /**
@@ -70,6 +75,16 @@ module.exports = {
             })
         });
         return arr
+    },
+    imgToModel(imgJson) { 
+        return { 
+            imgName: imgJson.imgName != undefined ? imgJson.imgName : null,
+            imgExt: imgJson.imgExt != undefined ? imgJson.imgExt : null,
+            type: imgJson.type != undefined ? imgJson.type : null
+        }
+    },
+    imgToJson(imgModel) { 
+        return  this.toJSON(imgModel)
     }
 
 
