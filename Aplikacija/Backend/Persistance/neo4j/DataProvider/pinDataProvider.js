@@ -6,6 +6,8 @@ const { randomUUID } = require('crypto');
 const createPin = async (pinInfo) => { 
     try {
         let pin = dtoHelper.pinToModel(pinInfo)
+        // console.log("Pin u createPin");
+        // console.log(pin);
         delete pin.pinID
         let pinDB = await neo4j.model('Pin').create(pin)
         if (!pinDB) { 
@@ -204,6 +206,34 @@ const commentPin = async (commentInfo) => {
         throw error
     }
 }
+
+const getPins = async(skip)=>{
+    try {
+        let result = await neo4j.readCypher(
+            `MATCH (p:Pin) RETURN p 
+            ORDER BY p.title 
+            SKIP ${skip}
+            LIMIT 4
+            `
+        )
+        if (result == null) { 
+            return null
+        }
+        let results=dtoHelper.fromCypher(result)
+        let pins=[]
+        
+        results.forEach(el=>{ 
+           let pin = dtoHelper.pinToModel(el)
+           pins.push(pin)
+
+        })
+        
+        return pins
+        
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     createPin,
     likePin,
@@ -214,5 +244,6 @@ module.exports = {
     updatePin,
     getPinById,
     getPinWithTags,
-    commentPin
+    commentPin,
+    getPins
 }

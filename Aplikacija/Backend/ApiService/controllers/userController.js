@@ -92,21 +92,22 @@ const unfollowUser = async(req, res)=>{
 }
 
 //NOT DONE 
-// const sendMessage = async (req,res) => { 
-//     try {
-//         //mySql async logic 
-//         let result = await logic.getUserById(req.params.id)
-//         if (result.success) { 
-//             resHelper.OkResponse(result.content,res)
-//         }
-//         else { 
-//             resHelper.BadRequestResponse(result.content,res)
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         resHelper.ErrorResponse(error,res)
-//     }
-// }
+const sendMessage = async (req,res) => { 
+    try {
+        //mySql async logic 
+        let result = await asyncLogic.sendMessage(req.body)
+        // let result = await logic.getUserById(req.params.id) //?
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
 
 const addImage = async (req,res) => { 
     try {
@@ -146,5 +147,6 @@ module.exports = {
     followUser,
     unfollowUser,
     addImage,
-    update
+    update,
+    sendMessage
 }

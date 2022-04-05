@@ -231,7 +231,7 @@ const  savePin = async (info) => {
                 false
             )
         } 
-        pin.likes = 0
+        delete pin.likes //odradjeno jer je suvisan property za create pin
         
         //pin creation
         let pinCopy = await pinDataProvider.createPin(pin) //pinInfo.pin
@@ -248,12 +248,12 @@ const  savePin = async (info) => {
         let boards = new Set()
         boards.add( 'All pins')
         boards.add(info.boardName)
-        let boards2 = new Set()
-        boards.forEach(element => { 
-            boards2.add({name: element})
-        }) 
-        console.log("BOARD:",boards2)
-        result = await pinDataProvider.connectWithBoards(pinCopy.pinID,boards2,info.userID)
+        // let boards2 = new Set()
+        // boards.forEach(element => { 
+        //     boards2.add({name: element})
+        // }) 
+        // console.log("BOARD:",boards2)
+        result = await pinDataProvider.connectWithBoards(pinCopy.pinID,boards,info.userID)
         if (!result) { 
             await pinDataProvider.deletePin(pinCopy.pinID) //rollback 
             throw new Error("Couldn't add pin to the board.")
@@ -324,6 +324,16 @@ const commentPin = async(commentInfo) => {
     }
 }  
 
+const getPins=async(skip)=>{
+    try {
+        let pins= await pinDataProvider.getPins(skip)
+        return dtoHelper.createResObject(pins,true)
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = { 
     createPin,
     likePin,
@@ -333,6 +343,7 @@ module.exports = {
     savePin,
     getByID,
     addImage,
-    commentPin
+    commentPin,
+    getPins
 
 }
