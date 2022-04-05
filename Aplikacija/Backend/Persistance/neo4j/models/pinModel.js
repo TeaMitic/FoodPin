@@ -13,11 +13,7 @@ neo4j.model('Pin', {
         type: 'string',
         required: true
     },
-    imgName: { 
-        type: "string",
-        default: "defaultImgName",
-        required: true
-    },
+    
     title: {  
         type: 'string',
         required: true

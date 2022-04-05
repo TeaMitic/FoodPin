@@ -1,6 +1,11 @@
+
+
 module.exports = {
+    toJSON(obj) { 
+        return Object.fromEntries(obj._properties)
+    },
     userToJson(userModel) {
-        return Object.fromEntries(userModel._properties)
+        return this.toJSON(userModel)
     },
     shortUserToJson(userJson) { 
         return { 
@@ -22,7 +27,6 @@ module.exports = {
             email: userJson.email != undefined ? userJson.email : null,
             about: userJson.about != undefined ? userJson.about : null,
             website: userJson.website != undefined ? userJson.website : null,
-            imgName: userJson.imgName != undefined ? userJson.imgName : "defaultImgName"
         }
     },
     attachToken(object, token) { 
@@ -40,8 +44,8 @@ module.exports = {
         // console.log( pinJson.likes);
         // console.log(pinJson.likes.low);
         return { 
+            pinID: pinJson.pinID != undefined ? pinJson.pinID : null,
             creatorID: pinJson.creatorID != undefined ? pinJson.creatorID : null,
-            imgName: pinJson.imgName != undefined ? pinJson.imgName : null,
             title: pinJson.title != undefined ? pinJson.title : null,
             description: pinJson.description != undefined ? pinJson.description : null,
             instruction: pinJson.instruction != undefined ? pinJson.instruction : null,
@@ -50,7 +54,7 @@ module.exports = {
         }
     },
     pinToJson(pinModel) { 
-        return  Object.fromEntries(pinModel._properties)
+        return  this.toJSON(pinModel)
     },
     boardToModel(boardJson) { 
         return { 
@@ -59,7 +63,7 @@ module.exports = {
         }
     },
     boardToJson(boardModel) { 
-        return  Object.fromEntries(boardModel._properties)
+        return  this.toJSON(boardModel)
     },
     fromCypher(cypherResult) { 
         /**
@@ -73,6 +77,17 @@ module.exports = {
             })
         });
         return arr
+    },
+    imgToModel(imgJson) { 
+        return { 
+            imgName: imgJson.imgName != undefined ? imgJson.imgName : null,
+            imgExt: imgJson.imgExt != undefined ? imgJson.imgExt : null,
+            type: imgJson.type != undefined ? imgJson.type : null,
+            filename: imgJson.filename != undefined ? imgJson.filename : 'noFilename.error'
+        }
+    },
+    imgToJson(imgModel) { 
+        return  this.toJSON(imgModel)
     }
 
 

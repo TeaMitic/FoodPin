@@ -21,7 +21,7 @@ const create = async (req,res) => {
 
 const addImage = async (req,res) => { 
     try {
-        let result = await syncLogic.addImage(req.file.filename,req.params.id)
+        let result = await syncLogic.addImage(req.file,req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }

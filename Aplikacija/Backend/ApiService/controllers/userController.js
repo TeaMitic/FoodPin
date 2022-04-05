@@ -111,7 +111,7 @@ const sendMessage = async (req,res) => {
 
 const addImage = async (req,res) => { 
     try {
-        let result = await syncLogic.addImage(req.file.filename,req.params.username)
+        let result = await syncLogic.addImage(req.file,req.params.username)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }

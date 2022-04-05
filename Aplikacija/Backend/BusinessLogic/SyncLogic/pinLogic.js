@@ -4,6 +4,7 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../../Helper/validation')
 const resHelper = require('../../Helper/responseHelper')
+const logicHelper = require('../../Helper/logicHelper')
 const fs = require('fs')
 const path = require('path')
 
@@ -72,15 +73,9 @@ const createPin = async (pinInfo) => {
     }
 }
 
-const   addImage = async(imgName,pinID) => { 
+const   addImage = async(imgFile,pinID) => { 
     try {
-        let validateString = validation.forString(imgName,"imageName")
-        if (validateString != 'ok') { 
-            return dtoHelper.createResObject({
-                name: "Validation failed",
-                text: validateString
-            },false)
-        } 
+        
         
         let pin = await pinDataProvider.getPinById(pinID)
         if(!pin){
@@ -88,8 +83,14 @@ const   addImage = async(imgName,pinID) => {
                 resHelper.NoPinError(pinID), false
             )
         } 
-        pin.imgName = imgName
-        return await pinDataProvider.updatePin(pin,pinID)
+        console.log(pin)
+        throw "error"
+        //add image 
+        return await logicHelper.addImage(imgFile,{
+            pinID: pinID,
+            type: 'Pin'
+        })
+        
     } catch (error) {
         throw error
     }

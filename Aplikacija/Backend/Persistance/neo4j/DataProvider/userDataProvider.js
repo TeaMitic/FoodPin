@@ -94,7 +94,7 @@ const unfollowUser = async(ids)=>{
     }
 }
 
-const updateProfle = async(user,userID) => { 
+const updateProfile = async(user,userID) => { 
     try {
         user = dtoHelper.userToModel(user)
         let userDB = await neo4j.model('User').find(userID)
@@ -105,7 +105,6 @@ const updateProfle = async(user,userID) => {
             email: user.email,
             about: user.about,
             website: user.website,
-            imgName: user.imgName
         })
         return dtoHelper.createResObject({},true)
     } catch (error) {
@@ -118,5 +117,5 @@ module.exports = {
     getUserByUsername,
     followUser,
     unfollowUser,
-    updateProfle
+    updateProfile
 }
