@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" v-bind:src=photo >
     <div class="message">Message: <br> {{MessageTracker}}</div>
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client' 
 
 export default {
   name: 'App',
@@ -17,37 +17,14 @@ export default {
   data() {
     return {
       message: "",
-      photo: null
+      
     }
   },
   async created() {
-    //testiramo slike
-    
-
-    // //testiramo ws 
-    // let wsUrl = 'ws://localhost:3000/'
-    // let ws = new WebSocket(wsUrl)
-    // ws.onopen = async () => { 
-    //   ws.send(JSON.stringify({
-    //     userID: "15", //userID,
-    //     init: true
-    //   }))
-    // }
-    // ws.onmessage = async (event) => { 
-    //   let message = JSON.parse(event.data)
-    //   //message from backend
-    //   console.log(message)
-    //   this.message = message
-    //   if (message.type == 'Chat') { 
-    //       //notify client about new message
-    //       //send chat message 
-    //   }
-    //   else { 
-    //       //notify client abotu new notification 
-    //       //enable red dot 
-
-    //   }
-    
+    let socket = io('http://localhost:5000')
+    socket.on('message', (message) => { 
+      console.log(message);
+    })
   },
 }
 </script>

@@ -102,6 +102,9 @@ const getUserById = async(id) => {
         //get user from neo4j db
         let user = await userDataProvider.getUserById(id)
         //get image filename and load image and attach do object
+        if (!user) { return dtoHelper.createResObject(
+            resHelper.NoUserError(id),false
+        )}
         let filePath 
         let image
         if (user.imgName != undefined ) { 

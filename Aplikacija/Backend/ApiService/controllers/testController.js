@@ -3,9 +3,9 @@ const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDat
 const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
 const messageDataProvider = require('../../Persistance/mySql/DataProvider/messageDataProvider')
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
-const { redis_client } = require('../../BusinessLogic/AsyncLogic/pushNotif/redis-config')
 const pinDataProvider = require('../../Persistance/neo4j/DataProvider/pinDataProvider');
 const { randomUUID } = require('crypto');
+const hellotest = require('../../BusinessLogic/AsyncLogic/pushNotif/pushNotifications');
 
 const createMessage = async (req,res) => { 
     try {
@@ -43,7 +43,6 @@ const connectBoardAndUser = async (req,res) => {
 const getUserById = async (req,res) => { 
     try {
         let user = await userDataProvider.getUserById(req.params.id)
-        console.log("CONTROLLER:",user)
     } catch (error) {
         console.log(error);
         resHelper.ErrorResponse(error,res)
@@ -64,20 +63,7 @@ const followUser = async (req, res)=>{
     }
 }
 
-//test done 
-const testWs = async (req,res) => { 
-    try {
-       redis_client.publish('app:notif', JSON.stringify({
-           userID: "15",
-       }))
-       console.log();
-       resHelper.OkResponse({},res)
-        
-    } catch (error) {
-        console.log(error);
-        resHelper.ErrorResponse(error,res)
-    }
-}
+
 
 const getPic = async (req,res) => { 
     try {
@@ -116,13 +102,23 @@ const commentPin = async (req,res) => {
         resHelper.ErrorResponse(error,res)
     }
 }
+
+const testSockets = (req,res) => { 
+    try {
+        const hello = require('../../BusinessLogic/AsyncLogic/pushNotif/pushNotifications')
+        hello()
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
 module.exports = { 
     getBoardByName,
     connectBoardAndUser,
     getUserById,
     createMessage,
     followUser,
-    testWs,
     getPic,
-    commentPin
+    commentPin,
+    testSockets
 }

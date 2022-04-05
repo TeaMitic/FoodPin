@@ -38,7 +38,6 @@ const login = async(req,res) => {
 const getById = async(req,res) => { 
     try {
         let result = await syncLogic.getUserById(req.params.id)
-        console.log('controller', result)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
