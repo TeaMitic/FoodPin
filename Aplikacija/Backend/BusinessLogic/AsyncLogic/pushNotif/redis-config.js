@@ -1,10 +1,10 @@
 const redis = require('redis');
 
+const REDIS_PORT = 6379
+const REDIS_HOST = 'localhost'
 
-const REDIS_SERVER = "redis://localhost:6379"
 
-
-const redis_client = redis.createClient(REDIS_SERVER);
+const redis_client = redis.createClient(`redis://${REDIS_HOST}:${REDIS_PORT}`);
 
         
 ;(async () => { 
@@ -18,4 +18,8 @@ const redis_client = redis.createClient(REDIS_SERVER);
 
 
 
-module.exports = redis_client;
+module.exports = {
+    redis_client,
+    REDIS_HOST,
+    REDIS_PORT
+};

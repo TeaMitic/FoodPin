@@ -3,7 +3,7 @@ const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDat
 const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
 const messageDataProvider = require('../../Persistance/mySql/DataProvider/messageDataProvider')
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
-const redisClient = require('../../BusinessLogic/AsyncLogic/pushNotif/redis-config')
+const { redis_client } = require('../../BusinessLogic/AsyncLogic/pushNotif/redis-config')
 const pinDataProvider = require('../../Persistance/neo4j/DataProvider/pinDataProvider');
 const { randomUUID } = require('crypto');
 
@@ -67,7 +67,7 @@ const followUser = async (req, res)=>{
 //test done 
 const testWs = async (req,res) => { 
     try {
-       redisClient.publish('app:notif', JSON.stringify({
+       redis_client.publish('app:notif', JSON.stringify({
            userID: "15",
        }))
        console.log();

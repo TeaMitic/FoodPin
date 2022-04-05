@@ -188,11 +188,12 @@ const commentPin = async (commentInfo) => {
         let result = await neo4j.writeCypher(`
             MATCH (u:User {userID: '${senderID}'}),
                   (p:Pin {pinID: '${pinId}'})-[:BELONGS]->(b:Board)<-[:HAS_BOARD]-(q:User)
+            WITH DISTINCT p,u,q
             CREATE (u)-[r:COMMENT {
-                    createdAt: '${createdAt}',
-                    text: '${text}',
-                    uuid: '${randomUUID()}' 
-                }]->(p)
+                createdAt: '${createdAt}',
+                text: '${text}',
+                uuid: '${randomUUID()}' 
+            }]->(p)
             RETURN q
         `)
         if (result.records.length === 0) { 
