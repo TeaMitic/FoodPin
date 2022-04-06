@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <div class="message">Client: <br> {{clientTracker}}</div>
     <div class="message">Message: <br> {{MessageTracker}}</div>
+    <div class="notif">Notification: <br> {{NotifTracker}}</div>
   </div>
 </template>
 
@@ -11,19 +13,36 @@ export default {
   name: 'App',
   computed: {
     MessageTracker() { 
-      return this.message
+      return this.poruka
+    },
+    NotifTracker() { 
+      return this.notification
+    },
+    clientTracker() { 
+      return this.client
     }
   },
   data() {
     return {
-      message: "",
+      poruka: "",
+      notification: "",
+      client: ""
       
     }
   },
   async created() {
-    let socket = io('http://localhost:5000')
+    let socket = io('http://localhost:5000', {
+      autoConnect: false
+    })
+    socket.connect()
     socket.on('message', (message) => { 
-      console.log(message);
+      this.client = message
+    })
+    socket.on('normal-notif', (message) => { 
+      this.notification = message
+    })
+    socket.on('chat', (message) => { 
+      this.poruka = message
     })
   },
 }
@@ -38,7 +57,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.message { 
+.message, .notif { 
   border: 1px solid black;
+  margin-top: 3px;
 }
 </style>

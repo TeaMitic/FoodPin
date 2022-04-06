@@ -1,10 +1,10 @@
 //#region requiring basic modules
 const httpServer = require('./express/express-config')
-const io = require('./BusinessLogic/AsyncLogic/pushNotif/socketio-config')
 const sequelize_config = require('./Persistance/mySql/config/mySql-config')
 const neo4j = require('./Persistance/neo4j/config')
+const redis = require('./BusinessLogic/AsyncLogic/pushNotif/redis-config')
+const socketio = require('./BusinessLogic/AsyncLogic/pushNotif/socketio-config');
 //#endregion
-
 //#region requiring neo4j models 
 neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
 //#endregion
@@ -19,18 +19,12 @@ neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
 
 //#endregion
 
+
 //#region socketio listeners 
+let io = socketio.getInstance()
 io.on('connection', (socket) => { 
-  socket.join('didi')
-  socket.send(`hello client: ${ socket.id}` )
-  socket.send(`u joined the rooms` )
-  socket.rooms.forEach(room => { 
-    socket.send(room)
-  })
-
-  
+  socket.send(`${ socket.id}`)
 })
-
 //#endregion
 
 //#region server listening

@@ -1,8 +1,22 @@
-// const io = require('./socketio-config')
+const socketio = require('./socketio-config')
 
-const hellotest = () => { 
-    io.to('didi').emit('Message from room')
+let io = socketio.getInstance()
+const sendNotification = (user,notification) => { 
+    try {
+        io.to(user).emit('normal-notif',notification)
+    } catch (error) {
+        throw error
+    }
+} 
+const sendMessage = (user,message) => { 
+    try {
+        io.to(user).emit('chat',message)
+    } catch (error) {
+        throw error
+    }
 }
 
-module.exports = hellotest
-
+module.exports = {
+    sendNotification,
+    sendMessage
+}

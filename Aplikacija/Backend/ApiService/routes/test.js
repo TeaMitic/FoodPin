@@ -9,5 +9,5 @@ router.post('/message',test.createMessage)
 router.post('/follow',test.followUser)
 router.get('/getPic',test.getPic)
 router.post('/comment',test.commentPin)
-router.get('/socket/hello',test.testSockets)
+router.post('/socket/hello',test.testSockets)
 module.exports = router
