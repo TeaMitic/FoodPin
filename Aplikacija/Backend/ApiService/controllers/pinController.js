@@ -39,6 +39,7 @@ const like = async (req,res) => {
     try {
         let result = await syncLogic.likePin(req.params.id)
         if (result.success) { 
+            // ? ne znam da li nam req.body ima podatke
             result= await asyncLogic.likePin(req.params.id, req.body)
             resHelper.OkResponse(result.content,res)
         }
@@ -140,7 +141,8 @@ const commentPin = async (req,res) => {
     try {
         let result = await syncLogic.commentPin(req.body)
         if (result.success) { 
-            //in result.content se nalazi receiverID 
+            //in result.content se nalazi receiverID
+            req.body.receiverID = result.content.receiverID 
             result = await asyncLogic.commentPin({
                 senderID: req.body.senderID,
                 text: req.body.text,

@@ -35,8 +35,8 @@ export default {
       autoConnect: false
     })
     socket.connect()
-    socket.on('message', (message) => { 
-      this.client = message
+    socket.on('connect', () => { 
+      this.client = socket.id
     })
     socket.on('normal-notif', (message) => { 
       this.notification = message

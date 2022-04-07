@@ -4,14 +4,17 @@ const resHelper = require('../../Helper/responseHelper')
 const dtoHelper = require('../../Helper/dtoHelper')
 const likeDataProvider = require('../../Persistance/mySql/DataProvider/likeDataProvider')
 const commentDataProvider = require('../../Persistance/mySql/DataProvider/commentDataProvider')
+const pushNotif = require('./pushNotif/pushNotifications')
 
 const likePin = async(pinID, likeInfo)=>{
     // Info:{
     //     pinID,
     //     senderID,
-    //     receiverID
+    //     receiverID,
+    //     * senderUsername new prop
     // }
     try {
+        // TODO validation for likeInfo needed
         let validateString = validation.forString(pinID, "pinID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
@@ -37,7 +40,13 @@ const likePin = async(pinID, likeInfo)=>{
         if(!result){
             return dtoHelper.createResObject('Like not saved in sql db', false)
         }
-
+        //notify client 
+        pushNotif.like({
+            emitterUsername: likeInfo.senderUsername,
+            receiverID: likeInfo.receiverID,
+            pinID: likeInfo.pinID
+        })
+        
         return dtoHelper.createResObject({},true)
 
         

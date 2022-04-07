@@ -23,7 +23,7 @@ neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
 //#region socketio listeners 
 let io = socketio.getInstance()
 io.on('connection', (socket) => { 
-  socket.send(`${ socket.id}`)
+  socket.join(socket.data.userID)
 })
 //#endregion
 
