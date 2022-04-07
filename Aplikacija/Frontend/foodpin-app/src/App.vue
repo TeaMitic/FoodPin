@@ -1,25 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" v-bind:src=photo >
-    <div class="message">Message: <br> {{MessageTracker}}</div>
+    <router-view></router-view>
+    <!-- <img alt="Vue logo" v-bind:src=photo > -->
+    <!-- <div class="message">Message: <br> {{MessageTracker}}</div> -->
   </div>
 </template>
 
 <script>
-
+// import Vue from 'vue'
 export default {
   name: 'App',
   computed: {
-    MessageTracker() { 
-      return this.message
-    }
+    // MessageTracker() { 
+    //   return this.message
+    // }
   },
-  data() {
-    return {
-      message: "",
-      photo: null
-    }
-  },
+  // data() {
+  //   return {
+  //     message: "",
+  //     photo: null
+  //   }
+  // },
   async created() {
     //testiramo slike
     
