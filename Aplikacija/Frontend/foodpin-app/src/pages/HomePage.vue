@@ -38,10 +38,14 @@
                         />
                     </div>
                     <div v-else-if="pageType == 'Login'" > 
-                        <LoginComponent/>
+                        <LoginComponent
+                            @childToParentYes="onChildClickYes"
+                        />
                     </div>
                     <div v-else-if="pageType == 'Register'" > 
-                        <RegisterComponent />
+                        <RegisterComponent
+                            @childToParentYes="onChildClickYes"
+                        />
                     </div>
                    
                 </div>
@@ -80,9 +84,10 @@ export default({
         }
     },
     methods: {
-       onChildClickYes(value){
-           this.page = value
-       }
+        onChildClickYes(value){
+            this.page = value
+        }
+
     },
 })
 

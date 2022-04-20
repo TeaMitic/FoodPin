@@ -11,7 +11,8 @@
                 <!-- @click="login"  v-model="loginInfo.password" v-model="loginInfo.username" -->
             </form>
             <div class="row nemanalog">
-                <p class="text-light mt-5">Don't have an account? <router-link :to="{name:'Register'}"><a class="nav-link" href="#!">Sign up</a></router-link></p>
+                <!-- ne treba router link vec komunikacija sa komponentama -->
+                <p class="text-light mt-5">Don't have an account? <a class="nav-link" href="#!" @click="pushData">Sign up</a></p>
             </div>
         </div>
     </div>
@@ -19,7 +20,11 @@
 
 <script>
 export default {
-
+    methods:{
+        pushData(){
+            this.$emit('childToParentYes', 'Register')
+        }
+    }
 }
 </script>
 
