@@ -70,7 +70,7 @@ export default({
     data() { 
         return { 
             isCollapsed: true,
-            page: 'Login'
+            page: 'Home'
         }
     },
     computed: { 
