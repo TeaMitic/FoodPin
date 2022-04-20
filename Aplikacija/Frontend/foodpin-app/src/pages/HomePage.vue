@@ -34,13 +34,13 @@
                 <div class="row gx-4 gx-lg-5 h-100 align-items-center  ">
                 <!-- <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center"> -->
                     <div v-if="pageType == 'Home'" > 
-                        <HomePageComponent/>
+                        <HomePageComponent @childToParentYes="onChildClickYes" />
                     </div>
-                    <div v-else-if="pageType == 'Login'" class="d-flex justify-content-center" > 
-                        <LoginComponent/>
+                    <div v-else-if="pageType == 'Login'" class="d-flex justify-content-center"> 
+                        <LoginComponent @childToParentYes="onChildClickYes" />
                     </div>
-                    <div v-else-if="pageType == 'Register'"  class="d-flex justify-content-center" > 
-                        <RegisterComponent/>
+                    <div v-else-if="pageType == 'Register'" class="d-flex justify-content-center" > 
+                        <RegisterComponent @childToParentYes="onChildClickYes" />
                     </div>
                    
                 </div>
@@ -80,6 +80,10 @@ export default({
     },
     methods: {
    
+        onChildClickYes(value){
+            this.page = value
+        }
+
     },
 })
 

@@ -9,16 +9,20 @@
         <!-- <div class="col-lg-8 align-self-baseline"> -->
             <p class="text-white-75 mb-5">This is where your cooking addiction begins!</p>
             <!-- Register treba da izmeni u data promenljivu -->
-            <router-link :to="{name: 'Register'}">
-                <a class="btn btn-primary btn-xl" href="#!">Register</a>
-            </router-link>
+            <!-- <router-link :to="{name: 'Register'}" @click="pushData"> -->
+                <a class="btn btn-primary btn-xl" href="#!" @click="pushData">Register</a>
+            <!-- </router-link> -->
         </div>
     </div>
 </template>
 
 <script>
 export default {
-
+    methods:{
+      pushData(){
+          this.$emit('childToParentYes', 'Register')
+      }  
+    }
 }
 </script>
 
