@@ -2,7 +2,6 @@ import  Vue  from 'vue'
 import Router from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import LoginPage from '../pages/LoginPage.vue'
-import RegisterPage from '../pages/RegisterPage.vue'
 
 Vue.use(Router);
 
@@ -33,26 +32,7 @@ const router = new Router({
             //     }
             // }
         },
-        {
-            path:'/Register',
-            name: 'Register',
-            component: RegisterPage,
-            // beforeEnter(to, from, next){
-            //     let tip = Vue.$cookies.get("tip")
-            //     if(tip === 'Customer'){
-            //         next({name: 'Customer'});
-            //     }
-            //     else if(tip === 'Store'){
-            //         next({name: 'Store'})
-            //     }
-            //     else if(tip === 'Deliverer'){
-            //         next({name: 'Deliverer'})
-            //     }
-            //     else{
-            //         next();
-            //     }
-            // }
-        },
+        
 
     ]
  });

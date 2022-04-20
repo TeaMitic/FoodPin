@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper PrijavaRow">
+    <div class="wrapper PrijavaRow col-lg-8  ">
         <div class="col-lg-8">
             <form class="form-signin" @submit.prevent>
                 <h2 class="form-signin-heading text-white font-weight-bold">Sign in</h2>

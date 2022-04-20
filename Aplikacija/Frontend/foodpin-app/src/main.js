@@ -6,6 +6,8 @@ import Toasted from 'vue-toasted'
 import store from './api-services/data'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
+import ('bootstrap')
+
 
 Vue.config.productionTip = false
 
