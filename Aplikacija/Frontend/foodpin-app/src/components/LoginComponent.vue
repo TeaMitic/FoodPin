@@ -1,6 +1,6 @@
 <template>
-    <div class="wrapper PrijavaRow col-lg-8  ">
-        <div class="col-lg-8">
+    <div class="wrapper PrijavaRow col-lg-8 col-12  ">
+        <div class="col-lg-8 col-10">
             <form class="form-signin" @submit.prevent>
                 <h2 class="form-signin-heading text-white font-weight-bold">Sign in</h2>
                 <hr class="divider" />

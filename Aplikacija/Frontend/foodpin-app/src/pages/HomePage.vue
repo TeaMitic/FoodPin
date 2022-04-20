@@ -3,21 +3,22 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <button v-on:click="page = 'Home'" class="btn  navbar-brand">FoodPin</button>
+                <button v-on:click="page = 'Home'" class="no-border  btn-margins btn no navbar-brand">FoodPin</button>
                 <!-- <router-link  class="navbar-brand text-decoration-none" :to="{name: 'HomePage'}"> 
                     FoodPin
                 </router-link> -->
-                <button  class=" navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class=" collapse navbar-collapse  " id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class=" collapse navbar-collapse " id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0 align-items-end  ">
                         <li class="nav-item ">
-                            <button v-on:click="page='Login'" class="btn nav-link ">Login</button>
+                            <button v-on:click="page='Login'" class="no-border btn-margins btn nav-link ">Login</button>
                             <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Login'}">
                                 Login
                             </router-link> -->
                         </li>
+                        <hr class="mx-0 my-1 menu-divider">
                         <li class="nav-item">
-                            <button v-on:click="page='Register'" class="btn nav-link">Register</button>
+                            <button v-on:click="page='Register'" class="no-border btn-margins btn nav-link">Register</button>
 
                             <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Register'}">
                                 Register
@@ -35,10 +36,10 @@
                     <div v-if="pageType == 'Home'" > 
                         <HomePageComponent/>
                     </div>
-                    <div v-else-if="pageType == 'Login'" > 
+                    <div v-else-if="pageType == 'Login'" class="d-flex justify-content-center" > 
                         <LoginComponent/>
                     </div>
-                    <div v-else-if="pageType == 'Register'" > 
+                    <div v-else-if="pageType == 'Register'"  class="d-flex justify-content-center" > 
                         <RegisterComponent/>
                     </div>
                    
@@ -69,7 +70,7 @@ export default({
     data() { 
         return { 
             isCollapsed: true,
-            page: 'Home'
+            page: 'Login'
         }
     },
     computed: { 
@@ -78,7 +79,7 @@ export default({
         }
     },
     methods: {
-       
+   
     },
 })
 
@@ -89,8 +90,24 @@ export default({
     margin-top: 0%;
 }
 .nav-link { 
-    font-size: 1.2rem !important
+    font-size: 1.2rem !important;
 }
+.no-border:focus {
+    outline: none;
+    box-shadow: none;
+}
+.btn-margins { 
+    padding: 0px !important;
+    margin: 0px 10px 0px 10px;
+}
+.menu-divider  {
+    width: 30%;
+}
+.btnMenu:focus:not(:focus-visible) { 
+    outline: none;
+}
+
+
 
 
 </style>
