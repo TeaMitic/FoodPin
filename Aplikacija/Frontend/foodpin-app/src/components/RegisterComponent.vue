@@ -1,8 +1,7 @@
 <template>
-  <div>
     <!-- <h1>Not done</h1> -->
-     <div class="wrapper PrijavaRow col-lg-8  ">
-        <div class="col-lg-8">
+     <div class="wrapper PrijavaRow col-lg-8 col-12 mx-5">
+        <div class="col-lg-8 col-10">
             <form class="form-signin" @submit.prevent>
                 <h2 class="form-signin-heading text-white font-weight-bold">Sign up</h2>
                 <hr class="divider" />
@@ -18,10 +17,9 @@
             </form>
             <div class="row nemanalog">
               <!-- ne treba router link vec komunikacija sa komponentama -->
-                <p class="text-light mt-5">Already have an account? <a class="nav-link" href="#!" @click="pushData">Sign in</a></p>
+                <p class="text-light mt-5">Already have an account? <a class="nav-link" href="#" @click="pushData">Sign in</a></p>
             </div>
         </div>
-    </div>
   </div>
 </template>
 

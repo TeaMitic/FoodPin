@@ -12,7 +12,7 @@
             </form>
             <div class="row nemanalog">
                 <!-- ne treba router link vec komunikacija sa komponentama -->
-                <p class="text-light mt-5">Don't have an account? <a class="nav-link" href="#!" @click="pushData">Sign up</a></p>
+                <p class="text-light mt-5">Don't have an account? <a class="nav-link" href="#" @click="pushData">Sign up</a></p>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
             <p class="text-white-75 mb-5">This is where your cooking addiction begins!</p>
             <!-- Register treba da izmeni u data promenljivu -->
             <!-- <router-link :to="{name: 'Register'}" @click="pushData"> -->
-                <a class="btn btn-primary btn-xl" href="#!" @click="pushData">Register</a>
+                <button class="btn btn-primary btn-xl" @click="pushData">Register</button>
             <!-- </router-link> -->
         </div>
     </div>
