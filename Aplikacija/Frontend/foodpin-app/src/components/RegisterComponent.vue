@@ -6,14 +6,18 @@
                 <h2 class="form-signin-heading text-white font-weight-bold">Sign up</h2>
                 <hr class="divider" />
                 <!-- <h2 class="form-signin-heading text-center">Sign in</h2> -->
-                <input type="text" class="form-control "  name="name" placeholder="Name" autofocus=""> 
-                <input type="text" class="form-control "  name="surname" placeholder="Surname" autofocus=""> 
-                <input type="text" class="form-control "  name="username" placeholder="Username" autofocus="">           
-                <input type="password" class="form-control"  name="sifra" placeholder="Password"/>   
-                <input type="password" class="form-control"  name="sifra" placeholder="Confirm password"/>  
+                <input type="text" class="form-control "  name="name" placeholder="Name" autofocus="" required
+                  v-model.trim="registerInfo.name"> 
+                <input type="text" class="form-control "  name="surname" placeholder="Surname" autofocus="" 
+                  v-model.trim="registerInfo.surname"> 
+                <input type="text" class="form-control "  name="username" placeholder="Username" autofocus=""
+                  v-model="registerInfo.username" required>           
+                <input type="password" class="form-control"  name="password" placeholder="Password" required 
+                  v-model="registerInfo.password"/>   
+                <input type="password" class="form-control"  name="repeatedPassword" placeholder="Confirm password" required
+                  v-model="registerInfo.repeatedPassword"/>     
 
-                <a class="btn btn-primary btn-xl">Register</a>
-                <!-- @click="login"  v-model="loginInfo.password" v-model="loginInfo.username" -->
+                <button @click="register" type="submit" class="btn btn-primary btn-xl">Register</button>
             </form>
             <div class="row nemanalog">
               <!-- ne treba router link vec komunikacija sa komponentama -->
@@ -24,11 +28,57 @@
 </template>
 
 <script>
+import Vue  from 'vue'
 export default {
+  data() {
+    return {
+      registerInfo: { 
+        name: '',
+        surname: '',
+        username: '',
+        password: '',
+        repeatedPassword: ''
+      }
+    }
+  },
   methods:{
     pushData(){
       this.$emit('childToParentYes', 'Login')
-    }
+    },
+    validateInputs() { 
+      let inputs = document.querySelectorAll('input')
+      let valid = false
+      for (let element of inputs) { 
+        let responseMessage = this.$helpers.validateInput(element)
+        if (responseMessage != 'OK') {
+          valid = false
+          break
+        }
+        valid = true
+      }
+      return valid
+    },
+    validatePasswords() { 
+      let responseMessage = this.$helpers.validatePassword(this.registerInfo.password,this.registerInfo.repeatedPassword)
+      if (responseMessage != 'OK') {
+        Vue.toasted.show(responseMessage, { 
+          theme: "bubble",
+          position: "bottom-center",
+          duration: 3000
+        })
+        return false
+      }
+      return true
+    },
+    async register() { 
+      if (!this.validateInputs()) {
+        return
+      }
+      if (!this.validatePasswords()) { 
+        return 
+      }
+      await this.$store.dispatch('register', JSON.stringify(this.registerInfo))
+    } 
   }
 }
 </script>

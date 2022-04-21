@@ -1,15 +1,15 @@
 <template>
     <div class="wrapper PrijavaRow col-lg-8 col-12  ">
         <div class="col-lg-8 col-10">
-            <form class="form-signin" @submit.prevent>
+            <form class="form-signin" @submit.prevent >
                 <h2 class="form-signin-heading text-white font-weight-bold">Sign in</h2>
                 <hr class="divider" />
                 <!-- <h2 class="form-signin-heading text-center">Sign in</h2> -->
                 <input type="text" class="form-control "  name="username" placeholder="Username" autofocus=""
-                    v-model.trim="loginInfo.username" v-model="loginInfo.username" required>           
+                    v-model.trim="loginInfo.username"  required>           
                 <input type="password" class="form-control"  name="sifra" placeholder="Password" 
-                    v-model.trim="loginInfo.password" v-model="loginInfo.password" required>
-                <button v-on:click="login" type="submit" class="btn btn-primary btn-xl">Login</button>
+                     v-model="loginInfo.password" required>
+                <button @click="login" type="submit" class="btn btn-primary btn-xl">Login</button>
             </form>
             <div class="row nemanalog">
                 <!-- ne treba router link vec komunikacija sa komponentama -->
@@ -20,7 +20,6 @@
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -31,29 +30,27 @@ export default {
         }
     },
     methods:{
-        validateIntputs() { 
+        validateInputs() { 
             let inputs = document.querySelectorAll('input')
             let valid = false
             for (let element of inputs) { 
-                let responseMessage = this.$helpers.validateIntput(element)
+                let responseMessage = this.$helpers.validateInput(element)
                 if (responseMessage != 'OK') {
-                    valid = false
-                    break
+                valid = false
+                break
                 }
                 valid = true
             }
-            return valid 
+            return valid
         },
         pushData(){
             this.$emit('childToParentYes', 'Register')
         },
         async login() { 
-            if (!this.validateIntputs()) { 
+            if (!this.validateInputs()) {
                 return
             }
-            await this.$store.dispatch('login', { 
-                loginInfo: this.loginInfo
-            })
+            await this.$store.dispatch('login', JSON.stringify(this.loginInfo))
         }
     }
 }

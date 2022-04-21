@@ -28,8 +28,10 @@ io.on('connection', (socket) => {
 //#endregion
 
 //#region server listening
-httpServer.listen(5000,() => { 
-   console.log('Server is listening on port 5000...');
+const port = 5000; 
+const host = 'localhost'
+httpServer.listen(port,() => { 
+   console.log(`Server is listening on port "http://${host}:${port}/"...`);
 })
 
 //#endregion

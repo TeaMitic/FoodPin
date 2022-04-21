@@ -6,8 +6,16 @@ import Toasted from 'vue-toasted'
 import store from './api-services/data'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
+import Validation from '../src/helper/validation'
 import ('bootstrap')
 
+const pluginValidation = { 
+  install() {
+    Vue.helpers = Validation,
+    Vue.prototype.$helpers = Validation
+  }
+}
+Vue.use(pluginValidation)
 
 Vue.config.productionTip = false
 
