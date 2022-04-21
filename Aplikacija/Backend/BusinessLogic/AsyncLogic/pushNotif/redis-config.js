@@ -1,6 +1,6 @@
 const redis = require('redis');
 
-const REDIS_PORT = 6379
+const REDIS_PORT = '6379'
 const REDIS_HOST = 'localhost'
 
 

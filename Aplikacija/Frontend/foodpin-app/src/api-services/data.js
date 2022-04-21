@@ -20,6 +20,11 @@ export default new Vuex.Store({
                 commit('setUsername', data.username)
                 commit('setToken', data.token)
             }
+            catch(error) { 
+                if (err.response.status == 500) { 
+                    console.log(err)
+                }
+            }
         }
         // async follow({commit}, followInfo) { 
         //     let res = await Api().post('/api/user/follow',followInfo)

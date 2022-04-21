@@ -106,7 +106,7 @@ const likePin = async (pinID) => {
             For logging data in SQL 
         */
 
-        //Tea refaktorisi kod 
+        //TODO Tea refaktorisi kod 
         let validateString = validation.forString(pinID,"pinID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({

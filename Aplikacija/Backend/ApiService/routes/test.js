@@ -7,7 +7,7 @@ router.post('/board/connect',test.connectBoardAndUser)
 router.get('/user/get/:id',test.getUserById)
 router.post('/message',test.createMessage)
 router.post('/follow',test.followUser)
-router.post('/ws',test.testWs)
 router.get('/getPic',test.getPic)
 router.post('/comment',test.commentPin)
+router.post('/socket/hello',test.testSockets)
 module.exports = router
