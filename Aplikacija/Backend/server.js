@@ -8,7 +8,7 @@ const sequelize_config = require('./Persistance/mySql/config/mySql-config')
 //#region requiring modules for sockets 
 const { Server } = require('socket.io')
 const http = require('http')
-const { createAdapter } = require('socket.io-redis')
+const { createAdapter } = require('socket.io-redis') 
 const { redis_client } = require('./BusinessLogic/AsyncLogic/pushNotif/redis-config')
 //#endregion 
 
