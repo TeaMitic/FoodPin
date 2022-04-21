@@ -1,8 +1,8 @@
-const socketio = require('./socketio-config')
+const socketInstance = require('./socketio-config')
 
 const sendNotification = (room,eventName, content) => { 
     try { 
-        let io = socketio.getInstance()
+        let io = socketInstance()
         io.to(room).emit(eventName,content)
     }
     catch(error) { 

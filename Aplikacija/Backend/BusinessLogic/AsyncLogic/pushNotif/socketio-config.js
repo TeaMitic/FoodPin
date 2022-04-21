@@ -1,10 +1,10 @@
-const httpServer = require('../../../express/express-config')
-const { Server } = require('socket.io')
-const { createAdapter } = require('@socket.io/redis-adapter')
-const { redis_client } = require('./redis-config')
 let instance = null
 
- function  init() { 
+function  init() { 
+    const httpServer = require('../../../express/express-config')
+    const { Server } = require('socket.io')
+    const { createAdapter } = require('@socket.io/redis-adapter')
+    const { redis_client } = require('./redis-config')
     let io = new Server(httpServer, {
         cors: { 
             origin: '*',

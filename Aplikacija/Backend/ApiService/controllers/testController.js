@@ -5,6 +5,8 @@ const messageDataProvider = require('../../Persistance/mySql/DataProvider/messag
 const followDataProvider = require('../../Persistance/mySql/DataProvider/followDataProvider')
 const pinDataProvider = require('../../Persistance/neo4j/DataProvider/pinDataProvider');
 const { randomUUID } = require('crypto');
+const pushNotifs = require('../../BusinessLogic/AsyncLogic/pushNotif/pushNotifications')
+
 
 const createMessage = async (req,res) => { 
     try {
@@ -104,7 +106,6 @@ const commentPin = async (req,res) => {
 
 const testSockets = (req,res) => { 
     try {
-        const pushNotifs = require('../../BusinessLogic/AsyncLogic/pushNotif/pushNotifications')
         pushNotifs.sendNotification(req.body.id,req.body.notif)
         pushNotifs.sendMessage(req.body.id,req.body.message)
         resHelper.OkResponse({},res)
