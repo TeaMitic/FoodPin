@@ -6,7 +6,7 @@ const redis = require('./BusinessLogic/AsyncLogic/pushNotif/redis-config')
 const socketio = require('./BusinessLogic/AsyncLogic/pushNotif/socketio-config');
 //#endregion
 //#region requiring neo4j models 
-neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
+neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models'); 
 //#endregion
 
 //#region neo4j schema 
