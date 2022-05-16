@@ -1,36 +1,6 @@
 <template>
     <div >
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <button v-on:click="page = 'Home'" class="no-border  btn-margins btn no navbar-brand"
-                    >FoodPin</button>
-                <!-- <router-link  class="navbar-brand text-decoration-none" :to="{name: 'HomePage'}"> 
-                    FoodPin
-                </router-link> -->
-                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class=" collapse navbar-collapse " id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto my-2 my-lg-0 align-items-end  ">
-                        <li class="nav-item ">
-                            <button v-on:click="page='Login'" class="no-border btn-margins btn nav-link "
-                                >Login</button>
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Login'}">
-                                Login
-                            </router-link> -->
-                        </li>
-                        <hr class="mx-0 my-1 menu-divider">
-                        <li class="nav-item">
-                            <button v-on:click="page='Register'" class="no-border btn-margins btn nav-link"
-                                >Register</button>
-
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Register'}">
-                                Register
-                            </router-link> -->
-                        </li> 
-                    </ul>
-                </div>
-            </div>
-        </nav>
+       <RegularHeaderComponent @childToParentYes="onChildClickYes" />
         <!-- Masthead-->
         <header class="masthead">
             <div class="container px-4 px-lg-5 h-100 ">
@@ -64,17 +34,18 @@
 import HomePageComponent from '../components/HomePageComponent.vue'
 import LoginComponent from '../components/LoginComponent.vue'
 import RegisterComponent from '../components/RegisterComponent.vue'
+import RegularHeaderComponent from '../components/RegularHeaderComponent.vue'
 
 export default({ 
     title: "FoodPin",
     components: { 
         HomePageComponent,
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        RegularHeaderComponent
     },
     data() { 
         return { 
-            isCollapsed: true,
             page: 'Home'
         }
     },
@@ -103,23 +74,6 @@ export default({
     overflow-x: hidden;
 
 }
-.nav-link { 
-    font-size: 1.2rem !important;
-}
-.no-border:focus {
-    outline: none;
-    box-shadow: none;
-}
-.btn-margins { 
-    padding: 0px !important;
-    margin: 0px 10px 0px 10px;
-}
-.menu-divider  {
-    width: 30%;
-}
-
-
-
 
 
 </style>

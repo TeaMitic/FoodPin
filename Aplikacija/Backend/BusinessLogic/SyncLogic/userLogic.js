@@ -11,17 +11,6 @@ const path = require('path')
 const logicHelper = require('../../Helper/logicHelper')
 
 
-const attachToken = (userInfo) => { 
-    try {
-        let webToken = token.generateAccessToken(userInfo)
-        userInfo = dtoHelper.attachToken(userInfo,webToken)
-        
-        return userInfo
-        
-    } catch (error) {
-        throw error
-    }
-}
 
 const registerUser = async (userInfo) => { 
     try {
@@ -229,6 +218,21 @@ const updateProfile = async (user,userID) => {
         throw error
     }
 } 
+
+//#region helper functions
+const attachToken = (userInfo) => { 
+    try {
+        let webToken = token.generateAccessToken(userInfo)
+        userInfo = dtoHelper.attachToken(userInfo,webToken)
+        
+        return userInfo
+        
+    } catch (error) {
+        throw error
+    }
+}
+//#endregion helper functions 
+
 
 module.exports = { 
     registerUser,

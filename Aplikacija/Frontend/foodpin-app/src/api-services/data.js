@@ -14,7 +14,7 @@ const login_register = async (commit,path,userObject) => {
         commit('setID', data.userID)
         commit('setUsername', data.username)
         commit('setToken', data.token)
-        Vue.$cookies.set("id", data.id, cookieTime)
+        Vue.$cookies.set("userID", data.userID, cookieTime)
         Vue.$cookies.set("username", data.username,cookieTime)
         Vue.$cookies.set("token", data.token, cookieTime)
         console.log(res.data);
