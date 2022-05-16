@@ -1,7 +1,7 @@
 let instance = null
 
 function  init() { 
-    const httpServer = require('../../../express/express-config')
+    const httpServer = require('../../../express-app/express-app-config')
     const { Server } = require('socket.io')
     const { createAdapter } = require('@socket.io/redis-adapter')
     const { redis_client } = require('./redis-config')

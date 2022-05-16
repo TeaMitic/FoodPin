@@ -1,5 +1,5 @@
 //#region requiring basic modules
-const httpServer = require('./express/express-config')
+const httpServer = require('./express-app/express-app-config')
 const sequelize_config = require('./Persistance/mySql/config/mySql-config')
 const neo4j = require('./Persistance/neo4j/config')
 const redis = require('./BusinessLogic/AsyncLogic/pushNotif/redis-config')
