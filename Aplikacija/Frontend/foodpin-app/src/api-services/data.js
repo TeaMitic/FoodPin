@@ -1,7 +1,7 @@
 // import router from '@/router'
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import router from '../router/index.js'
+import router from '../router/index.js'
 import Api from './apiConfig'
 
 const cookieTime = "1h"
@@ -23,7 +23,7 @@ const login_register = async (commit,path,userObject) => {
             position: "bottom-center",
             duration: 2000
         })
-        // router.push('/')
+        router.push('/UserPage')
     }
     catch(error) { 
         if (error.response.status == 500) { 

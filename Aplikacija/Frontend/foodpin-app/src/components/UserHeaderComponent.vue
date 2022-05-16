@@ -17,12 +17,12 @@
                         </li>
                         <li class="nav-item ">
                             <button v-on:click="pushData('Profile')" class="no-border btn-margins btn nav-link "
-                                >Login</button>
+                                >Profile</button>
                         </li>
                         <hr class="mx-0 my-1 menu-divider">
                         <li class="nav-item">
                             <button v-on:click="pushData('Logout')" class="no-border btn-margins btn nav-link"
-                                >Register</button>
+                                >Logout</button>
                         </li> 
                     </ul>
                 </div>
