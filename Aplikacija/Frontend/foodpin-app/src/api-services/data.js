@@ -26,7 +26,11 @@ export default new Vuex.Store({
         },
         async getUserByUsername({commit},username) { 
             try {
-                let res = await Api().get(`/api/user/getByUsername/${username}`)
+                let res = await Api().get(`/api/user/getByUsername/${username}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
                 commit('setUser',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
@@ -39,7 +43,11 @@ export default new Vuex.Store({
         },
         async getBoardsForUser({commit},userID) { 
             try {
-                let res = await Api().get(`/api/board/for/${userID}`)
+                let res = await Api().get(`/api/board/for/${userID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
                 commit('setBoardsForUser',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
@@ -101,7 +109,6 @@ const login_register = async (commit,path,userObject) => {
         Vue.$cookies.set("userID", data.userID, cookieTime)
         Vue.$cookies.set("username", data.username,cookieTime)
         Vue.$cookies.set("token", data.token, cookieTime)
-        console.log(res.data);
         Vue.toasted.show(`Welcome ${data.username}` , { 
             theme: "bubble",
             position: "bottom-center",

@@ -52,7 +52,7 @@ const getById = async(req,res) => {
 
 const getByUsername = async(req,res) => { 
     try {
-        let result = await syncLogic.getByUsername(req.params.username)
+        let result = await syncLogic.getUserByUsername(req.params.username)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
