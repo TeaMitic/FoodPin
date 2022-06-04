@@ -1,54 +1,36 @@
 <template>
     <div >
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <button v-on:click="page = 'Home'" class="no-border  btn-margins btn no navbar-brand"
-                    >FoodPin</button>
-                <!-- <router-link  class="navbar-brand text-decoration-none" :to="{name: 'HomePage'}"> 
-                    FoodPin
-                </router-link> -->
-                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class=" collapse navbar-collapse " id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto my-2 my-lg-0 align-items-end  ">
-                        <li class="nav-item ">
-                            <button v-on:click="page='Login'" class="no-border btn-margins btn nav-link "
-                                >Login</button>
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Login'}">
-                                Login
-                            </router-link> -->
-                        </li>
-                        <hr class="mx-0 my-1 menu-divider">
-                        <li class="nav-item">
-                            <button v-on:click="page='Register'" class="no-border btn-margins btn nav-link"
-                                >Register</button>
+        <UserHeaderComponent @childToParentYes="onChildClickYes" />
+        <!-- Main container -->
+        <div class="container">
+            <!-- User info -->
+            <div class="user-info">
+                <div class="cont-user-image">
+                    <img class="user-image" :src= user.imageUrl alt="User profile image">
+                </div>
+                <div class="cont-user-fullname">
+                    <h2 class="user-fullname">{{user.name}} {{user.surname != undefined ? user.surname : ""}}</h2>
+                </div>
+                <div class="cont-user-username">
+                    <p class="user-username">{{user.username}}</p>
+                </div>
+                <div class="cont-user-follows">
+                    <div class="cont-user-followers"><p class="user-follows">{{user.followers}}</p></div>
+                    <div class="cont-user-following"><p class="user-follows">{{user.following}}</p></div>
+                </div>
+                <div class="cont-user-buttons"></div>
+            </div>
+            <!-- Created or saved pins option -->
+            <div class="cont-pin-options">
 
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Register'}">
-                                Register
-                            </router-link> -->
-                        </li> 
-                    </ul>
-                </div>
             </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead">
-            <div class="container px-4 px-lg-5 h-100 ">
-                <div class="row gx-4 gx-lg-5 h-100 align-items-center  ">
-                <!-- <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center"> -->
-                    <div v-if="pageType == 'Home'" > 
-                        <HomePageComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                    <div v-else-if="pageType == 'Login'" class="d-flex justify-content-center"> 
-                        <LoginComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                    <div v-else-if="pageType == 'Register'" class="d-flex justify-content-center" > 
-                        <RegisterComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                   
-                </div>
+            <!-- Boards -->
+            <div class="cont-boards">
+                <div class="cont-boards-add"></div>
+                <div class="cont-boards-all"></div>
             </div>
-        </header>
+        </div>
 
         <!-- Footer-->
         <footer class="bg-light py-5 row ">
@@ -61,33 +43,41 @@
 </template>
 
 <script>
-import HomePageComponent from '../components/HomePageComponent.vue'
-import LoginComponent from '../components/LoginComponent.vue'
-import RegisterComponent from '../components/RegisterComponent.vue'
+import Vue from 'vue'
+import UserHeaderComponent from '../components/UserHeaderComponent.vue'
+import ImageConverter from '../helper/imageConverter' 
 
 export default({ 
-    title: "FoodPin",
+    title: "FoodPin - Profile",
     components: { 
-        HomePageComponent,
-        LoginComponent,
-        RegisterComponent
+        UserHeaderComponent
     },
     data() { 
-        return { 
-            isCollapsed: true,
-            page: 'Home'
-        }
-    },
-    computed: { 
-        pageType() { 
-            return this.page
+        return {
+            isDataLoaded: false,
+            user: null,
+            boards: null,
+            visiting: false
+
         }
     },
     methods: {
-   
-        onChildClickYes(value){
-            this.page = value
-            
+      
+    },
+    async created() {
+        // let userID = Vue.$cookies.get('userID') //ne moze iz cookija ako gledam tudji profil 
+        let userID = this.$route.params.username //ne moze iz cookija ako gledam tudji profil 
+        await this.$store.dispatch("getUserByID", userID)
+        this.user = this.$store.getters["getUserByID"]
+        await this.$store.dispatch("getBoardsForUser", userID)
+        this.boards = this.$store.getters["getBoardsForUser"]
+        this.isDataLoaded = true;
+        
+        if (this.user.image != null) { 
+            this.user.profileImageUrl = ImageConverter.getUrl(this.user.image.data)
+        }
+        else { 
+            this.user.profileImageUrl = '../assets/img/blank-profile.png'
         }
 
     },

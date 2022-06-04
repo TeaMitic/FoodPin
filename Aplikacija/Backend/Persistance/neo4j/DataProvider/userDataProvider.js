@@ -1,6 +1,7 @@
 const  neo4j  = require( '../config');
 const dtoHelper = require('../../../Helper/dtoHelper');
 const bcrypt = require('bcrypt')
+const dataProviderHelper = require('./dataProviderHelper')
 
 const saltRounds = 10
 
@@ -35,6 +36,7 @@ const getUserById = async (id) => {
         let userDB = await neo4j.model('User').find(id)
         if (userDB) { 
             let user = dtoHelper.userToJson(userDB)
+            user.hasImage = await dataProviderHelper.hasImage(user.username)
             return user
         }
         else { 

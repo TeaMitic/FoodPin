@@ -2,6 +2,7 @@ const dtoHelper = require('../../../Helper/dtoHelper')
 const neo4j = require('../config')
 const arrayHelper = require('../../../Helper/arrayHelper')
 const { randomUUID } = require('crypto');
+const dataProviderHelper = require('./dataProviderHelper')
 
 const createPin = async (pinInfo) => { 
     try {
@@ -144,17 +145,12 @@ const dislikePin = async(pinID)=>{
 
 const getPinById = async (pinID) => { 
     try {
-        //console.log(pinID)
         let pinDB = await neo4j.model('Pin').find(pinID)
         //let pinDB= await neo4j.readCypher(`MATCH (p:PIN {pinID: '${pinID}'}) return p`)
-        //console.log(pinDB)
         if (pinDB) { 
             let pinJson = dtoHelper.pinToJson(pinDB) 
-           // console.log("PIN json: ")
-            //console.log(pinJson)
             let pin = dtoHelper.pinToModel(pinJson)
-           // console.log("PIN iz provider-a: ")
-            //console.log(pin)
+            pin.hasImage = await dataProviderHelper.hasImage(pinID)
             return pin
         }
         return null
@@ -162,6 +158,7 @@ const getPinById = async (pinID) => {
         throw error
     }
 }
+
 
 const getPinWithTags = async (pinID) =>  { 
     let pin = await getPinById(pinID)

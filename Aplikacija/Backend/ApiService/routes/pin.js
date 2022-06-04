@@ -9,7 +9,7 @@ let middlewares = [
     multer.single('image')
 ]
 
-router.get('/get/:skip', auth, pin.getPins)
+router.get('/getWithSkip/:skip', auth, pin.getPins)
 router.get('/get/:id',auth,pin.getByID)
 
 router.post('/',auth,pin.create);

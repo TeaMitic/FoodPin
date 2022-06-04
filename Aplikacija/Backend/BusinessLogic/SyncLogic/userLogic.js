@@ -94,12 +94,11 @@ const getUserById = async(id) => {
         if (!user) { return dtoHelper.createResObject(
             resHelper.NoUserError(id),false
         )}
-        let filePath 
-        let image
-        if (user.imgName != undefined ) { 
-            filePath = path.join(__dirname,'..','..','images','profiles',user.imgName)
+        let filePath,image
+        if (user.hasImage != undefined ) { 
+            filePath = path.join(__dirname,'..','..','images','profiles',user.username + '.jpg')
             image= fs.readFileSync(filePath)
-            user.photo = image
+            user.image = image
         }
         
         return dtoHelper.createResObject(user,true)

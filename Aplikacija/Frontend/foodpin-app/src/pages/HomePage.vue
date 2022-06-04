@@ -1,5 +1,6 @@
 <template>
     <div >
+        <!-- Navigation -->
        <RegularHeaderComponent @childToParentYes="onChildClickYes" />
         <!-- Masthead-->
         <header class="masthead">
