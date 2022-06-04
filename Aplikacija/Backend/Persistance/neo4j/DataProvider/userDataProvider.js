@@ -52,6 +52,7 @@ const getUserByUsername = async(username) => {
         let userDB = await neo4j.model('User').first('username',username)
         if (userDB) { 
             let user = dtoHelper.userToJson(userDB)
+            user.hasImage = await dataProviderHelper.hasImage(user.username)
             return user
         }
         return null 

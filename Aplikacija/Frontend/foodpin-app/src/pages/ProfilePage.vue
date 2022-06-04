@@ -57,7 +57,9 @@ export default({
             isDataLoaded: false,
             user: null,
             boards: null,
-            visiting: false
+            visiting: false,
+            editable: false
+
 
         }
     },
@@ -65,11 +67,12 @@ export default({
       
     },
     async created() {
-        // let userID = Vue.$cookies.get('userID') //ne moze iz cookija ako gledam tudji profil 
-        let userID = this.$route.params.username //ne moze iz cookija ako gledam tudji profil 
-        await this.$store.dispatch("getUserByID", userID)
-        this.user = this.$store.getters["getUserByID"]
-        await this.$store.dispatch("getBoardsForUser", userID)
+        let usernameCookie = Vue.$cookies.get('username')
+        let usernameParam = this.$route.params.username 
+        usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
+        await this.$store.dispatch("getUserByUsername", usernameParam)
+        this.user = this.$store.getters["getUserByUsername"]
+        await this.$store.dispatch("getBoardsForUser", this.user.userID)
         this.boards = this.$store.getters["getBoardsForUser"]
         this.isDataLoaded = true;
         

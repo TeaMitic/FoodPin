@@ -9,10 +9,11 @@ let middlewares = [
     multer.single('image')
 ]
 
+router.get('/get/:id',auth,user.getById)
+router.get('/getByUsername/:username',auth,user.getByUsername)
 router.post('/',user.create)
 router.post('/addImage/:username',middlewares,user.addImage)
 router.post('/login',user.login)
-router.get('/get/:id',auth,user.getById)
 router.post('/follow',auth,user.followUser) //auth removed
 router.post('/unfollow',auth,user.unfollowUser)
 router.put('/update/:id',auth,user.update)

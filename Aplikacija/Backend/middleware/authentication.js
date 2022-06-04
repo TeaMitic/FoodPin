@@ -10,7 +10,7 @@ const auth = (req, res, next) =>{
                 next();
             }
             else { 
-                throw new Error("UnAuthorized error.")
+                throw new Error("Unauthorized error.")
             }
         }catch (error){
             console.log(error.message)

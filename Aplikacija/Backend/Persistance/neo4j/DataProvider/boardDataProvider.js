@@ -98,11 +98,30 @@ const connectWithUser = async (boardID,userID) => {
     }
 }
 
+const getBoardsForUser = async (userID) => { 
+    try {
+        let result = await neo4j.readCypher(`
+            MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}) 
+            RETURN  b
+        `)
+        //user always has 'All pins' board
+        if (result.records.length == 0) { 
+            return null
+        }
+
+        let boards = dtoHelper.fromCypher(result)
+        return boards
+    } catch (error) {
+        
+    }
+}
+
 module.exports = { 
     createBoard,
     updateBoard,
     deleteBoard,
     getBoardByName,
     connectWithUser,
-    getBoardByID
+    getBoardByID,
+    getBoardsForUser
 }

@@ -91,17 +91,14 @@ const getUserById = async(id) => {
         //get user from neo4j db
         let user = await userDataProvider.getUserById(id)
         //get image filename and load image and attach do object
-        if (!user) { return dtoHelper.createResObject(
-            resHelper.NoUserError(id),false
-        )}
-        let filePath,image
-        if (user.hasImage != undefined ) { 
-            filePath = path.join(__dirname,'..','..','images','profiles',user.username + '.jpg')
-            image= fs.readFileSync(filePath)
-            user.image = image
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(id),false
+            )
         }
         
-        return dtoHelper.createResObject(user,true)
+        
+        return dtoHelper.createResObject(attachImage(user),true)
 
         
     } catch (error) {
@@ -109,6 +106,32 @@ const getUserById = async(id) => {
     }
 
 }
+
+const getUserByUsername = async (username) => { 
+    try {
+        let validateString = validation.forString(username, "Username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        let user = await userDataProvider.getUserByUsername(username)
+        if(!user){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(username), false
+            )
+        } 
+       
+
+        
+        return dtoHelper.createResObject(attachImage(user),true)
+        
+    } catch (error) {
+        
+    }
+}
+
 const followUser= async(ids)=>{
     try {
         let validateString1 = validation.forString(ids.currentUser,"currentUser")
@@ -178,7 +201,13 @@ const unfollowUser = async(ids)=>{
 }
 const   addImage = async(imgFile,username) => { 
     try {
-        
+        let validateString = validation.forString(username, "Username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
         let user = await userDataProvider.getUserByUsername(username)
         if(!user){
             return dtoHelper.createResObject(
@@ -230,6 +259,20 @@ const attachToken = (userInfo) => {
         throw error
     }
 }
+
+const attachImage = (user) => { 
+    try {
+        let filePath,image
+        if (user.hasImage != undefined ) { 
+            filePath = path.join(__dirname,'..','..','images','profiles',user.username + '.jpg')
+            image= fs.readFileSync(filePath)
+            user.image = image
+        }
+        return user
+    } catch (error) {
+        
+    }
+}
 //#endregion helper functions 
 
 
@@ -240,5 +283,6 @@ module.exports = {
     followUser,
     unfollowUser,
     addImage,
-    updateProfile
+    updateProfile,
+    getUserByUsername
 }

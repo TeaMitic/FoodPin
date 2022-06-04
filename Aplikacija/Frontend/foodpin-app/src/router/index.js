@@ -24,7 +24,7 @@ const router = new Router({
             component: HomePage
         },
         {
-            path: '/:username/',
+            path: '/Profile/:username/',
             name: 'ProfilePage',
             component: ProfilePage,
             beforeEnter(to,from,next) {

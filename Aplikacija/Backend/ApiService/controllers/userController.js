@@ -49,6 +49,22 @@ const getById = async(req,res) => {
         resHelper.ErrorResponse(error,res)
     }
 }
+
+const getByUsername = async(req,res) => { 
+    try {
+        let result = await syncLogic.getByUsername(req.params.username)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 const followUser = async(req,res)=>{
     try {
         ids={
@@ -147,5 +163,6 @@ module.exports = {
     unfollowUser,
     addImage,
     update,
-    sendMessage
+    sendMessage,
+    getByUsername
 }
