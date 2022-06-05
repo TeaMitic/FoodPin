@@ -1,9 +1,9 @@
 <template>
     <div >
         <!-- Navigation-->
-        <!-- <UserHeaderComponent @childToParentYes="onChildClickYes" /> -->
+        <UserHeaderComponent @childToParentYes="onChildClickYes"  />
         <!-- Main container -->
-        <div class="container">
+        <div class="container my-3 py-5">
             <!-- User info -->
             <div v-if="!this.isDataLoaded">
                 <AppSpinner />
@@ -11,28 +11,46 @@
             <div v-else>
                 <div class="user-info">
                     <div class="cont-user-image">
-                     <img class="user-image" :src= this.imageUrl alt="User profile image">
+                     <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
+                     <img v-else class="user-image" :src= this.imageUrl alt="User profile image">
                     </div>
                     <div class="cont-user-fullname">
                         <h2 class="user-fullname">{{user.name}} {{user.surname != undefined ? user.surname : ""}}</h2>
                     </div>
                     <div class="cont-user-username">
-                        <p class="user-username">{{user.username}}</p>
+                        <p class="user-username"><b>@{{user.username}}</b></p>
                     </div>
-                    <div class="cont-user-follows">
-                        <div class="cont-user-followers"><p class="user-follows">{{user.followers}}</p></div>
-                        <div class="cont-user-following"><p class="user-follows">{{user.following}}</p></div>
+                    <div class="cont-user-follows row justify-content-center">
+                        <div class="cont-user-followers d-flex justify-content-center col-2"><p class="user-follows">Followers: <b>{{user.followers}}</b></p></div>
+                        <div class="cont-user-following d-flex justify-content-center col-2"><p class="user-follows">Following: <b>{{user.following}}</b></p></div>
                     </div>
-                    <div class="cont-user-buttons"></div>
+                    <div class="cont-user-buttons">
+                        <div v-if="this.editable">
+                            <button class="edit-button">Edit</button>
+                        </div>
+                        <div v-else>
+                            <button class="follow-button">Follow/Unfollow</button>
+                            <button class="chat-button">Message</button>
+                        </div>
                     </div>
-                    <!-- Created or saved pins option -->
-                    <div class="cont-pin-options">
-
+                </div>
+                <!-- Created or saved pins option -->
+                <div class="cont-pin-options row justify-content-center p-3">
+                    <button v-on:click="showBoards('created')" class="col-2 mx-1">Created</button>
+                    <button v-on:click="showBoards('saved')" class="col-2 mx-1">Saved</button>
                 </div>
                 <!-- Boards -->
                 <div class="cont-boards">
-                    <div class="cont-boards-add"></div>
-                    <div class="cont-boards-all"></div>
+                    <div class="cont-boards-add">
+                        <!-- dve ikonice jedna sort boards (levo) i druga add pin/board (desno) -->
+                        <!-- sort boards ne radi za all pins, on je uvek na pocetku  -->
+                        
+                    </div>  
+                    <div class="cont-boards-all">
+                        <!-- prvo ide All pins uvek pa onda ostale -->
+                        <!-- All pins card component -->
+                        <!-- Other boards card component -->
+                    </div>
                 </div>
             </div>
             
@@ -50,15 +68,17 @@
 
 <script>
 import Vue from 'vue'
-// import UserHeaderComponent from '../components/UserHeaderComponent.vue'
+import UserHeaderComponent from '../components/UserHeaderComponent.vue'
 import AppSpinner from '../components/AppSpinerComponent.vue'
 import ImageConverter from '../helper/imageConverter' 
+
 
 export default({ 
     title: "FoodPin - Profile",
     components: { 
-        // UserHeaderComponent
-        AppSpinner
+        UserHeaderComponent,
+        AppSpinner,
+
     },
     data() { 
         return {
@@ -67,17 +87,26 @@ export default({
             boards: null,
             visiting: false,
             editable: false,
-            imageUrl:  "assets\\img\\blank-profile.png" //Aplikacija\Frontend\foodpin-app\src\assets\img\blank-profile.png
+            imageUrl:  null, 
+            hasImage: false,
+            shownBoards: 'saved'
 
 
         }
     },
     methods: {
-      
+        showBoards(type) { 
+            this.shownBoards = type
+        },
+        onChildClickYes(value){
+            console.log("REDIRECTED: ",value)
+        }
     },
     async created() {
         let usernameCookie = Vue.$cookies.get('username')
         let usernameParam = this.$route.params.username 
+        console.log("USERNAME COOKIE:",usernameCookie)
+        console.log("USERNAME COOKIE:",usernameParam)
         usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
         await this.$store.dispatch("getUserByUsername", usernameParam)
         this.user = this.$store.getters["getUser"]
@@ -87,9 +116,15 @@ export default({
         
         if (this.user.image != null) { 
             this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
+            this.hasImage = true
         }
+        // else { 
+        //     this.hasImage =
+        //     this.imageUrl = "../assets/img/blank_profile.png"
+        // }
 
     },
+  
    
 })
 

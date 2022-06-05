@@ -109,6 +109,8 @@ const getUserById = async(id) => {
 
 const getUserByUsername = async (username) => { 
     try {
+
+        //* treba da se vrati i pratioci
         let validateString = validation.forString(username, "Username")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
@@ -118,17 +120,21 @@ const getUserByUsername = async (username) => {
         }
         let user = await userDataProvider.getUserByUsername(username)
         if(!user){
+
             return dtoHelper.createResObject(
                 resHelper.NoUserError(username), false
             )
         } 
        
-
+        //followers and following
+        let followObj =  await userDataProvider.countFollows(user.userID)
+        user.followers = followObj.followers
+        user.following = followObj.following
         
         return dtoHelper.createResObject(attachImage(user),true)
         
     } catch (error) {
-        
+        throw error
     }
 }
 
@@ -228,20 +234,22 @@ const   addImage = async(imgFile,username) => {
 
 const updateProfile = async (user,userID) => { 
     try {
-        let validateString = validation.forString(imgName,"imageName")
+        let validateString = validation.forString(userID,"UserID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
                 text: validateString
-            },false)
-        } 
-        let userDB = await userDataProvider.getUserById(pinID)
+            },false)         
+        }
+        //? user validation
+        let userDB = await userDataProvider.getUserById(userID)
         if(!userDB){
             return dtoHelper.createResObject(
                 resHelper.NoUserError(userID), false
             )
         } 
         let result = await userDataProvider.updateProfile(user,userID)
+        return result //? zasto kreiram resObject u provider klasi? 
     } catch (error) {
         throw error
     }
@@ -263,15 +271,27 @@ const attachToken = (userInfo) => {
 const attachImage = (user) => { 
     try {
         let filePath,image
-        if (user.hasImage != undefined ) { 
+        if (user.hasImage != undefined  && user.hasImage) { 
+
+            //setting flags to false 
+            user.image = null
+            user.hasImage = false
+
             filePath = path.join(__dirname,'..','..','images','profiles',user.username + '.jpg')
-            image= fs.readFileSync(filePath)
-            user.image = image
+            if (fs.existsSync(filePath)) { 
+                image= fs.readFileSync(filePath)
+
+                //setting flags to true
+                user.image = image
+                user.hasImage = true
+            }
+
+            return user
         }
-        return user
     } catch (error) {
-        
+        throw error 
     }
+   
 }
 //#endregion helper functions 
 

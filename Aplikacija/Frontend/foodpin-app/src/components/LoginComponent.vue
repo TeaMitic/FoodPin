@@ -29,6 +29,11 @@ export default {
             },
         }
     },
+   
+    mounted() {
+        let usernameInput = document.querySelector('input')
+        usernameInput.focus()
+    },
     methods:{
         validateInputs() { 
             let inputs = document.querySelectorAll('input')

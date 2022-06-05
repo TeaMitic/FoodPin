@@ -114,11 +114,40 @@ const updateProfile = async(user,userID) => {
         throw error
     }
 }
+
+const countFollows = async(userID) => { 
+    try {
+        //counting followers 
+        let resultFollowing = await neo4j.readCypher(
+            `MATCH (u:User {userID:"${userID}"})-[follows:FOLLOWS]->(other:User)
+            RETURN COUNT(follows) as following`
+        )
+        
+        let resultFollowers = await neo4j.readCypher(
+            `MATCH (u:User {userID:"${userID}"})<-[follows:FOLLOWS]-(other:User)
+            RETURN COUNT(follows) as followers`
+        )
+        let followObj = { }
+        if (resultFollowing.records.length === 0) { 
+            followObj.following = 0
+        }
+        if (resultFollowers.records.length === 0) { 
+            followObj.followers = 0
+        }
+        followObj.following = dtoHelper.fromCypherNumbers(resultFollowing)
+        followObj.followers = dtoHelper.fromCypherNumbers(resultFollowers)
+        return followObj
+      
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     create,
     getUserById,
     getUserByUsername,
     followUser,
     unfollowUser,
-    updateProfile
+    updateProfile,
+    countFollows
 }

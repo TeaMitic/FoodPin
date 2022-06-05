@@ -4,7 +4,12 @@
             <div class="container px-4 px-lg-5">
                 <button v-on:click="pushData('Home')" class="no-border  btn-margins btn no navbar-brand"
                     >FoodPin</button>
-                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse"
+                        data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"   
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                    </span>
+                </button>
                 <div class=" collapse navbar-collapse " id="navbarResponsive">
                     <ul class="navbar-nav ms-auto my-2 my-lg-0 align-items-end  ">
                         <li class="nav-item ">
@@ -15,14 +20,10 @@
                             <button v-on:click="pushData('Chat')" class="no-border btn-margins btn nav-link "
                                 >Chat</button>
                         </li>
-                        <li class="nav-item ">
-                            <button v-on:click="pushData('Profile')" class="no-border btn-margins btn nav-link "
-                                >Login</button>
-                        </li>
                         <hr class="mx-0 my-1 menu-divider">
                         <li class="nav-item">
                             <button v-on:click="pushData('Logout')" class="no-border btn-margins btn nav-link"
-                                >Register</button>
+                                >Logout</button>
                         </li> 
                     </ul>
                 </div>
@@ -32,7 +33,6 @@
 <script>
 
 export default({ 
-    title: "FoodPin",
     components: { 
         
     },
@@ -42,7 +42,7 @@ export default({
         }
     },
     methods: {
-   
+     
         pushData(value){
             this.$emit('childToParentYes', value)
         },
@@ -66,5 +66,8 @@ export default({
 }
 .menu-divider  {
     width: 30%;
+}
+#mainNav { 
+    background-color: rgb(41, 155, 98);
 }
 </style>

@@ -24,7 +24,6 @@
 <script>
 
 export default({ 
-    title: "FoodPin",
     components: { 
         
     },
