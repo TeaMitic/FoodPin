@@ -41,6 +41,10 @@ export default {
       }
     }
   },
+  mounted() {
+    let nameInput = document.querySelector('input')
+    nameInput.focus()
+  },
   methods:{
     pushData(){
       this.$emit('childToParentYes', 'Login')

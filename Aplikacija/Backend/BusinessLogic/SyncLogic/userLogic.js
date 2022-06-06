@@ -91,18 +91,14 @@ const getUserById = async(id) => {
         //get user from neo4j db
         let user = await userDataProvider.getUserById(id)
         //get image filename and load image and attach do object
-        if (!user) { return dtoHelper.createResObject(
-            resHelper.NoUserError(id),false
-        )}
-        let filePath 
-        let image
-        if (user.imgName != undefined ) { 
-            filePath = path.join(__dirname,'..','..','images','profiles',user.imgName)
-            image= fs.readFileSync(filePath)
-            user.photo = image
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(id),false
+            )
         }
         
-        return dtoHelper.createResObject(user,true)
+        
+        return dtoHelper.createResObject(attachImage(user),true)
 
         
     } catch (error) {
@@ -110,6 +106,38 @@ const getUserById = async(id) => {
     }
 
 }
+
+const getUserByUsername = async (username) => { 
+    try {
+
+        //* treba da se vrati i pratioci
+        let validateString = validation.forString(username, "Username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        let user = await userDataProvider.getUserByUsername(username)
+        if(!user){
+
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(username), false
+            )
+        } 
+       
+        //followers and following
+        let followObj =  await userDataProvider.countFollows(user.userID)
+        user.followers = followObj.followers
+        user.following = followObj.following
+        
+        return dtoHelper.createResObject(attachImage(user),true)
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 const followUser= async(ids)=>{
     try {
         let validateString1 = validation.forString(ids.currentUser,"currentUser")
@@ -179,7 +207,13 @@ const unfollowUser = async(ids)=>{
 }
 const   addImage = async(imgFile,username) => { 
     try {
-        
+        let validateString = validation.forString(username, "Username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
         let user = await userDataProvider.getUserByUsername(username)
         if(!user){
             return dtoHelper.createResObject(
@@ -200,20 +234,22 @@ const   addImage = async(imgFile,username) => {
 
 const updateProfile = async (user,userID) => { 
     try {
-        let validateString = validation.forString(imgName,"imageName")
+        let validateString = validation.forString(userID,"UserID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
                 text: validateString
-            },false)
-        } 
-        let userDB = await userDataProvider.getUserById(pinID)
+            },false)         
+        }
+        //? user validation
+        let userDB = await userDataProvider.getUserById(userID)
         if(!userDB){
             return dtoHelper.createResObject(
                 resHelper.NoUserError(userID), false
             )
         } 
         let result = await userDataProvider.updateProfile(user,userID)
+        return result //? zasto kreiram resObject u provider klasi? 
     } catch (error) {
         throw error
     }
@@ -231,6 +267,32 @@ const attachToken = (userInfo) => {
         throw error
     }
 }
+
+const attachImage = (user) => { 
+    try {
+        let filePath,image
+        if (user.hasImage != undefined  && user.hasImage) { 
+
+            //setting flags to false 
+            user.image = null
+            user.hasImage = false
+
+            filePath = path.join(__dirname,'..','..','images','profiles',user.username + '.jpg')
+            if (fs.existsSync(filePath)) { 
+                image= fs.readFileSync(filePath)
+
+                //setting flags to true
+                user.image = image
+                user.hasImage = true
+            }
+
+            return user
+        }
+    } catch (error) {
+        throw error 
+    }
+   
+}
 //#endregion helper functions 
 
 
@@ -241,5 +303,6 @@ module.exports = {
     followUser,
     unfollowUser,
     addImage,
-    updateProfile
+    updateProfile,
+    getUserByUsername
 }

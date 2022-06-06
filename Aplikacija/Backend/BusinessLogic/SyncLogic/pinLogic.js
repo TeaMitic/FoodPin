@@ -277,12 +277,12 @@ const getByID =async(pinID)=>{
         }
         let pin =await pinDataProvider.getPinById(pinID)
 
-        let filePath 
-        let image
-        if (pin.imgName != undefined ) { 
-            filePath = path.join(__dirname,'..','..','images','pins',pin.imgName)
+        let filePath, image
+        //it is not pin.imgName, it is relationship with image node 
+        if (pin.hasImage) { 
+            filePath = path.join(__dirname,'..','..','images','pins',pinID + '.jpg')
             image= fs.readFileSync(filePath)
-            pin.photo = image
+            pin.image = image
         } 
 
         return dtoHelper.createResObject(pin,true)

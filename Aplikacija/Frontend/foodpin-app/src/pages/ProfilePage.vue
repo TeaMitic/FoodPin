@@ -1,54 +1,60 @@
 <template>
     <div >
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
-            <div class="container px-4 px-lg-5">
-                <button v-on:click="page = 'Home'" class="no-border  btn-margins btn no navbar-brand"
-                    >FoodPin</button>
-                <!-- <router-link  class="navbar-brand text-decoration-none" :to="{name: 'HomePage'}"> 
-                    FoodPin
-                </router-link> -->
-                <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class=" collapse navbar-collapse " id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto my-2 my-lg-0 align-items-end  ">
-                        <li class="nav-item ">
-                            <button v-on:click="page='Login'" class="no-border btn-margins btn nav-link "
-                                >Login</button>
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Login'}">
-                                Login
-                            </router-link> -->
-                        </li>
-                        <hr class="mx-0 my-1 menu-divider">
-                        <li class="nav-item">
-                            <button v-on:click="page='Register'" class="no-border btn-margins btn nav-link"
-                                >Register</button>
-
-                            <!-- <router-link class="text-decoration-none nav-link" :to="{name: 'Register'}">
-                                Register
-                            </router-link> -->
-                        </li> 
-                    </ul>
+        <UserHeaderComponent @childToParentYes="onChildClickYes"  />
+        <!-- Main container -->
+        <div class="container my-3 py-5">
+            <!-- User info -->
+            <div v-if="!this.isDataLoaded">
+                <AppSpinner />
+            </div>
+            <div v-else>
+                <div class="user-info">
+                    <div class="cont-user-image">
+                     <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
+                     <img v-else class="user-image" :src= this.imageUrl alt="User profile image">
+                    </div>
+                    <div class="cont-user-fullname">
+                        <h2 class="user-fullname">{{user.name}} {{user.surname != undefined ? user.surname : ""}}</h2>
+                    </div>
+                    <div class="cont-user-username">
+                        <p class="user-username"><b>@{{user.username}}</b></p>
+                    </div>
+                    <div class="cont-user-follows row justify-content-center">
+                        <div class="cont-user-followers d-flex justify-content-center col-2"><p class="user-follows">Followers: <b>{{user.followers}}</b></p></div>
+                        <div class="cont-user-following d-flex justify-content-center col-2"><p class="user-follows">Following: <b>{{user.following}}</b></p></div>
+                    </div>
+                    <div class="cont-user-buttons">
+                        <div v-if="this.editable">
+                            <button class="edit-button">Edit</button>
+                        </div>
+                        <div v-else>
+                            <button class="follow-button">Follow/Unfollow</button>
+                            <button class="chat-button">Message</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Created or saved pins option -->
+                <div class="cont-pin-options row justify-content-center p-3">
+                    <button v-on:click="showBoards('created')" class="col-2 mx-1">Created</button>
+                    <button v-on:click="showBoards('saved')" class="col-2 mx-1">Saved</button>
+                </div>
+                <!-- Boards -->
+                <div class="cont-boards">
+                    <div class="cont-boards-add">
+                        <!-- dve ikonice jedna sort boards (levo) i druga add pin/board (desno) -->
+                        <!-- sort boards ne radi za all pins, on je uvek na pocetku  -->
+                        
+                    </div>  
+                    <div class="cont-boards-all">
+                        <!-- prvo ide All pins uvek pa onda ostale -->
+                        <!-- All pins card component -->
+                        <!-- Other boards card component -->
+                    </div>
                 </div>
             </div>
-        </nav>
-        <!-- Masthead-->
-        <header class="masthead">
-            <div class="container px-4 px-lg-5 h-100 ">
-                <div class="row gx-4 gx-lg-5 h-100 align-items-center  ">
-                <!-- <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center"> -->
-                    <div v-if="pageType == 'Home'" > 
-                        <HomePageComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                    <div v-else-if="pageType == 'Login'" class="d-flex justify-content-center"> 
-                        <LoginComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                    <div v-else-if="pageType == 'Register'" class="d-flex justify-content-center" > 
-                        <RegisterComponent @childToParentYes="onChildClickYes" />
-                    </div>
-                   
-                </div>
-            </div>
-        </header>
+            
+        </div>
 
         <!-- Footer-->
         <footer class="bg-light py-5 row ">
@@ -61,36 +67,64 @@
 </template>
 
 <script>
-import HomePageComponent from '../components/HomePageComponent.vue'
-import LoginComponent from '../components/LoginComponent.vue'
-import RegisterComponent from '../components/RegisterComponent.vue'
+import Vue from 'vue'
+import UserHeaderComponent from '../components/UserHeaderComponent.vue'
+import AppSpinner from '../components/AppSpinerComponent.vue'
+import ImageConverter from '../helper/imageConverter' 
+
 
 export default({ 
-    title: "FoodPin",
+    title: "FoodPin - Profile",
     components: { 
-        HomePageComponent,
-        LoginComponent,
-        RegisterComponent
+        UserHeaderComponent,
+        AppSpinner,
+
     },
     data() { 
-        return { 
-            isCollapsed: true,
-            page: 'Home'
-        }
-    },
-    computed: { 
-        pageType() { 
-            return this.page
+        return {
+            isDataLoaded: false,
+            user: null,
+            boards: null,
+            visiting: false,
+            editable: false,
+            imageUrl:  null, 
+            hasImage: false,
+            shownBoards: 'saved'
+
+
         }
     },
     methods: {
-   
+        showBoards(type) { 
+            this.shownBoards = type
+        },
         onChildClickYes(value){
-            this.page = value
-            
+            console.log("REDIRECTED: ",value)
         }
+    },
+    async created() {
+        let usernameCookie = Vue.$cookies.get('username')
+        let usernameParam = this.$route.params.username 
+        console.log("USERNAME COOKIE:",usernameCookie)
+        console.log("USERNAME COOKIE:",usernameParam)
+        usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
+        await this.$store.dispatch("getUserByUsername", usernameParam)
+        this.user = this.$store.getters["getUser"]
+        await this.$store.dispatch("getBoardsForUser", this.user.userID)
+        this.boards = this.$store.getters["getBoardsForUser"]
+        this.isDataLoaded = true;
+        
+        if (this.user.image != null) { 
+            this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
+            this.hasImage = true
+        }
+        // else { 
+        //     this.hasImage =
+        //     this.imageUrl = "../assets/img/blank_profile.png"
+        // }
 
     },
+  
    
 })
 
@@ -116,6 +150,14 @@ export default({
 }
 .menu-divider  {
     width: 30%;
+}
+.user-image { 
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-top: 1rem;
+
 }
 
 

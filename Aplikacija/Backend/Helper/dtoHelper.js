@@ -78,6 +78,9 @@ module.exports = {
         });
         return arr
     },
+    fromCypherNumbers(cypherResult) { 
+        return cypherResult.records[0]._fields[0].low
+    },
     imgToModel(imgJson) { 
         return { 
             imgName: imgJson.imgName != undefined ? imgJson.imgName : null,

@@ -125,8 +125,26 @@ const deleteBoard = async (boardInfo) => {
         throw error
     }
 }
+
+const getBoardsForUser = async(userID) => { 
+    try {
+        //user validation
+        let user = await userDataProvider.getUserById(userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID),
+                false
+            )
+        }
+        let boards = await boardDataProvider.getBoardsForUser(userID)
+        return dtoHelper.createResObject(boards,true)
+    } catch (error) {
+        
+    }
+}
 module.exports = { 
     createBoard,
     updateBoard,
-    deleteBoard
+    deleteBoard,
+    getBoardsForUser
 }
