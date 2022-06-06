@@ -100,6 +100,7 @@ const connectWithUser = async (boardID,userID) => {
 
 const getBoardsForUser = async (userID) => { 
     try {
+        //getting boards with first few pins  
         let result = await neo4j.readCypher(`
             MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}) 
             RETURN  b
