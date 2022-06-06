@@ -47,21 +47,28 @@
             </div> -->
             <div class="container px-4 px-lg-5 mt-5">
                     <div class="row ">
-                        <div class="col-4 pin">
+                        <div class="col-3 pin">
                             <PinCard />
                             <!-- v-for="store in allStores" 
                                             :key="store.id" 
                                             :store="store"/ -->
 
                         </div>
-                         <div class="col-4 pin">
+                         <div class="col-3 pin">
                             <PinCard />
                             <!-- v-for="store in allStores" 
                                             :key="store.id" 
                                             :store="store"/ -->
 
                         </div>
-                         <div class="col-4 pin">
+                        <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                        <div class="col-3 pin">
                             <PinCard />
                             <!-- v-for="store in allStores" 
                                             :key="store.id" 
