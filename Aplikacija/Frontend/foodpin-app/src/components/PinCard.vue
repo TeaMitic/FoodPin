@@ -4,14 +4,23 @@
       <div class="row">
         <div class="col-6">
           <!-- Treba da bude selectbox -->
-          <h2 class="card-title">Board</h2> 
+          <!-- <h2 class="card-title">Board</h2>  -->
+          <select name="board">
+            <option value="Paste">Paste</option>
+            <option value="Smoothies">Smoothies</option>
+            <option value="Salads">Salads</option>
+            <option value="Sweets">Sweets</option>
+          </select>
+            <!-- <select v-model="selected_game">
+              <option v-for="game in games" :value="game.value">{{game.text}}</option>
+            </select> -->
         </div>
         <div class="col-6">
           <button class="button">Save pin</button>
         </div>
       </div>
       <div class="row">
-        <h2 class="card-title">Pin Name</h2>
+        <h4 class="card-title">Pin Name</h4>
       </div>
     </div>
   </div>

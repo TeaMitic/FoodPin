@@ -15,7 +15,7 @@ neo4j.withDirectory(__dirname + '\\Persistance\\neo4j\\models');
 // neo4j.schema.install().then(() => console.log('Schema installed!'))
 
 /*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
-// neo4j.schema.drop().then(() => console.log('Schema dropped!'))
+//neo4j.schema.drop().then(() => console.log('Schema dropped!'))
 
 //#endregion
 

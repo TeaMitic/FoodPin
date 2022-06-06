@@ -46,7 +46,7 @@
                 </div>
             </div> -->
             <div class="container px-4 px-lg-5 mt-5">
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-3 pin">
                             <PinCard />
                             <!-- v-for="store in allStores" 
@@ -69,6 +69,48 @@
 
                         </div>
                         <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
+                            <PinCard />
+                            <!-- v-for="store in allStores" 
+                                            :key="store.id" 
+                                            :store="store"/ -->
+
+                        </div>
+                          <div class="col-3 pin">
                             <PinCard />
                             <!-- v-for="store in allStores" 
                                             :key="store.id" 
@@ -102,5 +144,6 @@ export default {
 .pin{
     /* width: 100%; */
     height: 100%;
+    margin-bottom: 2.5%;
 }
 </style>
