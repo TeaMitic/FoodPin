@@ -114,7 +114,8 @@ const login_register = async (commit,path,userObject) => {
             position: "bottom-center",
             duration: 2000
         })
-        router.push(`/Profile/${data.username}`) //!vrati nazad
+        // router.push(`/Profile/${data.username}`) //!vrati nazad
+        router.push('/UserPage')
     }
     catch(error) { 
         if (error.response.status == 500) { 
