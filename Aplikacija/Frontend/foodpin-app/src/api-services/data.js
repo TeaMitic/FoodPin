@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import router from '../router/index.js'
 import Api from './apiConfig'
 
-const cookieTime = "1h"
+const cookieTime = "24h"
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -56,6 +56,25 @@ export default new Vuex.Store({
                 else { 
                    toastedErrorMessage(error.response.data)
                 }
+            }
+        },
+        async createBoard({commit},board) { 
+            try {
+                await Api().post('/api/board',board,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+                Vue.toasted.show(
+                    `Board created`, { 
+                    theme: "bubble",
+                    position: "bottom-center",
+                    duration: 3000,
+                    allowHtml: true
+                })
+            } catch (error) {
+                toastedErrorMessage(error.response.data)
             }
         }
         

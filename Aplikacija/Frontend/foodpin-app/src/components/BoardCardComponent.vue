@@ -40,7 +40,7 @@ export default {
     },
 }
 </script>
-<style >
+<style scoped>
 .pin-image { 
     object-fit: cover;
     border-radius: 10px;

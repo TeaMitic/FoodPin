@@ -9,6 +9,7 @@
                 <AppSpinner />
             </div>
             <div v-else>
+                <BoardBuilder v-if="showBoardBuilder" />
                 <div class="user-info">
                     <div class="cont-user-image">
                      <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
@@ -30,11 +31,13 @@
                     <div class="cont-user-about">
                         <p class="user-about">{{user.about}}</p>
                     </div>
-                    <div class="cont-user-buttons">
-                        <div v-if="this.editable">
-                            <button class="edit-button">Edit</button>
+                    <div class="cont-user-buttons row justify-content-center">
+                        <div v-if="this.editable" class="edit-button col-6">
+                            <router-link :to="{name: 'settings'}" >
+                                <font-awesome-icon class="edit-icon" :icon="['fa','edit']" />
+                            </router-link>
                         </div>
-                        <div v-else>
+                        <div v-else  class="edit-button col-6">
                             <button class="follow-button mx-1">Follow/Unfollow</button>
                             <button class="chat-button mx-1">Message</button>
                         </div>
@@ -49,9 +52,23 @@
                 <div class="cont-boards">
                     <div class="cont-boards-add row justify-content-end">
                         <!-- add board or pin ikonica -->
-                        <button class="add-btn rounded-circle">
+                        <button class="add-btn rounded-circle d-flex" v-on:click="toggleCreateField">
                             <font-awesome-icon class="plus-icon" :icon="['fa','plus']"/>
                         </button>
+                        <div class="create-field" v-if="showCreateField">
+                            <div class="row align-items-left ">
+                                <label class="d-flex mt-2 mx-1">Create</label>
+                                <router-link :to="{name: 'pin-builder'}" class="link">
+                                    <button class="create-field-option my-1 mx-1">
+                                        <h3>Pin</h3>
+                                    </button>
+                                </router-link>
+                                <button class="create-field-option mx-1 mb-1" v-on:click="toggleBoardBuilder">
+                                    <h3>Board</h3>
+                                </button>
+                                
+                            </div>
+                        </div>
                     </div>  
                     <div class="cont-boards-all row">
                         <!-- prvo ide All pins uvek pa onda ostale -->
@@ -80,6 +97,7 @@ import UserHeaderComponent from '../components/UserHeaderComponent.vue'
 import AppSpinner from '../components/AppSpinerComponent.vue'
 import ImageConverter from '../helper/imageConverter' 
 import BoardCard from '../components/BoardCardComponent.vue'
+import BoardBuilder from '../components/BoardBuilderComponent.vue'
 
 
 export default({ 
@@ -87,7 +105,8 @@ export default({
     components: { 
         UserHeaderComponent,
         AppSpinner,
-        BoardCard
+        BoardCard,
+        BoardBuilder
 
     },
     data() { 
@@ -100,6 +119,8 @@ export default({
             imageUrl:  null, 
             hasImage: false,
             // shownBoards: 'saved'
+            showCreateField: false,
+            showBoardBuilder: false
 
 
         }
@@ -113,9 +134,16 @@ export default({
         // showBoards(type) { 
         //     this.shownBoards = type
         // },
+        toggleCreateField() { 
+            this.showCreateField = !this.showCreateField
+        },
+        toggleBoardBuilder() { 
+            this.showBoardBuilder = !this.showBoardBuilder
+        },
         onChildClickYes(value){
             console.log("REDIRECTED: ",value)
         }
+
     },
     async created() {
         let usernameCookie = Vue.$cookies.get('username')
@@ -178,13 +206,49 @@ export default({
     background-color: transparent;
     padding: 0;
     border: none;
+    justify-content: center;
+    align-items: center;
 }
 .add-btn:hover { 
     background-color: rgb(209, 207, 207);
+    transition: 0.2s ease-out;
 }
 .plus-icon { 
     height: 50px !important;
     width: 50px !important;
+    color: #f4623a;
+}
+.edit-icon { 
+    height: 30px !important;
+    width: 30px !important;
+}
+.edit-button { 
+    background-color: red;
+}
+.create-field { 
+    display:flex;
+    align-items: flex-end;
+    flex-direction: column;
+    position: absolute;
+    bottom: 30%
+}
+.create-field > div { 
+    background-color: rgb(246 246 246);
+    border-radius: 8px;
+}
+.create-field-option { 
+    background-color: gainsboro;
+    display: flex;
+    border-radius: 5px;
+    width: -webkit-fill-available;
+}
+.create-field-option:hover { 
+    background-color: hsl(0, 0%, 60%);
+    transition: 0.2s ease-out;
+}
+.link {
+    text-decoration: none;
+    padding: 0;
 }
 
 

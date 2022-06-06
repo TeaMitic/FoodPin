@@ -9,7 +9,7 @@ const generateAccessToken = (user) => {
     },
     token_secret, 
     {
-        expiresIn: '3600s'
+        expiresIn: '86400s'
     })
 }
 const verifyToken = (request) =>  { 

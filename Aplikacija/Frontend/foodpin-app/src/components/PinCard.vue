@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style>
+<style  scoped>
 :root{
   --clr-orange: #f4623a;
   --clr-neutral-100: hsl(0,0%,100%);  
