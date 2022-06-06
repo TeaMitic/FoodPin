@@ -21,19 +21,19 @@ const router = new Router({
     routes:[
         {
             path: '/',
-            name: 'HomePage',
+            name: 'homepage',
             component: HomePage
         },
         {
-            path: '/Profile/:username/',
-            name: 'ProfilePage',
+            path: '/profile/:username/',
+            name: 'profilepage',
             component: ProfilePage,
             beforeEnter(to,from,next) {
                 if (checkCookie()) {
                     next()
                 }
                 else { 
-                    next({name: 'HomePage'})
+                    next({name: 'homepage'})
                 }
             }
         },

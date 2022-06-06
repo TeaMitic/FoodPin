@@ -84,7 +84,6 @@ const   addImage = async(imgFile,pinID) => {
             )
         } 
         console.log(pin)
-        throw "error"
         //add image 
         return await logicHelper.addImage(imgFile,{
             pinID: pinID,

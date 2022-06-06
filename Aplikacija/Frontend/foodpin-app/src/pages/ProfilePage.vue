@@ -24,32 +24,40 @@
                         <div class="cont-user-followers d-flex justify-content-center col-2"><p class="user-follows">Followers: <b>{{user.followers}}</b></p></div>
                         <div class="cont-user-following d-flex justify-content-center col-2"><p class="user-follows">Following: <b>{{user.following}}</b></p></div>
                     </div>
+                    <div class="cont-user-website">
+                        <a class="user-website" v-bind:href="user.website" target="_blank" rel="noopener"><b>{{user.website | trim-web}}</b></a>
+                    </div>
+                    <div class="cont-user-about">
+                        <p class="user-about">{{user.about}}</p>
+                    </div>
                     <div class="cont-user-buttons">
                         <div v-if="this.editable">
                             <button class="edit-button">Edit</button>
                         </div>
                         <div v-else>
-                            <button class="follow-button">Follow/Unfollow</button>
-                            <button class="chat-button">Message</button>
+                            <button class="follow-button mx-1">Follow/Unfollow</button>
+                            <button class="chat-button mx-1">Message</button>
                         </div>
                     </div>
                 </div>
                 <!-- Created or saved pins option -->
-                <div class="cont-pin-options row justify-content-center p-3">
+                <!-- <div class="cont-pin-options row justify-content-center p-3">
                     <button v-on:click="showBoards('created')" class="col-2 mx-1">Created</button>
                     <button v-on:click="showBoards('saved')" class="col-2 mx-1">Saved</button>
-                </div>
+                </div> -->
                 <!-- Boards -->
                 <div class="cont-boards">
-                    <div class="cont-boards-add">
-                        <!-- dve ikonice jedna sort boards (levo) i druga add pin/board (desno) -->
-                        <!-- sort boards ne radi za all pins, on je uvek na pocetku  -->
-                        
+                    <div class="cont-boards-add row justify-content-end">
+                        <!-- add board or pin ikonica -->
+                        <button class="add-btn rounded-circle">
+                            <font-awesome-icon class="plus-icon" :icon="['fa','plus']"/>
+                        </button>
                     </div>  
-                    <div class="cont-boards-all">
+                    <div class="cont-boards-all row">
                         <!-- prvo ide All pins uvek pa onda ostale -->
                         <!-- All pins card component -->
                         <!-- Other boards card component -->
+                        <BoardCard v-for="board in allBoards" :key="board.boardID" :board="board" class= "col-3 m-3"/>
                     </div>
                 </div>
             </div>
@@ -71,6 +79,7 @@ import Vue from 'vue'
 import UserHeaderComponent from '../components/UserHeaderComponent.vue'
 import AppSpinner from '../components/AppSpinerComponent.vue'
 import ImageConverter from '../helper/imageConverter' 
+import BoardCard from '../components/BoardCardComponent.vue'
 
 
 export default({ 
@@ -78,6 +87,7 @@ export default({
     components: { 
         UserHeaderComponent,
         AppSpinner,
+        BoardCard
 
     },
     data() { 
@@ -89,15 +99,20 @@ export default({
             editable: false,
             imageUrl:  null, 
             hasImage: false,
-            shownBoards: 'saved'
+            // shownBoards: 'saved'
 
 
         }
     },
+    computed: {
+        allBoards() { 
+            return  this.$store.getters["getBoardsForUser"]
+        }
+    },
     methods: {
-        showBoards(type) { 
-            this.shownBoards = type
-        },
+        // showBoards(type) { 
+        //     this.shownBoards = type
+        // },
         onChildClickYes(value){
             console.log("REDIRECTED: ",value)
         }
@@ -105,13 +120,11 @@ export default({
     async created() {
         let usernameCookie = Vue.$cookies.get('username')
         let usernameParam = this.$route.params.username 
-        console.log("USERNAME COOKIE:",usernameCookie)
-        console.log("USERNAME COOKIE:",usernameParam)
+
         usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
         await this.$store.dispatch("getUserByUsername", usernameParam)
         this.user = this.$store.getters["getUser"]
         await this.$store.dispatch("getBoardsForUser", this.user.userID)
-        this.boards = this.$store.getters["getBoardsForUser"]
         this.isDataLoaded = true;
         
         if (this.user.image != null) { 
@@ -159,7 +172,20 @@ export default({
     margin-top: 1rem;
 
 }
-
+.add-btn { 
+    height: 70px;
+    width: 70px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+}
+.add-btn:hover { 
+    background-color: rgb(209, 207, 207);
+}
+.plus-icon { 
+    height: 50px !important;
+    width: 50px !important;
+}
 
 
 

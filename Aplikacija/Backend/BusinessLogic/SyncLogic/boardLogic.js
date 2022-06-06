@@ -3,6 +3,8 @@ const dtoHelper = require("../../Helper/dtoHelper")
 const resHelper = require('../../Helper/responseHelper')
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataProvider')
+const fs = require('fs')
+const path = require('path')
 
 const createBoard = async (boardInfo) => { 
     try {
@@ -137,11 +139,40 @@ const getBoardsForUser = async(userID) => {
             )
         }
         let boards = await boardDataProvider.getBoardsForUser(userID)
+        boards.forEach(board => { 
+            board = attachPinImagesForBoard(board)
+        })
         return dtoHelper.createResObject(boards,true)
     } catch (error) {
-        
+        throw error
     }
 }
+
+//#region helper functions 
+const attachPinImagesForBoard = (board) => { 
+    try {
+        let filePath,image
+        let pinsIDs = [...board.pins]
+        delete board.pins
+        board.pins = []
+        pinsIDs.forEach(pinID => {
+            filePath = path.join(__dirname,'..','..','images','pins',pinID + '.jpg')
+            if (fs.existsSync(filePath)) { 
+                image= fs.readFileSync(filePath)
+                board.pins.push({
+                    pinID: pinID,
+                    image: image
+                })
+            } 
+        });
+        return board
+       
+    } catch (error) {
+        throw error 
+    }
+   
+}
+//#endregion
 module.exports = { 
     createBoard,
     updateBoard,

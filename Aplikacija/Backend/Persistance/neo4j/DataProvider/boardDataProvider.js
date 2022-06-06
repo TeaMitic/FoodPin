@@ -103,17 +103,29 @@ const getBoardsForUser = async (userID) => {
         //getting boards with first few pins  
         let result = await neo4j.readCypher(`
             MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}) 
-            RETURN  b
+            RETURN  b ORDER BY b.name
         `)
         //user always has 'All pins' board
         if (result.records.length == 0) { 
             return null
         }
-
         let boards = dtoHelper.fromCypher(result)
+        for await (let b of boards) { 
+            result = await neo4j.readCypher(`
+            MATCH (b:Board {boardID: "${b.boardID}"}) <-[:BELONGS]- (p:Pin)
+            RETURN p limit 3`)
+            
+            let pins = dtoHelper.fromCypher(result)
+            let pinsIDs = []
+            //only ID is neccessary for reading images from fs
+            pins.forEach(pin => { 
+                pinsIDs.push(pin.pinID)
+            })
+            b.pins = [...pinsIDs]
+        }
         return boards
     } catch (error) {
-        
+        throw error
     }
 }
 

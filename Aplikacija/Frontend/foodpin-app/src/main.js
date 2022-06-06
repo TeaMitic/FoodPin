@@ -7,6 +7,9 @@ import store from './api-services/data'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
 import Validation from '../src/helper/validation'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import ('bootstrap')
 
 const pluginValidation = { 
@@ -24,6 +27,20 @@ Axios.defaults.baseURL = process.env.API_ENDPOINT;
 // Vue.component('AppSpinner', AppSpinner);
 Vue.use(VueCookies);
 Vue.use(Toasted);
+
+
+//url simplefier
+Vue.filter('trimWeb', function(value) { 
+  if (value) {
+    //https://instagram/user123.com/
+    return value.replace(/(^\w+:|^)\/\//, '');
+    
+  }
+})
+
+//icons
+library.add(faPlus)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 new Vue({
   router,
