@@ -5,7 +5,7 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import UserPage from '../pages/UserPage.vue'
 import EditProfilePage from '../pages/EditProfilePage.vue'
 import PinBuilder from '../pages/PinBuilderPage.vue'
-
+import BoardPage from '../pages/BoardPage.vue'
 Vue.use(Router);
 
 function checkCookie() { 
@@ -61,7 +61,29 @@ const router = new Router({
         {
             path: '/pin-builder',
             name: 'pin-builder',
-            component: PinBuilder
+            component: PinBuilder,
+            beforeEnter(to,from,next) { 
+                if (checkCookie()) { 
+                    next()
+                }
+                else { 
+                    next({name: 'homepage'})
+                }
+            }
+        },
+        {
+            path: '/:username/:name',
+            name: 'boardpage',
+            component: BoardPage,
+            beforeEnter(to,from,next) { 
+                if (checkCookie()) { 
+                    next()
+                }
+                else { 
+                    next({name: 'homepage'})
+                }
+            }
+
         }
         
         

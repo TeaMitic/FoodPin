@@ -9,7 +9,7 @@
                 <AppSpinner />
             </div>
             <div v-else>
-                <BoardBuilder v-if="showBoardBuilder" />
+                <BoardBuilder v-if="showBoardBuilder" @toggleBoardBuilder="toggleBoardBuilder"/>
                 <div class="user-info">
                     <div class="cont-user-image">
                      <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
@@ -142,7 +142,9 @@ export default({
         },
         onChildClickYes(value){
             console.log("REDIRECTED: ",value)
-        }
+            this.$router.push()
+        },
+        
 
     },
     async created() {
@@ -159,11 +161,6 @@ export default({
             this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true
         }
-        // else { 
-        //     this.hasImage =
-        //     this.imageUrl = "../assets/img/blank_profile.png"
-        // }
-
     },
   
    

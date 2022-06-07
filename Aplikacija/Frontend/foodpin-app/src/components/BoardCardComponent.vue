@@ -1,5 +1,5 @@
 <template >
-    <div class="card border-0" style="width: 18rem;">
+    <router-link class="card border-0 link"  :to="{name: 'boardpage', params: {username: this.username, name: board.name} }">
         <div class="card-body d-flex ">
             <div class="card-body-left">
                 <img class= "pin-image image-bigger" :src="this.images[0]" >
@@ -14,10 +14,11 @@
             </div>
         </div>
         <h5 class="card-title">{{board.name}}</h5>  
-    </div>
+    </router-link>
 </template>
 <script>
 import ImageConverter from '../helper/imageConverter' 
+import Vue from 'vue'
 
 export default {
 
@@ -29,14 +30,19 @@ export default {
     },
     data() {
         return {
-            images: null
+            images: null,
+            username: null
         }
     },
     created() {
+        this.username = Vue.$cookies.get('username')
         this.images = []
         this.board.pins.forEach(pin => {
             this.images.push(ImageConverter.fromByteArray(pin.image.data))
         });
+    },
+    methods: {
+      
     },
 }
 </script>
@@ -67,8 +73,12 @@ export default {
     border-top-right-radius: 0;
     border-bottom-left-radius: 0;
 }
-.card-body:hover { 
+.card:hover { 
     background-color: rgb(211, 211, 211);
     cursor: pointer;
+}
+.link {
+    text-decoration: none;
+    /* padding: 0;   */
 }
 </style>

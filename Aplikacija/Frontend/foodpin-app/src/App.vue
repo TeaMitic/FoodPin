@@ -6,44 +6,10 @@
 </template>
 
 <script>
-// import io from 'socket.io-client'
 
 export default {
   name: 'App',
-  // computed: {
-  //   MessageTracker() { 
-  //     return this.poruka
-  //   },
-  //   NotifTracker() { 
-  //     return this.notification
-  //   },
-  //   clientTracker() { 
-  //     return this.client
-  //   }
-  // },
-  // data() {
-  //   return {
-  //     poruka: "",
-  //     notification: "",
-  //     client: ""
-      
-  //   }
-  // },
-  // async created() {
-  //   let socket = io('http://localhost:5000', {
-  //     autoConnect: false
-  //   })
-  //   socket.connect()
-  //   socket.on('connect', () => { 
-  //     this.client = socket.id
-  //   })
-  //   socket.on('normal-notif', (message) => { 
-  //     this.notification = message
-  //   })
-  //   socket.on('chat', (message) => { 
-  //     this.poruka = message
-  //   })
-  // },
+  
 }
 </script>
 
