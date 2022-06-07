@@ -210,7 +210,7 @@ const getPins = async(skip)=>{
             `MATCH (p:Pin) RETURN p 
             ORDER BY p.title 
             SKIP ${skip}
-            LIMIT 4
+            LIMIT 12
             `
         )
         if (result == null) { 
@@ -219,11 +219,14 @@ const getPins = async(skip)=>{
         let results=dtoHelper.fromCypher(result)
         let pins=[]
         
-        results.forEach(el=>{ 
-           let pin = dtoHelper.pinToModel(el)
-           pins.push(pin)
+        for await (let el of results){
+            let pin = dtoHelper.pinToModel(el)
+            pin.hasImage = await dataProviderHelper.hasImage(pin.pinID)
+            pins.push(pin)
+        }
+        // results.for(el=>{ 
 
-        })
+        // })
         
         return pins
         

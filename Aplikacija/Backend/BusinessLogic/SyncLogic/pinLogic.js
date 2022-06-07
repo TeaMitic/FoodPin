@@ -326,8 +326,34 @@ const commentPin = async(commentInfo) => {
 const getPins=async(skip)=>{
     try {
         let pins= await pinDataProvider.getPins(skip)
-        return dtoHelper.createResObject(pins,true)
+        let pinsImages = []
+        pins.forEach(pin=>{
+            pinsImages.push(attachImage(pin))
+        })
+        console.log(pins)
+        return dtoHelper.createResObject(pinsImages,true)
         
+    } catch (error) {
+        throw error
+    }
+}
+const attachImage = (pin) => {
+    try {
+        let filePath,image
+        if (pin.hasImage != undefined  && pin.hasImage) {
+            //setting flags to false
+            pin.image = null
+            pin.hasImage = false
+            filePath = path.join(__dirname,'..','..','images','pins',pin.pinID + '.jpg')
+            if (fs.existsSync(filePath)) {
+                image= fs.readFileSync(filePath)
+                //setting flags to true
+                pin.image = image
+                pin.hasImage = true
+            }
+            console.log(pin)
+            return pin
+        }
     } catch (error) {
         throw error
     }

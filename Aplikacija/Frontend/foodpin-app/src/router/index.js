@@ -38,8 +38,8 @@ const router = new Router({
             }
         },
         {
-            path: '/UserPage',
-            name: 'UserPage',
+            path: '/userpage',
+            name: 'userpage',
             component: UserPage
         }
         

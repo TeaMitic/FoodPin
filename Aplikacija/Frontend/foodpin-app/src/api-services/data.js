@@ -14,7 +14,8 @@ export default new Vuex.Store({
         currentUsername: null,
         currentUserID: null,
         user: null,
-        user_boards: null
+        user_boards: null,
+        pins_homepage: null
     },
     actions: { 
         async login({commit}, loginObject) { 
@@ -23,6 +24,12 @@ export default new Vuex.Store({
         },
         async register({commit},registerInfo) { 
             await login_register(commit,'/api/user/',registerInfo)
+        },
+        logout({commit}){
+            commit('setNista')
+            Vue.$cookies.remove('token')
+            Vue.$cookies.remove('userID')
+            Vue.$cookies.remove('username')
         },
         async getUserByUsername({commit},username) { 
             try {
@@ -57,6 +64,53 @@ export default new Vuex.Store({
                    toastedErrorMessage(error.response.data)
                 }
             }
+        },
+        async getPinsForHomepage({commit}, skip){
+            try {
+                let res = await Api().get(`/api/pin/getWithSkip/${skip}`, {
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                console.log(res.data)
+                commit('setPinsForHomepage', res.data)
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async savePin({commit}, pin){
+            try {
+                console.log(pin);
+                commit('setNista')
+                let res = await Api().post('/api/pin/save', pin, {
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                // console.log(res.status);
+                if(res.status == 200){
+                    Vue.toasted.show('Pin is saved', {
+                        theme: "bubble",
+                        position: "top-center",
+                        duration: 2500
+                      })
+                }
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+
         }
         
     },
@@ -76,6 +130,9 @@ export default new Vuex.Store({
         },
         setBoardsForUser(state,boards) { 
             state.user_boards = boards
+        },
+        setPinsForHomepage(state, pins){
+            state.pins_homepage = pins
         }
     },
     getters: { 
@@ -84,6 +141,9 @@ export default new Vuex.Store({
         },
         getBoardsForUser(state) { 
             return state.user_boards
+        },
+        getPinsForHomepage(state){
+            return state.pins_homepage
         }
     }
 })
@@ -115,7 +175,7 @@ const login_register = async (commit,path,userObject) => {
             duration: 2000
         })
         // router.push(`/Profile/${data.username}`) //!vrati nazad
-        router.push('/UserPage')
+        router.push('/userpage')
     }
     catch(error) { 
         if (error.response.status == 500) { 
