@@ -81,7 +81,9 @@ export default new Vuex.Store({
         async createPin({commit},pinInfo) { 
             try {
                 let res = await Api().post('/api/pin/',pinInfo, {
-                    'Authorization' : Vue.$cookies.get('token')
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
                 })
                 commit('setPin',res.data)
             } catch (error) {
@@ -98,8 +100,10 @@ export default new Vuex.Store({
                 let pinID = imgInfo.pinID
                 let form = imgInfo.image
                 await Api().post(`/api/pin/addImage/${pinID}`,form, {
-                    'Authorization' : Vue.$cookies.get('token'),
-                    'Content-type': 'multipart/form-data'
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token'),
+                        'Content-type': 'multipart/form-data'
+                    }
                 })
                 commit('setNista')
             } catch (error) {

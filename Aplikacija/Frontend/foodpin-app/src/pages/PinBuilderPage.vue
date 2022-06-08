@@ -30,19 +30,19 @@
                 </div>
                 <div class="pin-info-cont p-3">
                     <div class="pin-info-title py-1">
-                        <input type="text" name="pin-name" v-model="pin.title" class="pin-title" placeholder="Add yout title" >
+                        <input type="text" name="pin-name" v-model.trim="pin.title" class="pin-title" placeholder="Add yout title" >
                     </div>
                     <div class="pin-info-description py-1">
-                        <input type="text" name="pin-description" v-model="pin.description" class="pin-description" placeholder="Describe this meal" >
+                        <input type="text" name="pin-description" v-model.trim="pin.description" class="pin-description" placeholder="Describe this meal" >
                     </div>
                     <div class="pin-info-instruction py-1">
-                        <input type="text" name="pin-instruction" v-model="pin.instruction" class="pin-instruction" placeholder="How to prepare this meal" >
+                        <input type="text" name="pin-instruction" v-model.trim="pin.instruction" class="pin-instruction" placeholder="How to prepare this meal" >
                     </div>
                     <div class="pin-info-ingredients py-1">
-                        <input type="text" name="pin-ingredients" v-model="pin.ingredients" class="pin-ingredients" placeholder="Eggs, butter... " >
+                        <input type="text" name="pin-ingredients" v-model.trim="pin.ingredients" class="pin-ingredients" placeholder="Eggs, butter... " >
                     </div>
                     <div class="pin-info-tags py-1">
-                        <input type="text" name="pin-tags" v-model="tags" class="pin-tags" placeholder="Sweet, yummy, brekfast... " >
+                        <input type="text" name="pin-tags" v-model.trim="tags" class="pin-tags" placeholder="Sweet, yummy, brekfast... " >
                     </div>
                 </div>
             </div>
@@ -128,26 +128,25 @@ export default {
                 },
                 tags: this.convertToTagJson(this.tags)
             }
-            console.log(pinInfo)
             //calling api  
             this.isDataLoaded = false
             await this.$store.dispatch('createPin',pinInfo)
             let pin = this.$store.getters['getPin']
             console.log(pin)
-            // //aggregating data for uploadImage api
-            // let form = new FormData()
-            // form.append('image',this.imageFile)
-            // let imgInfo = { 
-            //     image: form,
-            //     pinID: pin.pinID
-            // }
-            // await this.$store.dispatch('uploadPinImage',imgInfo)
-            // this.isDataLoaded = true
-            // Vue.toasted.show('Pin created.',{
-            //      theme: "bubble",
-            //     position: "bottom-center",
-            //     duration: 2000,
-            // })
+            //aggregating data for uploadImage api
+            let form = new FormData()
+            form.append('image',this.imageFile)
+            let imgInfo = { 
+                image: form,
+                pinID: pin.pinID
+            }
+            await this.$store.dispatch('uploadPinImage',imgInfo)
+            this.isDataLoaded = true
+            Vue.toasted.show('Pin created.',{
+                 theme: "bubble",
+                position: "bottom-center",
+                duration: 2000,
+            })
 
         },
         triggerFileInput() { 
@@ -155,7 +154,7 @@ export default {
             fileInput.click()
         },
         convertToTagJson(tagsString) { 
-            let tagsArray = tagsString.split(' ')
+            let tagsArray = tagsString.split(/[, ]+/)
             let tagsJson = []
             tagsArray.forEach(tag => { 
                 tagsJson.push({name: tag})
