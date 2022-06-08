@@ -14,7 +14,8 @@ export default new Vuex.Store({
         currentUsername: null,
         currentUserID: null,
         user: null,
-        user_boards: null
+        user_boards: null,
+        pin: null,
     },
     actions: { 
         async login({commit}, loginObject) { 
@@ -76,6 +77,39 @@ export default new Vuex.Store({
             } catch (error) {
                 toastedErrorMessage(error.response.data)
             }
+        },
+        async createPin({commit},pinInfo) { 
+            try {
+                let res = await Api().post('/api/pin/',pinInfo, {
+                    'Authorization' : Vue.$cookies.get('token')
+                })
+                commit('setPin',res.data)
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async uploadPinImage({commit},imgInfo) { 
+            try {
+                let pinID = imgInfo.pinID
+                let form = imgInfo.image
+                await Api().post(`/api/pin/addImage/${pinID}`,form, {
+                    'Authorization' : Vue.$cookies.get('token'),
+                    'Content-type': 'multipart/form-data'
+                })
+                commit('setNista')
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
         }
         
     },
@@ -95,6 +129,9 @@ export default new Vuex.Store({
         },
         setBoardsForUser(state,boards) { 
             state.user_boards = boards
+        },
+        setPin(state,pin) { 
+            state.pin = pin
         }
     },
     getters: { 
@@ -103,6 +140,9 @@ export default new Vuex.Store({
         },
         getBoardsForUser(state) { 
             return state.user_boards
+        },
+        getPin(state) { 
+            return state.pin
         }
     }
 })

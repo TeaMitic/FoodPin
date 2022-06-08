@@ -16,7 +16,6 @@ const createPin = async (pinInfo) => {
         //     pin: { 
         //         creatorID: required,
         //         title: required,
-        //         imgName: required
         //     },
         //     tags: [tag,tag]
         // }
@@ -67,7 +66,7 @@ const createPin = async (pinInfo) => {
             await pinDataProvider.deletePin(pin.pinID) //rollback 
             throw new Error("Couldn't add pin to the board.")
         }
-        return dtoHelper.createResObject({},true)
+        return dtoHelper.createResObject(pin,true)
     } catch (error) {
         throw error 
     }
