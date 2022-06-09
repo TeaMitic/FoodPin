@@ -1,6 +1,8 @@
 const imageDataProvider = require('../Persistance/neo4j/DataProvider/imageDataProvider')
 const dtoHelper = require('./dtoHelper')
 const resHelper = require('./responseHelper')
+const fs = require('fs')
+const path = require('path')
 
 const addImage = async (imgFile,connectorInfo) => { 
     //crates neo4j iamge node and connect with its owner
@@ -19,7 +21,63 @@ const addImage = async (imgFile,connectorInfo) => {
     return dtoHelper.createResObject(image, true)
 
 }
+const attachImage = (pin) => {
+    //loads image from FS and attach it to pin object 
+    try {
+        let filePath,image
+        if (pin.hasImage != undefined  && pin.hasImage) {
+            //setting flags to false
+            pin.image = null
+            pin.hasImage = false
+            filePath = path.join(__dirname,'..','images','pins',pin.pinID + '.jpg')
+            if (fs.existsSync(filePath)) {
+                image= fs.readFileSync(filePath)
+                //setting flags to true
+                pin.image = image
+                pin.hasImage = true
+            }
+            // console.log(pin)
+            return pin
+        }
+    } catch (error) {
+        throw error
+    }
+}
+
+const copyImage = async(imgFilePath, pinCopyID) => {
+    try {
+        let copyFilePath = path.join(__dirname,'..','images','pins',pinCopyID + '.jpg')
+        fs.copyFile(imgFilePath, copyFilePath, (err) => {
+            if (err) {
+                console.log("Error Found:", err);
+            }
+            else {
+                console.log("Image copied");              
+            }
+        });  
+        let connectorInfo = {
+            pinID: pinCopyID,
+            type: 'Pin'
+        }
+        let imgObj = { 
+            imgName: pinCopyID,
+            imgExt: "jpg",
+            filename: pinCopyID + '.jpg',
+            type: 'Pin'
+        }
+        console.log("IMG OBJ:",imgObj)
+        let result = await addImage(imgObj, connectorInfo)
+        console.log(result.success);
+        return  result.success
+
+    } catch (error) {
+        throw error
+    }
+}
+
 
 module.exports = { 
-    addImage
+    addImage,
+    attachImage,
+    copyImage
 }
