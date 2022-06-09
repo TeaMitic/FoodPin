@@ -2,7 +2,7 @@
     <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
             <div class="container px-4 px-lg-5">
-                <button v-on:click="pushData('Home')" class="no-border  btn-margins btn no navbar-brand"
+                <button v-on:click="home" class="no-border  btn-margins btn no navbar-brand"
                     >FoodPin</button>
                 <button  class="btnMenu navbar-toggler " type="button"  data-bs-toggle="collapse"
                         data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"   
@@ -16,14 +16,16 @@
                             <button v-on:click="pushData('Notifications')" class="no-border btn-margins btn nav-link "
                                 >Notifications</button>
                         </li>
-                        <li class="nav-item ">
-                            <button v-on:click="pushData('Chat')" class="no-border btn-margins btn nav-link "
-                                >Chat</button>
-                        </li>
-                        <li class="nav-item ">
-                            <button v-on:click="pushData('Profile')" class="no-border btn-margins btn nav-link "
-                                >Profile</button>
-                        </li>
+                        <router-link :to="{ name: 'chatpage', params: {username:  this.username} } " class="link">
+                            <li class="nav-item">
+                                <button class="no-border btn-margins btn nav-link">Chat</button>
+                            </li>
+                        </router-link>
+                        <router-link :to="{ name: 'profilepage', params: {username:  this.username} } " class="link">
+                            <li class="nav-item">
+                                <button class="no-border btn-margins btn nav-link">Profile</button>
+                            </li>
+                        </router-link>
                         <hr class="mx-0 my-1 menu-divider">
                         <router-link :to="{ name: 'homepage' } " class="link">
                             <li class="nav-item">
@@ -36,6 +38,7 @@
         </nav>
 </template>
 <script>
+import Vue from 'vue'
 
 export default({ 
     components: { 
@@ -43,7 +46,8 @@ export default({
     },
     data() { 
         return { 
-            page: 'Home'
+            page: 'Home',
+            username: null,
         }
     },
     methods: {     
@@ -53,8 +57,15 @@ export default({
         logout(){
             console.log("usao u logout");
             this.$store.dispatch('logout')
+        },
+        home() { 
+            if (this.$route.path != '/userpage') { 
+                this.$router.push('/userpage')
+            }
         }
-
+    },
+    created() {
+        this.username = Vue.$cookies.get('username')  
     },
    
 })

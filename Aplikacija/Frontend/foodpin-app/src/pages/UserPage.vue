@@ -47,12 +47,15 @@
                 </div>
             </div> -->
             <div class="container px-4 px-lg-5 mt-5">
-                <div v-if="isDataLoaded">
+                <div v-if="!isDataLoaded">
+                    <AppSpinner />
+                </div>
+                <div v-else>
                     <div class="row">
                         <div class="pin">
                             <PinCard v-for="pin in pins"
                                     :key="pin.pinID"
-                                    :pin ="pin"/>
+                                    :pin ="pin" :boards="boards" />
 
                         </div>
                         <!-- <div class="col-3 pin">
@@ -64,6 +67,7 @@
                         </div> -->
                     </div>
                 </div>
+
             </div>
         </header>
 
@@ -79,14 +83,19 @@
 <script>
 import PinCard from '@/components/PinCardComponent.vue'
 import UserHeader from '@/components/UserHeaderComponent.vue'
+import AppSpinner from '@/components/AppSpinnerComponent.vue'
+import Vue from 'vue'
+
 export default {
   components: {
     PinCard,
-    UserHeader
+    UserHeader,
+    AppSpinner
   },
   data(){
     return{
         isDataLoaded: false,
+        boards: null,
     }
   },
   computed:{
@@ -96,6 +105,9 @@ export default {
   },
   async created(){
     await this.$store.dispatch("getPinsForHomepage", 0)
+    const userID = Vue.$cookies.get('userID')
+    await this.$store.dispatch('getBoardsForUserNoImages', userID)
+    this.boards = this.$store.getters['getBoardsForUserNoImages']
     this.isDataLoaded = true;
   }
 }

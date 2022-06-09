@@ -40,9 +40,6 @@ module.exports = {
         }
     },
     pinToModel(pinJson) { 
-        // console.log("dtoHelper pintomodel");
-        // console.log( pinJson.likes);
-        // console.log(pinJson.likes.low);
         return { 
             pinID: pinJson.pinID != undefined ? pinJson.pinID : null,
             creatorID: pinJson.creatorID != undefined ? pinJson.creatorID : null,

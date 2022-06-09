@@ -7,8 +7,7 @@ const dataProviderHelper = require('./dataProviderHelper')
 const createPin = async (pinInfo) => { 
     try {
         let pin = dtoHelper.pinToModel(pinInfo)
-        // console.log("Pin u createPin");
-        // console.log(pin);
+
         delete pin.pinID
         let pinDB = await neo4j.model('Pin').create(pin)
         if (!pinDB) { 
@@ -36,7 +35,6 @@ const connectWithBoards = async (pinID,boards,userID) => {
                 CREATE (p)-[r:BELONGS]->(b)
                 RETURN p,r,b
         `)
-        console.log(result)
         if (result.records.length === 0) { 
             return null
         }
@@ -51,7 +49,6 @@ const connectWithBoards = async (pinID,boards,userID) => {
 const connectWithTags = async (pinID,tags) => { 
     
     tags = arrayHelper.unwind(tags)
-    console.log('tags-posle:',tags)
     let result = await neo4j.writeCypher(`
             MATCH (p:Pin {pinID: '${pinID}'})
             WITH [${tags}] as tags,p
@@ -60,7 +57,6 @@ const connectWithTags = async (pinID,tags) => {
                 CREATE (t) <-[:HAS]-(p))
             RETURN p,tags
     `)
-    console.log(result)
     if (result.records.length === 0) { 
         return null
     }

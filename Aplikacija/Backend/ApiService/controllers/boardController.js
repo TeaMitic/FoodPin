@@ -51,9 +51,25 @@ const deleteBoard = async (req,res) => {
     }
 }
 
-const getForUser = async (req,res) => { 
+const getForUserWithImages = async (req,res) => { 
     try {
-        let result = await logic.getBoardsForUser(req.params.userID)
+        let result = await logic.getBoardsForUserWithImages(req.params.userID)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error)
+        resHelper.ErrorResponse(error,res)
+
+    }
+}
+const getForUserNoImages = async (req,res) => { 
+    try {
+        let result = await logic.getBoardsForUserNoImages(req.params.userID)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }
@@ -68,9 +84,12 @@ const getForUser = async (req,res) => {
     }
 }
 
+
+
 module.exports = { 
     create,
     update,
     deleteBoard,
-    getForUser
+    getForUserWithImages,
+    getForUserNoImages
 }

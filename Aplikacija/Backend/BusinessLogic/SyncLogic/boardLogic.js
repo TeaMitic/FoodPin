@@ -128,7 +128,7 @@ const deleteBoard = async (boardInfo) => {
     }
 }
 
-const getBoardsForUser = async(userID) => { 
+const getBoardsForUserWithImages = async(userID) => { 
     try {
         //user validation
         let user = await userDataProvider.getUserById(userID)
@@ -142,6 +142,23 @@ const getBoardsForUser = async(userID) => {
         boards.forEach(board => { 
             board = attachPinImagesForBoard(board)
         })
+        return dtoHelper.createResObject(boards,true)
+    } catch (error) {
+        throw error
+    }
+}
+
+const getBoardsForUserNoImages = async(userID) => { 
+    try {
+        //user validation
+        let user = await userDataProvider.getUserById(userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID),
+                false
+            )
+        }
+        let boards = await boardDataProvider.getBoardsForUserNoImages(userID)
         return dtoHelper.createResObject(boards,true)
     } catch (error) {
         throw error
@@ -177,5 +194,6 @@ module.exports = {
     createBoard,
     updateBoard,
     deleteBoard,
-    getBoardsForUser
+    getBoardsForUserWithImages,
+    getBoardsForUserNoImages
 }

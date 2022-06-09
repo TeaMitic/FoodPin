@@ -1,7 +1,7 @@
 <template>
     <div >
         <!-- Navigation-->
-        <UserHeaderComponent @childToParentYes="onChildClickYes"  />
+        <UserHeader @childToParentYes="onChildClickYes"  />
         <!-- Main container -->
         <div class="container my-3 py-5">
             <!-- User info -->
@@ -50,7 +50,7 @@
                 </div> -->
                 <!-- Boards -->
                 <div class="cont-boards">
-                    <div class="cont-boards-add row justify-content-end">
+                    <div class="cont-boards-add row justify-content-end" v-if="this.editable">
                         <!-- add board or pin ikonica -->
                         <button class="add-btn rounded-circle d-flex" v-on:click="toggleCreateField">
                             <font-awesome-icon class="plus-icon" :icon="['fa','plus']"/>
@@ -93,8 +93,8 @@
 
 <script>
 import Vue from 'vue'
-import UserHeaderComponent from '../components/UserHeaderComponent.vue'
-import AppSpinner from '../components/AppSpinerComponent.vue'
+import UserHeader from '../components/UserHeaderComponent.vue'
+import AppSpinner from '../components/AppSpinnerComponent.vue'
 import ImageConverter from '../helper/imageConverter' 
 import BoardCard from '../components/BoardCardComponent.vue'
 import BoardBuilder from '../components/BoardBuilderComponent.vue'
@@ -103,7 +103,7 @@ import BoardBuilder from '../components/BoardBuilderComponent.vue'
 export default({ 
     title: "FoodPin - Profile",
     components: { 
-        UserHeaderComponent,
+        UserHeader,
         AppSpinner,
         BoardCard,
         BoardBuilder
@@ -127,7 +127,7 @@ export default({
     },
     computed: {
         allBoards() { 
-            return  this.$store.getters["getBoardsForUser"]
+            return  this.$store.getters["getBoardsForUserWithImages"]
         }
     },
     methods: {
@@ -154,10 +154,10 @@ export default({
         usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
         await this.$store.dispatch("getUserByUsername", usernameParam)
         this.user = this.$store.getters["getUser"]
-        await this.$store.dispatch("getBoardsForUser", this.user.userID)
+        await this.$store.dispatch("getBoardsForUserWithImages", this.user.userID)
         this.isDataLoaded = true;
-        
-        if (this.user.image != null) { 
+        console.log(this.user)
+        if (this.user.hasImage) { 
             this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true
         }

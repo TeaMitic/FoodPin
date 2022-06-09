@@ -52,11 +52,14 @@ export default {
       required:true,
       type: Object
     },
+    boards: { 
+      required: true,
+      type: Array
+    }
   },
   data(){
     return{
       isDataLoaded: false,
-      boards: null,
       selected_board: '',
       imageUrl: null,
       cssProps: {
@@ -86,9 +89,6 @@ export default {
     }
   },
   async created(){
-    const userID = Vue.$cookies.get('userID')
-    await this.$store.dispatch('getBoardsForUser', userID)
-    this.boards = this.$store.getters['getBoardsForUser']
     this.imageUrl = imageConverter.fromByteArray(this.pin.image.data)
     // console.log(this.imageUrl);
     this.cssProps.backgroundImage = `url(${this.imageUrl})`

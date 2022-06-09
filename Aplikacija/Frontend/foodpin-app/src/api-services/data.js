@@ -15,6 +15,7 @@ export default new Vuex.Store({
         currentUserID: null,
         user: null,
         user_boards: null,
+        user_boards_only: null,
         pin: null,
         pins_homepage: null
     },
@@ -49,14 +50,31 @@ export default new Vuex.Store({
                 }
             }
         },
-        async getBoardsForUser({commit},userID) { 
+        async getBoardsForUserWithImages({commit},userID) { 
             try {
-                let res = await Api().get(`/api/board/for/${userID}`,{
+                let res = await Api().get(`/api/board/for/${userID}/withImages`,{
                     headers: {
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
                 commit('setBoardsForUser',res.data)
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async getBoardsForUserNoImages({commit},userID) { 
+            try {
+                let res = await Api().get(`/api/board/for/${userID}/noImages`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setBoardsOnlyForUser',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log(error)
@@ -92,7 +110,6 @@ export default new Vuex.Store({
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
-                console.log(res.data)
                 commit('setPinsForHomepage', res.data)
             } catch (error) {
                 if (error.response.status == 500) {
@@ -133,7 +150,7 @@ export default new Vuex.Store({
                 commit('setNista')                
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
@@ -184,6 +201,9 @@ export default new Vuex.Store({
         setBoardsForUser(state,boards) { 
             state.user_boards = boards
         },
+        setBoardsOnlyForUser(state,boards) { 
+            state.user_boards_only = boards
+        },
         setPin(state,pin) { 
             state.pin = pin
         },
@@ -195,8 +215,11 @@ export default new Vuex.Store({
         getUser(state) { 
             return state.user
         },
-        getBoardsForUser(state) { 
+        getBoardsForUserWithImages(state) { 
             return state.user_boards
+        },
+        getBoardsForUserNoImages(state) { 
+            return state.user_boards_only
         },
         getPin(state) { 
             return state.pin

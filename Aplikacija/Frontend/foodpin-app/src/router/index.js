@@ -6,6 +6,8 @@ import UserPage from '../pages/UserPage.vue'
 import EditProfilePage from '../pages/EditProfilePage.vue'
 import PinBuilder from '../pages/PinBuilderPage.vue'
 import BoardPage from '../pages/BoardPage.vue'
+import ChatPage from '../pages/ChatPage.vue'
+
 Vue.use(Router);
 
 function checkCookie() { 
@@ -18,6 +20,7 @@ function checkCookie() {
     if (token == null) return false
     return true
 }
+
 
 const router = new Router({
     routes:[
@@ -92,6 +95,19 @@ const router = new Router({
                 }
             }
 
+        },
+        { 
+            path: '/chat/:username',
+            name: 'chatpage',
+            component: ChatPage,
+            beforeEnter(to,from,next) { 
+                if (checkCookie()) { 
+                    next()
+                }
+                else { 
+                    next({name: 'homepage'})
+                }
+            }
         }
         
         

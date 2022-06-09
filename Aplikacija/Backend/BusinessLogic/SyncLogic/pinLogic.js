@@ -31,7 +31,6 @@ const createPin = async (pinInfo) => {
         pinInfo.pin.creatorID = userID
         //user validation 
         let user = await userDataProvider.getUserById(userID)
-        // console.log(user)
         if (!user) { 
             return dtoHelper.createResObject(
                 resHelper.NoUserError(userID),
@@ -329,7 +328,6 @@ const getPins=async(skip)=>{
         pins.forEach(pin=>{
             pinsImages.push(attachImage(pin))
         })
-        console.log(pins)
         return dtoHelper.createResObject(pinsImages,true)
         
     } catch (error) {
@@ -353,7 +351,6 @@ const attachImage = (pin) => {
                 pin.image = image
                 pin.hasImage = true
             }
-            console.log(pin)
             return pin
         }
     } catch (error) {
