@@ -8,7 +8,7 @@ const boardLogic = require('./boardLogic')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const path = require('path')
-const logicHelper = require('../../Helper/logicHelper')
+const logicHelper = require('../../Helper/imageHelper')
 
 
 

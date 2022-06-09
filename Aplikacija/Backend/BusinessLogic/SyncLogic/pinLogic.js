@@ -4,7 +4,7 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../../Helper/validation')
 const resHelper = require('../../Helper/responseHelper')
-const logicHelper = require('../../Helper/logicHelper')
+const logicHelper = require('../../Helper/imageHelper')
 const fs = require('fs')
 const path = require('path')
 
@@ -75,7 +75,7 @@ const createPin = async (pinInfo) => {
 
 const   addImage = async(imgFile,pinID) => { 
     try {
-        
+        //creates image node and connect with pinID
         
         let pin = await pinDataProvider.getPinById(pinID)
         if(!pin){
@@ -337,7 +337,10 @@ const getPins=async(skip)=>{
         throw error
     }
 }
+
+//#region helper functions
 const attachImage = (pin) => {
+    //loads image from FS and attach it to pin object 
     try {
         let filePath,image
         if (pin.hasImage != undefined  && pin.hasImage) {
@@ -358,7 +361,7 @@ const attachImage = (pin) => {
         throw error
     }
 }
-
+//#endregion
 module.exports = { 
     createPin,
     likePin,

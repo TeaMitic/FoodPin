@@ -3,6 +3,7 @@ const dtoHelper = require('./dtoHelper')
 const resHelper = require('./responseHelper')
 
 const addImage = async (imgFile,connectorInfo) => { 
+    //crates neo4j iamge node and connect with its owner
     let imgObj = { 
         imgName: imgFile.basename,
         imgExt: imgFile.ext,
