@@ -54,9 +54,17 @@ const router = new Router({
 
         },
         {
-            path: '/UserPage',
-            name: 'UserPage',
-            component: UserPage
+            path: '/userpage',
+            name: 'userpage',
+            component: UserPage,
+            beforeEnter(to,from,next) { 
+                if (checkCookie()) { 
+                    next()
+                }
+                else { 
+                    next({name: 'homepage'})
+                }
+            }
         },
         {
             path: '/pin-builder',

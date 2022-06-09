@@ -25,10 +25,11 @@
                                 >Profile</button>
                         </li>
                         <hr class="mx-0 my-1 menu-divider">
-                        <li class="nav-item">
-                            <button v-on:click="pushData('Logout')" class="no-border btn-margins btn nav-link"
-                                >Logout</button>
-                        </li> 
+                        <router-link :to="{ name: 'homepage' } " class="link">
+                            <li class="nav-item">
+                                <button @click="logout" class="no-border btn-margins btn nav-link">Logout</button>
+                            </li>
+                        </router-link>
                     </ul>
                 </div>
             </div>
@@ -45,11 +46,14 @@ export default({
             page: 'Home'
         }
     },
-    methods: {
-     
+    methods: {     
         pushData(value){
             this.$emit('childToParentYes', value)
         },
+        logout(){
+            console.log("usao u logout");
+            this.$store.dispatch('logout')
+        }
 
     },
    
@@ -71,7 +75,11 @@ export default({
 .menu-divider  {
     width: 30%;
 }
-#mainNav { 
-    background-color: rgb(41, 155, 98);
+
+.link{
+    text-decoration: none;
 }
+/* #mainNav { 
+    background-color: rgb(41, 155, 98);
+} */
 </style>

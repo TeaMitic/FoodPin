@@ -4,7 +4,7 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../../Helper/validation')
 const resHelper = require('../../Helper/responseHelper')
-const logicHelper = require('../../Helper/logicHelper')
+const logicHelper = require('../../Helper/imageHelper')
 const fs = require('fs')
 const path = require('path')
 
@@ -74,7 +74,7 @@ const createPin = async (pinInfo) => {
 
 const   addImage = async(imgFile,pinID) => { 
     try {
-        
+        //creates image node and connect with pinID
         
         let pin = await pinDataProvider.getPinById(pinID)
         if(!pin){
@@ -325,13 +325,42 @@ const commentPin = async(commentInfo) => {
 const getPins=async(skip)=>{
     try {
         let pins= await pinDataProvider.getPins(skip)
-        return dtoHelper.createResObject(pins,true)
+        let pinsImages = []
+        pins.forEach(pin=>{
+            pinsImages.push(attachImage(pin))
+        })
+        console.log(pins)
+        return dtoHelper.createResObject(pinsImages,true)
         
     } catch (error) {
         throw error
     }
 }
 
+//#region helper functions
+const attachImage = (pin) => {
+    //loads image from FS and attach it to pin object 
+    try {
+        let filePath,image
+        if (pin.hasImage != undefined  && pin.hasImage) {
+            //setting flags to false
+            pin.image = null
+            pin.hasImage = false
+            filePath = path.join(__dirname,'..','..','images','pins',pin.pinID + '.jpg')
+            if (fs.existsSync(filePath)) {
+                image= fs.readFileSync(filePath)
+                //setting flags to true
+                pin.image = image
+                pin.hasImage = true
+            }
+            console.log(pin)
+            return pin
+        }
+    } catch (error) {
+        throw error
+    }
+}
+//#endregion
 module.exports = { 
     createPin,
     likePin,
