@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isDataLoaded" class="card col-4" :style="cssProps">
+  <div v-if="isDataLoaded" class="card col-2" :style="cssProps">
   <!-- { 'background-image': `url(${require(imageUrl)})`} -->
     <div class="card-content">
       <div class="row row1">
@@ -113,8 +113,8 @@ export default {
   /* padding: 0.5rem 0 0.5rem; */
   object-fit:fill;
   max-width: 40ch;
-  height: 10rem;
-  width: 20rem;
+  height: 15rem; /*auto */
+  width: inherit; /*auto */
   margin-bottom: 2.5%;
   margin-left: 2.5%;
   overflow: hidden;
@@ -137,8 +137,8 @@ export default {
 
 .card-content{
   background: hsl(0 0% 0% / 0.2); /*ovo treba da bude za hover, animaciju*/  
-  height: 10rem;
-  width: 20rem;
+  height: 15rem;
+  width: inherit;
   transform: translateY(100%);
   transition: transform 500ms ease;
 }

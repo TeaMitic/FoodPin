@@ -130,10 +130,7 @@ export default new Vuex.Store({
                         'Content-type': 'multipart/form-data'
                     }
                 })
-                commit('setNista')
-                console.log(res.data)
-                commit('setPinsForHomepage', res.data)
-                
+                commit('setNista')                
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log(error)
@@ -145,21 +142,19 @@ export default new Vuex.Store({
         },
         async savePin({commit}, pin){
             try {
-                console.log(pin);
-                commit('setNista')
                 let res = await Api().post('/api/pin/save', pin, {
                     headers: {
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
-                // console.log(res.status);
                 if(res.status == 200){
                     Vue.toasted.show('Pin is saved', {
                         theme: "bubble",
                         position: "top-center",
                         duration: 2500
-                      })
+                    })
                 }
+                commit('setNista')
                 
             } catch (error) {
                 if (error.response.status == 500) { 
