@@ -1,5 +1,5 @@
 <template >
-    <div class="row board-builder  justify-content-center" v-on:click="hideComponent">
+    <div class="row board-builder  justify-content-center align-items-center" v-on:click="hideComponent">
         <div v-if="!this.isDataLoaded">
             <AppSpinner />
         </div>
@@ -20,7 +20,7 @@
     </div>
 </template>
 <script>
-// import AppSpinner from './AppSpinerComponent.vue'
+// import AppSpinner from './AppSpinnerComponent.vue'
 import Vue from 'vue'
 export default {
     components: {
@@ -91,7 +91,13 @@ export default {
 }
 .board-builder { 
     background-color: rgba(0, 0, 0, 0.8);
-    position: absolute;
+    position: fixed;
+    padding:0;
+    margin:0;
+    z-index: 1000;
+    top:0;
+    left:0;
+
     width: 100%;
     height: 100%;
 }

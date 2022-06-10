@@ -47,6 +47,7 @@ export default {
 }
 </script>
 <style scoped>
+
 .pin-image { 
     object-fit: cover;
     border-radius: 10px;
@@ -79,6 +80,7 @@ export default {
 }
 .link {
     text-decoration: none;
+    /* z-index: -999; */
     /* padding: 0;   */
 }
 </style>

@@ -104,6 +104,8 @@ export default {
     }
   },
   async created(){
+    // if (!this.$store.getters['getPinsForHomepage']) { 
+    //     }
     await this.$store.dispatch("getPinsForHomepage", 0)
     const userID = Vue.$cookies.get('userID')
     await this.$store.dispatch('getBoardsForUserNoImages', userID)
