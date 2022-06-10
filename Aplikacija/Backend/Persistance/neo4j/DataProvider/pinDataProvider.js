@@ -213,18 +213,8 @@ const getPins = async(skip)=>{
             return null
         }
         let results=dtoHelper.fromCypher(result)
-        let pins=[]
         
-        for await (let el of results){
-            let pin = dtoHelper.pinToModel(el)
-            pin.hasImage = await dataProviderHelper.hasImage(pin.pinID)
-            pins.push(pin)
-        }
-        // results.for(el=>{ 
-
-        // })
-        
-        return pins
+        return results
         
     } catch (error) {
         throw error

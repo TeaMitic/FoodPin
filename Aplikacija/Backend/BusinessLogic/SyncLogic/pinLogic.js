@@ -7,6 +7,8 @@ const resHelper = require('../../Helper/responseHelper')
 const imageHelper = require('../../Helper/imageHelper')
 const fs = require('fs')
 const path = require('path')
+const dataProviderHelper = require('../../Persistance/neo4j/DataProvider/dataProviderHelper')
+
 
 const createPin = async (pinInfo) => { 
     try {
@@ -334,9 +336,13 @@ const getPins=async(skip)=>{
     try {
         let pins= await pinDataProvider.getPins(skip)
         let pinsImages = []
-        pins.forEach(pin=>{
+        
+        for await (let pin of pins){
+            pin.hasImage = await dataProviderHelper.hasImage(pin.pinID)
             pinsImages.push(imageHelper.attachImage(pin))
-        })
+        } 
+
+
         return dtoHelper.createResObject(pinsImages,true)
         
     } catch (error) {

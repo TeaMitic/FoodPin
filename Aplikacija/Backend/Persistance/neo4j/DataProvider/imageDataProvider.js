@@ -16,7 +16,6 @@ const upload = async (imgInfo, connectorInfo) => {
 
         //image creting 
         let img = dtoHelper.imgToModel(imgInfo)
-        console.log("IMG PROVIDER:",img);
         let imgDB = await neo4j.model('Image').create(img)
         if (!imgDB) { 
             return null
