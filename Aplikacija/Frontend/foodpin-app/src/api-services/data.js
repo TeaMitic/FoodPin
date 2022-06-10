@@ -50,6 +50,24 @@ export default new Vuex.Store({
                 }
             }
         },
+        async getUserById({commit}, userID){
+            try {
+                let res = await Api().get(`/api/user/get/${userID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setUser', res.data)
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
         async getBoardsForUserWithImages({commit},userID) { 
             try {
                 let res = await Api().get(`/api/board/for/${userID}/withImages`,{
@@ -173,6 +191,23 @@ export default new Vuex.Store({
                 }
                 commit('setNista')
                 
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async getPinById({commit}, pinID){
+            try {
+                let res = await Api().get(`/api/pin/get/${pinID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setPin', res.data)                
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log(error)

@@ -7,7 +7,7 @@ import store from './api-services/data'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
 import Validation from '../src/helper/validation'
-import {faPlus,faEdit, faTrash} from '@fortawesome/free-solid-svg-icons'
+import {faPlus,faEdit, faTrash, faHeart} from '@fortawesome/free-solid-svg-icons'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import ('bootstrap')
@@ -42,6 +42,7 @@ Vue.filter('trimWeb', function(value) {
 library.add(faPlus)
 library.add(faEdit)
 library.add(faTrash)
+library.add(faHeart)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

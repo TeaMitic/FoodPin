@@ -7,6 +7,7 @@ import EditProfilePage from '../pages/EditProfilePage.vue'
 import PinBuilder from '../pages/PinBuilderPage.vue'
 import BoardPage from '../pages/BoardPage.vue'
 import ChatPage from '../pages/ChatPage.vue'
+import PinPage from '../pages/PinPage.vue'
 
 Vue.use(Router);
 
@@ -101,6 +102,19 @@ const router = new Router({
             name: 'chatpage',
             component: ChatPage,
             beforeEnter(to,from,next) { 
+                if (checkCookie()) { 
+                    next()
+                }
+                else { 
+                    next({name: 'homepage'})
+                }
+            }
+        },
+        {
+            path: '/pinpage/:pinID',
+            name: 'pinpage',
+            component: PinPage,
+            beforeEnter(to,from,next){
                 if (checkCookie()) { 
                     next()
                 }
