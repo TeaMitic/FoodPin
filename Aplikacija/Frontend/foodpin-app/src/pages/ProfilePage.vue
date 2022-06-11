@@ -10,6 +10,7 @@
             </div>
             <div v-else>
                 <BoardBuilder v-if="showBoardBuilder" @toggleBoardBuilder="toggleBoardBuilder"/>
+            <div >
                 <div class="user-info">
                     <div class="cont-user-image">
                      <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
@@ -43,11 +44,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Created or saved pins option -->
-                <!-- <div class="cont-pin-options row justify-content-center p-3">
-                    <button v-on:click="showBoards('created')" class="col-2 mx-1">Created</button>
-                    <button v-on:click="showBoards('saved')" class="col-2 mx-1">Saved</button>
-                </div> -->
                 <!-- Boards -->
                 <div class="cont-boards">
                     <div class="cont-boards-add row justify-content-end">
@@ -71,22 +67,13 @@
                         </div>
                     </div>  
                     <div class="cont-boards-all row">
-                        <!-- prvo ide All pins uvek pa onda ostale -->
-                        <!-- All pins card component -->
-                        <!-- Other boards card component -->
                         <BoardCard v-for="board in allBoards" :key="board.boardID" :board="board" class= "col-3 m-3"/>
                     </div>
                 </div>
             </div>
             
         </div>
-
-        <!-- Footer-->
-        <footer class="bg-light py-5 row ">
-            <div class="  container px-4 px-lg-5 ">
-                <div class="small text-center text-muted">Copyright &copy; 2022 - FoodPin</div>
-            </div>
-        </footer>
+    </div>
     </div>
 
 </template>

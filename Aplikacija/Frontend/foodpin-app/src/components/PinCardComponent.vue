@@ -52,16 +52,24 @@ export default {
       required:true,
       type: Object
     },
+    // boards: { 
+    //   required: true,
+    //   type: Array
+    // }
   },
   data(){
     return{
       isDataLoaded: false,
-      boards: null,
       selected_board: '',
       imageUrl: null,
       cssProps: {
         backgroundImage: ''
       }
+    }
+  },
+  computed: { 
+    boards() { 
+      return this.$store.getters['getBoardsForUserNoImages']
     }
   },
   methods:{

@@ -92,7 +92,6 @@ export default new Vuex.Store({
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
-                console.log(res.data)
                 commit('setPinsForHomepage', res.data)
             } catch (error) {
                 if (error.response.status == 500) {

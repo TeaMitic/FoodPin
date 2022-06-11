@@ -79,6 +79,7 @@
 <script>
 import PinCard from '@/components/PinCardComponent.vue'
 import UserHeader from '@/components/UserHeaderComponent.vue'
+import Vue from 'vue'
 export default {
   components: {
     PinCard,
@@ -87,6 +88,7 @@ export default {
   data(){
     return{
         isDataLoaded: false,
+        // boards: null,
     }
   },
   computed:{
@@ -96,6 +98,9 @@ export default {
   },
   async created(){
     await this.$store.dispatch("getPinsForHomepage", 0)
+    const userID = Vue.$cookies.get('userID')
+    await this.$store.dispatch('getBoardsForUserNoImages', userID)
+    // this.boards = this.$store.getters['getBoardsForUserNoImages']
     this.isDataLoaded = true;
   }
 }
