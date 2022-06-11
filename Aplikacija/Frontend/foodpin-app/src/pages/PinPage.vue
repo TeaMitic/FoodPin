@@ -9,8 +9,10 @@
                 </div>
                 <div v-else>
                     <div class="row">
-                        <div class="col-1 ">                            
-                            <button class="btn-back justify-content-start"><font-awesome-icon :icon="['fa','arrow-left']"  class="back" @click="back" /></button>
+                        <div class="col-1 "> 
+                            <router-link :to="{name: 'userpage'}">
+                                <button class="btn-back justify-content-start"><font-awesome-icon :icon="['fa','arrow-left']"  class="back" @click="back" /></button>
+                            </router-link>                           
                         </div>
                         <div class="pin col-9">
                             <div class="row pinRow">
@@ -186,7 +188,10 @@ export default {
             //like - red
             // unlike - black
             //ovde treba css logika i api poziv
-        }
+        },
+        // back(){
+        //     this.$route.push('/userpage')
+        // }
     },
     computed:{
         pin(){
@@ -299,7 +304,6 @@ export default {
     border-radius: 50%;
     width: 60px;
     height: 60px;
-
     background-color: transparent;
 }
 
