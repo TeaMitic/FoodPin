@@ -9,10 +9,10 @@
                 </div>
                 <div v-else>
                     <div class="row">
-                        <div class="back col-2">
-                             <button> BACK </button>
+                        <div class="col-1 ">                            
+                            <button class="btn-back justify-content-start"><font-awesome-icon :icon="['fa','arrow-left']"  class="back" @click="back" /></button>
                         </div>
-                        <div class="pin col-8">
+                        <div class="pin col-9">
                             <div class="row pinRow">
                                 <div class="col-6 img" :style="cssProps">
                                     <!-- <img v-if="!this.hasImagePin" class="img" src= "../assets/img/foodpin2.jpg" alt="Pin image">
@@ -50,7 +50,7 @@
                                             <!-- <button ><i class="fa-solid fa-heart"></i></button>  -->
                                             <!-- <p class="likes-p">{{pin.likes}} likes</p> -->
                                             <!-- @click="like" -->
-                                            <button class="btn-like"><font-awesome-icon :icon="['fa','heart']" class="heart" @click="like" :style="cssLike" /> </button><p class="likes-p">{{pin.likes}} Likes</p>
+                                            <button class="btn-like"><font-awesome-icon :icon="['fa','heart']" class="heart" @click="like" :style="cssLike" /></button><p class="likes-p">{{pin.likes}} Likes</p>
                                         </div>
                                         <div class="comments-div justify-content-center">
                                             <div v-if="otherComments" class="comments">
@@ -144,16 +144,29 @@ export default {
                 })
             }
         },
-        follow(){
+        async follow(){
             this.isFollowing =!this.isFollowing
             if(this.isFollowing){
                 this.followString = 'Unfollow'
                 this.cssFollow.backgroundColor= 'rgb(190 188 188 / 0.7)'
-
+                const info = {
+                    currentUser: Vue.$cookies.get('userID'),
+                    followedUser: this.pin.creatorID
+                }
+                await this.$store.dispatch("follow", info)
+                //  ids={
+                    // currentUser: req.body.currentUser,
+                    // followedUser: req.body.followedUser
+                // }
             }
             else{
                 this.followString = 'Follow'
                 this.cssFollow.backgroundColor = 'rgb(241,51,79)'
+                const info = {
+                    currentUser: Vue.$cookies.get('userID'),
+                    followedUser: this.pin.creatorID
+                }
+                await this.$store.dispatch("unfollow", info)
             }
             //follow - red
             //unfollow - gray
@@ -280,6 +293,20 @@ export default {
 }
 .btn-like{
     border: none;
+}
+.btn-back{
+    border:3px solid #e60023;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+
+    background-color: transparent;
+}
+
+.back{
+    color:black;
+    width: 50%;
+    height: 50%;
 }
 
 .profile{

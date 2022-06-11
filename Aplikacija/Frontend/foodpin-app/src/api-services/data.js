@@ -281,6 +281,42 @@ export default new Vuex.Store({
                 }
             }
         },
+        async follow({commit}, info){
+            try {
+                await Api().post('api/user/follow',info, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async unfollow({commit}, info){
+            try {
+                await Api().post('api/user/unfollow',info, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        }
         // async commentPin({commit},pinID, comment){
         //     try {
                 

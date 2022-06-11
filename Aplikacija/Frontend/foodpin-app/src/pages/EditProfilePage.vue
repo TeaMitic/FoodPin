@@ -103,7 +103,7 @@ export default({
     async created() {
         let userID = Vue.$cookies.get('userID')
 
-        await this.$store.dispatch("getUserByID",userID)
+        await this.$store.dispatch("getUserById",userID)
         this.user = this.$store.getters["getUser"]
         this.isDataLoaded = true;
         if (this.user.hasImage) { 
