@@ -14,9 +14,9 @@
                         </div>
                         <div class="pin col-8">
                             <div class="row pinRow">
-                                <div class="col-6 img">
-                                    image
-                                    <!-- ili ovde da ide img tag, mozda je to bolje da bude kao popunjen div -->
+                                <div class="col-6 img" :style="cssProps">
+                                    <!-- <img v-if="!this.hasImagePin" class="img" src= "../assets/img/foodpin2.jpg" alt="Pin image">
+                                    <img v-else class="img" :src= this.imageUrlPin alt="Pin image"> -->
                                 </div>
                                 <div class="col-6 info">
                                     <div class="row board-save justify-content-end mx-4">
@@ -36,22 +36,25 @@
                                         <div class="col-6 img-username">
                                             <div class="profile">
                                                 <img v-if="!this.hasImage" class="profile" src= "../assets/img/blank_profile.png" alt="User profile image">
-                                                <img v-else class="profile" :src= this.imageUrl alt="User profile image">
+                                                <img v-else class="profile" :src= this.imageUrlUser alt="User profile image">
                                             </div>
                                             <p class="mx-3">{{user.name}} {{user.surname}}</p>
                                         </div>
                                         <div class="col-6">
-                                            <button class="button btn-follow" @click="follow">Follow</button>
+                                            <button class="button btn-follow" @click="follow" :style="cssFollow">{{followString}}</button>
                                         </div>
                                         <!-- Username and Follow -->
                                     </div>
                                     <div class="row likes-comments">
                                         <div class="likes">
-                                            <font-awesome-icon :icon="['fa','heart']" /> <p class="likes-p">{{pin.likes}} Likes</p>
+                                            <!-- <button ><i class="fa-solid fa-heart"></i></button>  -->
+                                            <!-- <p class="likes-p">{{pin.likes}} likes</p> -->
+                                            <!-- @click="like" -->
+                                            <button class="btn-like"><font-awesome-icon :icon="['fa','heart']" class="heart" @click="like" :style="cssLike" /> </button><p class="likes-p">{{pin.likes}} Likes</p>
                                         </div>
                                         <div class="comments-div justify-content-center">
                                             <div v-if="otherComments" class="comments">
-                                                others comments - component
+                                                <p class="align-self-end">{{commentStr}}</p>
                                             </div>
                                             <div class="post-comment">
                                                 <input class="input-comm" type="text" v-model="comment">
@@ -59,9 +62,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="row original-user align-items-end">
-                                        Original: @username
-                                    </div> -->
                                     <!-- 5 rows -->
                                     <!-- board save -->
                                     <!-- pin name -->
@@ -101,10 +101,26 @@ export default {
             selected_board: 'All pins',
             comment: "",
             boards: null,
-            pin: null,
+            // pin: null,
             user: null,
-            imageUrl:  null, 
+            imageUrlUser:  null, 
+            imageUrlPin: null,
             hasImage: false,
+            // hasImagePin: false,
+            isFollowing: false,
+            liked: false,
+            followString: 'Follow',
+            commentStr: 'no comments on this pin',
+            cssProps: {
+                backgroundImage: ''
+            },
+            cssLike:{
+                color: ''
+            },
+            cssFollow:{
+                backgroundColor: '',
+            },
+
 
         }
     },
@@ -129,19 +145,56 @@ export default {
             }
         },
         follow(){
+            this.isFollowing =!this.isFollowing
+            if(this.isFollowing){
+                this.followString = 'Unfollow'
+                this.cssFollow.backgroundColor= 'rgb(190 188 188 / 0.7)'
 
+            }
+            else{
+                this.followString = 'Follow'
+                this.cssFollow.backgroundColor = 'rgb(241,51,79)'
+            }
+            //follow - red
+            //unfollow - gray
+            //css logika i api poziv
+        },
+        async like(){
+            this.liked = !this.liked
+            if(this.liked){
+                this.cssLike.color = 'rgb(255,0,0)'
+                await this.$store.dispatch('likePin',this.pin.pinID)
+                //api like
+            }
+            else{
+                this.cssLike.color = 'rgb(0,0,0)'
+                //api unlike
+            }
+            //like - red
+            // unlike - black
+            //ovde treba css logika i api poziv
+        }
+    },
+    computed:{
+        pin(){
+            return this.$store.getters['getPin']
         }
     },
     async created(){
         let pinParams = this.$route.params.pinID 
         await this.$store.dispatch('getPinById', pinParams)
-        this.pin = this.$store.getters['getPin']
 
         await this.$store.dispatch('getUserById', this.pin.creatorID)
         this.user = this.$store.getters['getUser']
         if (this.user.hasImage) { 
-            this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
+            this.imageUrlUser =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true
+        }
+
+        if(this.pin.hasImage){
+            this.imageUrlPin =ImageConverter.fromByteArray(this.pin.image.data)
+            this.cssProps.backgroundImage = `url(${this.imageUrlPin})`
+            // this.hasImagePin = true
         }
 
 
@@ -165,7 +218,7 @@ export default {
 }
 .pin{
     background-color: beige;
-    height: 30rem;
+    height: 35rem;
     border-radius: 20px;
     overflow: hidden;
 }
@@ -176,7 +229,7 @@ export default {
     margin-top: 5%;
     margin-bottom: 5%;
     color:#f1334f;
-    text-decoration: overline;
+    /* text-decoration: overline; */
     
 }
 .info{
@@ -184,8 +237,11 @@ export default {
 }
 .img{
     /* background-color: blueviolet; */
-    background-image: url("../assets/img/foodpin2.jpg");
-    background-size: cover;
+    /* background-image: url("../assets/img/foodpin2.jpg"); */
+    background-size: 100% 100%;
+    object-fit: fill;
+    /* width: 100%; */
+    /* height: inherit; */
 }
 .select{
   background-color: transparent;
@@ -222,6 +278,9 @@ export default {
     margin-top: auto;
     margin-left: 1%;
 }
+.btn-like{
+    border: none;
+}
 
 .profile{
     border-radius: 50%;
@@ -251,9 +310,32 @@ export default {
     margin:0;
 }
 .comments{
-    border: 1px solid black;
+    border: 1px solid gray;
+    border-radius: 10px;
     overflow-y: scroll;
     height: 200px;
+    justify-content: center;
+    display: flex;
+    align-items: flex-end;
+}
+::-webkit-scrollbar-track {
+   box-shadow: inset 0 0 5px grey; 
+   border-radius: 10px;
+
+  /* border: 1px solid #000;
+  padding: 2px 0;
+  background-color: #404040; */
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  /* box-shadow: inset 0 0 6px rgba(0,0,0,.3); */
+  background-color: #737272;
+  /* border: 1px solid #000; */
 }
 .input-comm{
     width: 100%;

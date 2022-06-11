@@ -37,6 +37,7 @@ const addImage = async (req,res) => {
 
 const like = async (req,res) => { 
     try {
+        
         let result = await syncLogic.likePin(req.params.id)
         if (result.success) { 
             // ? ne znam da li nam req.body ima podatke

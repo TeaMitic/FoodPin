@@ -216,7 +216,37 @@ export default new Vuex.Store({
                    toastedErrorMessage(error.response.data)
                 }
             }
-        }
+        },
+        async likePin({commit},pinID){
+            try {
+                console.log(pinID);
+                await Api().put(`/api/pin/like/${pinID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        // async commentPin({commit},pinID, comment){
+        //     try {
+                
+        //     } catch (error) {
+        //         if (error.response.status == 500) { 
+        //             console.log(error)
+        //         }
+        //         else { 
+        //            toastedErrorMessage(error.response.data)
+        //         }
+        //     }
+        // }
     },
         
     mutations: { 
