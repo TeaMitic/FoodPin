@@ -97,7 +97,7 @@ const getUserById = async(id) => {
             )
         }
         
-        
+        user = await attachFollows(user)
         return dtoHelper.createResObject(attachImage(user),true)
 
         
@@ -127,9 +127,7 @@ const getUserByUsername = async (username) => {
         } 
        
         //followers and following
-        let followObj =  await userDataProvider.countFollows(user.userID)
-        user.followers = followObj.followers
-        user.following = followObj.following
+        user = await attachFollows(user)
         
         return dtoHelper.createResObject(attachImage(user),true)
         
@@ -205,6 +203,24 @@ const unfollowUser = async(ids)=>{
         throw error
     }
 }
+
+// const getFollowingsForUser = async(userID) =>  {
+//     try {
+//         let validateString = validation.forString(id, "ID")
+//         if (validateString != 'ok') { 
+//             return dtoHelper.createResObject({
+//                 name: "Validation failed",
+//                 text: validateString
+//             },false)         
+//         }
+//         let followings = await userDataProvider.getFollowingsForUser(userID)
+//         followings.forEach(user => {
+//             user = attachImage(user)
+//         });
+//     } catch (error) {
+        
+//     }   
+// }
 const   addImage = async(imgFile,username) => { 
     try {
         let validateString = validation.forString(username, "Username")
@@ -220,11 +236,14 @@ const   addImage = async(imgFile,username) => {
                 resHelper.NoUserError(user.userID), false
             )
         } 
-        //add image 
-        return await logicHelper.addImage(imgFile,{
-            userID: user.userID,
-            type: 'User'
-        })
+        if (!user.hasImage) { 
+            //add image 
+            return await logicHelper.addImage(imgFile,{
+                userID: user.userID,
+                type: 'User'
+            })
+        }
+        return dtoHelper.createResObject(user,true) 
        
 
     } catch (error) {
@@ -256,6 +275,18 @@ const updateProfile = async (user,userID) => {
 } 
 
 //#region helper functions
+const attachFollows = async (user) => { 
+    try {
+        let followObj =  await userDataProvider.countFollows(user.userID)
+        user.followers = followObj.followers
+        user.following = followObj.following
+        return user
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 const attachToken = (userInfo) => { 
     try {
         let webToken = token.generateAccessToken(userInfo)

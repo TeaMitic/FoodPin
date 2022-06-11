@@ -146,7 +146,7 @@ const getPinById = async (pinID) => {
         if (pinDB) { 
             let pinJson = dtoHelper.pinToJson(pinDB) 
             let pin = dtoHelper.pinToModel(pinJson)
-            pin.hasImage = await dataProviderHelper.hasImage(pinID)
+            pin.hasImage = await dataProviderHelper.hasImage(pinID) //!not needed 
             return pin
         }
         return null
@@ -213,6 +213,7 @@ const getPins = async(skip)=>{
             return null
         }
         let results=dtoHelper.fromCypher(result)
+        
         
         return results
         

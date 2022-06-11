@@ -338,10 +338,10 @@ const getPins=async(skip)=>{
         let pinsImages = []
         
         for await (let pin of pins){
-            pin.hasImage = await dataProviderHelper.hasImage(pin.pinID)
+            // pin.hasImage = await dataProviderHelper.hasImage(pin.pinID) //!not needed 
+            pin.hasImage = true
             pinsImages.push(imageHelper.attachImage(pin))
         } 
-
 
         return dtoHelper.createResObject(pinsImages,true)
         

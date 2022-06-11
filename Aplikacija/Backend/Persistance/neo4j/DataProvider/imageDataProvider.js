@@ -16,7 +16,7 @@ const upload = async (imgInfo, connectorInfo) => {
 
         //image creting 
         let img = dtoHelper.imgToModel(imgInfo)
-        let imgDB = await neo4j.model('Image').create(img)
+        let imgDB = await neo4j.model('Image').mecreate(img)
         if (!imgDB) { 
             return null
         }

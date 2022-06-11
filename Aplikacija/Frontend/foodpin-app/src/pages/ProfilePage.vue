@@ -1,7 +1,9 @@
 <template>
     <div >
+        <!-- board builder  -->
+        <BoardBuilder v-if="showBoardBuilder" @toggleBoardBuilder="toggleBoardBuilder"/>
         <!-- Navigation-->
-        <UserHeader @childToParentYes="onChildClickYes"  />
+        <UserHeader  v-if="!showBoardBuilder" />
         <!-- Main container -->
         <div class="container my-3 py-5">
             <!-- User info -->
@@ -9,7 +11,6 @@
                 <AppSpinner />
             </div>
             <div v-else>
-                <BoardBuilder v-if="showBoardBuilder" @toggleBoardBuilder="toggleBoardBuilder"/>
                 <div class="user-info">
                     <div class="cont-user-image">
                      <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
@@ -22,8 +23,14 @@
                         <p class="user-username"><b>@{{user.username}}</b></p>
                     </div>
                     <div class="cont-user-follows row justify-content-center">
-                        <div class="cont-user-followers d-flex justify-content-center col-2"><p class="user-follows">Followers: <b>{{user.followers}}</b></p></div>
-                        <div class="cont-user-following d-flex justify-content-center col-2"><p class="user-follows">Following: <b>{{user.following}}</b></p></div>
+                        <div class="cont-user-followers d-flex justify-content-center col-2 " >
+                            <p class="user-follows">Followers: <b>{{user.followers}}</b></p>
+                            <!-- <FollowersField v-if="showFollowersField" :followersNum="user.followers" :userID="user.userID" /> -->
+                        </div>
+                        <div class="cont-user-following d-flex justify-content-center col-2 " >
+                            <p class="user-follows">Following: <b>{{user.following}}</b></p>
+                            <!-- <FollowingField v-if="showFollowingField"  :followingNum="user.following" :userID="user.userID" /> -->
+                        </div>
                     </div>
                     <div class="cont-user-website">
                         <a class="user-website" v-bind:href="user.website" target="_blank" rel="noopener"><b>{{user.website | trim-web}}</b></a>
@@ -32,9 +39,9 @@
                         <p class="user-about">{{user.about}}</p>
                     </div>
                     <div class="cont-user-buttons row justify-content-center">
-                        <div v-if="this.editable" class="edit-button col-6">
-                            <router-link :to="{name: 'settings'}" >
-                                <font-awesome-icon class="edit-icon" :icon="['fa','edit']" />
+                        <div v-if="this.editable" class=" col-2 p-2  ">
+                            <router-link :to="{name: 'settings'}" class="edit-button rounded link d-flex justify-content-center align-items-center">Edit profile
+                                <font-awesome-icon class=" mx-2 mb-1 edit-icon" :icon="['fa','edit']" />
                             </router-link>
                         </div>
                         <div v-else  class="edit-button col-6">
@@ -106,7 +113,7 @@ export default({
         UserHeader,
         AppSpinner,
         BoardCard,
-        BoardBuilder
+        BoardBuilder,
 
     },
     data() { 
@@ -120,7 +127,9 @@ export default({
             hasImage: false,
             // shownBoards: 'saved'
             showCreateField: false,
-            showBoardBuilder: false
+            showBoardBuilder: false,
+            // showFollowersField: false,
+            // showFollowingField: false
 
 
         }
@@ -139,11 +148,15 @@ export default({
         },
         toggleBoardBuilder() { 
             this.showBoardBuilder = !this.showBoardBuilder
+            this.showCreateField = !this.showCreateField
         },
-        onChildClickYes(value){
-            console.log("REDIRECTED: ",value)
-            this.$router.push()
-        },
+        // toggleFollowersField() { 
+        //     this.showFollowersField = !this.showFollowersField
+        // },
+        // toggleFollowingField() { 
+        //     this.showFollowingField = !this.showFollowingField
+        // }
+
         
 
     },
@@ -156,7 +169,6 @@ export default({
         this.user = this.$store.getters["getUser"]
         await this.$store.dispatch("getBoardsForUserWithImages", this.user.userID)
         this.isDataLoaded = true;
-        console.log(this.user)
         if (this.user.hasImage) { 
             this.imageUrl =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true
@@ -220,14 +232,15 @@ export default({
     width: 30px !important;
 }
 .edit-button { 
-    background-color: red;
+    background-color: gray;
 }
 .create-field { 
     display:flex;
     align-items: flex-end;
     flex-direction: column;
     position: absolute;
-    bottom: 30%
+    bottom: 30%;
+    width: fit-content;
 }
 .create-field > div { 
     background-color: rgb(246 246 246);
@@ -247,7 +260,15 @@ export default({
     text-decoration: none;
     padding: 0;
 }
-
+.cursor-pointer { 
+    /*beacusse it is a div*/
+    border-radius: 15px;
+}
+.cursor-pointer:hover{ 
+    cursor: pointer;
+    /*beacusse it is a div*/
+    background-color: antiquewhite;
+}
 
 
 

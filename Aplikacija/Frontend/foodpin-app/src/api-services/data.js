@@ -17,7 +17,8 @@ export default new Vuex.Store({
         user_boards: null,
         user_boards_only: null,
         pin: null,
-        pins_homepage: null
+        pins_homepage: null,
+        user_followings: null,
     },
     actions: { 
         async login({commit}, loginObject) { 
@@ -34,22 +35,11 @@ export default new Vuex.Store({
             Vue.$cookies.remove('username')
         },
         async getUserByUsername({commit},username) { 
-            try {
-                let res = await Api().get(`/api/user/getByUsername/${username}`,{
-                    headers: {
-                        'Authorization' : Vue.$cookies.get('token')
-                    }
-                })
-                commit('setUser',res.data)
-            } catch (error) {
-                if (error.response.status == 500) { 
-                    console.log(error)
-                }
-                else { 
-                   toastedErrorMessage(error.response.data)
-                }
-            }
+            await getUser(commit,`/api/user/getByUsername/${username}`)
         },
+    //    async getUserByID({commit}, userID) { 
+    //         await getUser(commit, `/api/user/get/${userID}`)
+    //     }, 
         async getUserById({commit}, userID){
             try {
                 let res = await Api().get(`/api/user/get/${userID}`,{
@@ -128,6 +118,7 @@ export default new Vuex.Store({
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
+                console.log("PINS:",res.data);
                 commit('setPinsForHomepage', res.data)
             } catch (error) {
                 if (error.response.status == 500) {
@@ -175,6 +166,26 @@ export default new Vuex.Store({
                 }
             }
         },
+        async uploadUserImage({commit},imgInfo) { 
+            try {
+                let username = imgInfo.username
+                let form = imgInfo.image
+                await Api().post(`/api/user/addImage/${username}`,form, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token'),
+                        'Content-type': 'multipart/form-data'
+                    }
+                })
+                commit('setNista')                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log("ERROR:",error.response)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
         async savePin({commit}, pin){
             try {
                 let res = await Api().post('/api/pin/save', pin, {
@@ -207,7 +218,25 @@ export default new Vuex.Store({
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
-                commit('setPin', res.data)                
+                commit('setPin', res.data) 
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+
+        async getFollowings({commit},userID) { 
+            try {
+                let res = await Api().get(`/api/user/getFollowings/${userID}`,{
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setFollowings',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log(error)
@@ -226,6 +255,23 @@ export default new Vuex.Store({
                     }
                 })
                 commit('setNista')
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async updateProfile({commit},userInfo) { 
+            try {
+                let res = await Api().put(`/api/user/update/${userInfo.userID}`,userInfo,{
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                },)
+                commit('setFollowings',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log(error)
@@ -274,6 +320,9 @@ export default new Vuex.Store({
         },
         setPinsForHomepage(state, pins){
             state.pins_homepage = pins
+        },
+        setFollowings(state,followings) { 
+            state.user_followings = followings
         }
     },
     getters: { 
@@ -291,6 +340,9 @@ export default new Vuex.Store({
         },
         getPinsForHomepage(state){
             return state.pins_homepage
+        },
+        getFollowings(state) { 
+            return state.user_followings
         }
     }
 })
@@ -305,6 +357,23 @@ const toastedErrorMessage = (data) => {
         duration: 3000,
         allowHtml: true
     })
+}
+const getUser = async (commit, path) => { 
+    try {
+        let res = await Api().get(path,{
+            headers: {
+                'Authorization' : Vue.$cookies.get('token')
+            }
+        })
+        commit('setUser',res.data)
+    } catch (error) {
+        if (error.response.status == 500) { 
+            console.log(error)
+        }
+        else { 
+           toastedErrorMessage(error.response.data)
+        }
+    }
 }
 const login_register = async (commit,path,userObject) => { 
     try { 
