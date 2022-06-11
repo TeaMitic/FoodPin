@@ -105,6 +105,20 @@ const unfollowUser = async(req, res)=>{
         resHelper.ErrorResponse(error,res)
     }
 }
+// const getFollowings = async(req,res) => { 
+//     try {
+//         let result = await syncLogic.getFollowingsForUser(req.params.id)
+//         if (result.success) { 
+//             resHelper.OkResponse(result.content,res)
+//         }
+//         else { 
+//             resHelper.BadRequestResponse(result.content,res)
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         resHelper.ErrorResponse(error,res)
+//     }
+// }
 
 //NOT DONE 
 const sendMessage = async (req,res) => { 
@@ -164,5 +178,6 @@ module.exports = {
     addImage,
     update,
     sendMessage,
-    getByUsername
+    getByUsername,
+    // getFollowings
 }

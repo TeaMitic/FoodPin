@@ -18,6 +18,7 @@ router.post('/follow',auth,user.followUser) //auth removed
 router.post('/unfollow',auth,user.unfollowUser)
 router.put('/update/:id',auth,user.update)
 router.post('/sendMsg',auth,user.sendMessage)
+// router.get('/getFollowings/:id',auth,user.getFollowings)
 
 
 

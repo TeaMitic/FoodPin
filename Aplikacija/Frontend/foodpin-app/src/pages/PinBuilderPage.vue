@@ -1,6 +1,7 @@
 <template >
     
     <div >
+        <UserHeader />
         <div v-if="!isDataLoaded">
             <AppSpinner />
         </div>
@@ -11,7 +12,7 @@
                     <option v-for="board in boards" :key="board.boardID" :value="board.name">{{board.name}}</option>
                 </select>
             </div>
-            <div class="content d-flex justify-content-around align-center col-6 px-3 py-2">
+            <div class="content d-flex justify-content-between align-center col-6 px-3 py-2">
                 <!-- add content -->
                 <div class="col-6 p-3 d-flex justify-content-center flex-column">
                     <div class="pin-image-cont row flex-column ">
@@ -32,17 +33,17 @@
                     <div class="pin-info-title py-1">
                         <input type="text" name="pin-name" v-model.trim="pin.title" class="pin-title" placeholder="Add yout title" >
                     </div>
-                    <div class="pin-info-description py-1">
-                        <input type="text" name="pin-description" v-model.trim="pin.description" class="pin-description" placeholder="Describe this meal" >
-                    </div>
-                    <div class="pin-info-instruction py-1">
-                        <input type="text" name="pin-instruction" v-model.trim="pin.instruction" class="pin-instruction" placeholder="How to prepare this meal" >
-                    </div>
                     <div class="pin-info-ingredients py-1">
                         <input type="text" name="pin-ingredients" v-model.trim="pin.ingredients" class="pin-ingredients" placeholder="Eggs, butter... " >
                     </div>
                     <div class="pin-info-tags py-1">
                         <input type="text" name="pin-tags" v-model.trim="tags" class="pin-tags" placeholder="Sweet, yummy, brekfast... " >
+                    </div>
+                    <div class="pin-info-description py-1">
+                        <textarea type="text" name="pin-description"  rows="5" v-model.trim="pin.description" class="pin-description" placeholder="Describe this meal" />
+                    </div>
+                    <div class="pin-info-instruction py-1">
+                        <textarea type="text" name="pin-instruction" rows="5" v-model.trim="pin.instruction" class="pin-instruction" placeholder="How to prepare this meal" />
                     </div>
                 </div>
             </div>
@@ -53,12 +54,14 @@
     </div>
 </template>
 <script>
-import AppSpinner from '../components/AppSpinerComponent.vue'
+import AppSpinner from '../components/AppSpinnerComponent.vue'
+import UserHeader from '../components/UserHeaderComponent.vue'
 import Vue from 'vue'
 
 export default {
     components: {
-        AppSpinner
+        AppSpinner,
+        UserHeader
     },
     data() {
         return {
@@ -83,8 +86,8 @@ export default {
     
     async created() {
         this.userID = Vue.$cookies.get('userID')
-        await this.$store.dispatch("getBoardsForUser", this.userID)
-        this.boards = this.$store.getters["getBoardsForUser"]
+        await this.$store.dispatch("getBoardsForUserNoImages", this.userID)
+        this.boards = this.$store.getters["getBoardsForUserNoImages"]
         let boardsSimple = []
         this.boards.forEach(board => {
             boardsSimple.push( { 
@@ -97,6 +100,9 @@ export default {
     methods: {
         onFileSelected(event) { 
             this.imageFile = event.target.files[0];
+            if (!this.checkImageSize(this.imageFile)) { 
+                return
+            }
             var reader = new FileReader();
 
             reader.onload = (event)  => {
@@ -104,6 +110,23 @@ export default {
                 this.isFileLoaded = true    
             };
             reader.readAsDataURL(this.imageFile);
+
+        },
+        checkImageSize(image) {
+            let size = image.size
+            var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
+            let sizeInMB = size / Math.pow(1024, i)
+            if (sizeInMB > 3) { 
+                Vue.toasted.show("Image size to large. Maximum size iz 3 MB.", { 
+                    theme: "bubble",
+                    position: "top-center",
+                    duration: 2500
+                })
+                this.removeImage()
+                return false
+            } 
+            return true
+
 
         },
         removeImage() { 
@@ -132,7 +155,6 @@ export default {
             this.isDataLoaded = false
             await this.$store.dispatch('createPin',pinInfo)
             let pin = this.$store.getters['getPin']
-            console.log(pin)
             //aggregating data for uploadImage api
             let form = new FormData()
             form.append('image',this.imageFile)
@@ -142,6 +164,7 @@ export default {
             }
             await this.$store.dispatch('uploadPinImage',imgInfo)
             this.isDataLoaded = true
+            this.$router.push(`/profile/${Vue.$cookies.get('username')}`)
             Vue.toasted.show('Pin created.',{
                  theme: "bubble",
                 position: "bottom-center",
@@ -215,5 +238,8 @@ body {
 }
 .btn-create:hover { 
     background-color: rgb(192, 192, 192) !important;
+}
+textarea { 
+    width: 100%;
 }
 </style>

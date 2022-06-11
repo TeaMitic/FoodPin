@@ -4,9 +4,11 @@ const userDataProvider = require('../../Persistance/neo4j/DataProvider/userDataP
 const boardDataProvider = require('../../Persistance/neo4j/DataProvider/boardDataProvider')
 const validation = require('../../Helper/validation')
 const resHelper = require('../../Helper/responseHelper')
-const logicHelper = require('../../Helper/imageHelper')
+const imageHelper = require('../../Helper/imageHelper')
 const fs = require('fs')
 const path = require('path')
+const dataProviderHelper = require('../../Persistance/neo4j/DataProvider/dataProviderHelper')
+
 
 const createPin = async (pinInfo) => { 
     try {
@@ -31,7 +33,6 @@ const createPin = async (pinInfo) => {
         pinInfo.pin.creatorID = userID
         //user validation 
         let user = await userDataProvider.getUserById(userID)
-        // console.log(user)
         if (!user) { 
             return dtoHelper.createResObject(
                 resHelper.NoUserError(userID),
@@ -84,7 +85,7 @@ const   addImage = async(imgFile,pinID) => {
         } 
         console.log(pin)
         //add image 
-        return await logicHelper.addImage(imgFile,{
+        return await imageHelper.addImage(imgFile,{
             pinID: pinID,
             type: 'Pin'
         })
@@ -246,15 +247,24 @@ const  savePin = async (info) => {
         let boards = new Set()
         boards.add( 'All pins')
         boards.add(info.boardName)
-        // let boards2 = new Set()
-        // boards.forEach(element => { 
-        //     boards2.add({name: element})
-        // }) 
-        // console.log("BOARD:",boards2)
+
         result = await pinDataProvider.connectWithBoards(pinCopy.pinID,boards,info.userID)
         if (!result) { 
             await pinDataProvider.deletePin(pinCopy.pinID) //rollback 
             throw new Error("Couldn't add pin to the board.")
+        }
+
+        //helper copyImage
+        let filePath, image
+        if (pin.hasImage) { 
+            filePath = path.join(__dirname,'..','..','images','pins',pin.pinID + '.jpg')
+        }
+        else{
+            throw new Error("Couldn't add image to the saved pin. Pin doesn't have an image")
+        } 
+        result = await imageHelper.copyImage(filePath, pinCopy.pinID)
+        if (!result) { 
+            throw new Error("Couldn't add image to the saved pin.")
         }
 
         /*SQL logging and push notification */
@@ -326,10 +336,13 @@ const getPins=async(skip)=>{
     try {
         let pins= await pinDataProvider.getPins(skip)
         let pinsImages = []
-        pins.forEach(pin=>{
-            pinsImages.push(attachImage(pin))
-        })
-        console.log(pins)
+        
+        for await (let pin of pins){
+            // pin.hasImage = await dataProviderHelper.hasImage(pin.pinID) //!not needed 
+            pin.hasImage = true
+            pinsImages.push(imageHelper.attachImage(pin))
+        } 
+
         return dtoHelper.createResObject(pinsImages,true)
         
     } catch (error) {
@@ -353,13 +366,13 @@ const attachImage = (pin) => {
                 pin.image = image
                 pin.hasImage = true
             }
-            console.log(pin)
             return pin
         }
     } catch (error) {
         throw error
     }
 }
+
 //#endregion
 module.exports = { 
     createPin,

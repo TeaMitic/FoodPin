@@ -122,9 +122,7 @@ const savePin = async (req,res) => {
 const  getByID = async(req,res)=>{
     try {
         let result = await syncLogic.getByID(req.params.id)
-       // console.log("PIN iz controlera: ")
         if (result.success) { 
-            //console.log(result.content)
             resHelper.OkResponse(result.content,res)
         }
         else { 

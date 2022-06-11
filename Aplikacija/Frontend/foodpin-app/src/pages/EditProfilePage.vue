@@ -57,13 +57,219 @@
             </div>
             
         </div>
+
+        <!-- Footer-->
+        <footer class="bg-light py-5 row ">
+            <div class="  container px-4 px-lg-5 ">
+                <div class="small text-center text-muted">Copyright &copy; 2022 - FoodPin</div>
+            </div>
+        </footer>
     </div>
+
 </template>
+
 <script>
-export default {
+import Vue from 'vue'
+import UserHeader from '../components/UserHeaderComponent.vue'
+import AppSpinner from '../components/AppSpinnerComponent.vue'
+import ImageConverter from '../helper/imageConverter' 
+
+
+export default({ 
+    title: "FoodPin - Settings",
+    components: { 
+        UserHeader,
+        AppSpinner,
+
+    },
+    data() { 
+        return {
+            isDataLoaded: false,
+            user: null,
+            editable: false,
+            imageUrl:  null, 
+            imageUrlOrg: null,
+            hasImage: false,
+            imageFile: null,
+            btnUploadEnabled: false
+
+
+
+        }
+    },
+ 
+    async created() {
+        let userID = Vue.$cookies.get('userID')
+
+        await this.$store.dispatch("getUserByID",userID)
+        this.user = this.$store.getters["getUser"]
+        this.isDataLoaded = true;
+        if (this.user.hasImage) { 
+            this.imageUrlOrg =  ImageConverter.fromByteArray(this.user.image.data)
+            this.imageUrl = this.imageUrlOrg
+            this.hasImage = true
+        }
+    },
+    methods: {
+        
+        onFileSelected(event) { 
+            this.imageFile = event.target.files[0];
+            if (!this.checkImageSize(this.imageFile)) { 
+                return
+            }
+            var reader = new FileReader();
+
+            reader.onload = (event)  => {
+                this.imageUrl = event.target.result;
+                this.btnUploadEnabled = true
+            };
+            reader.readAsDataURL(this.imageFile);
+
+        },
+        checkImageSize(image) {
+            let size = image.size
+            var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
+            let sizeInMB = size / Math.pow(1024, i)
+            if (sizeInMB > 3) { 
+                Vue.toasted.show("Image size to large. Maximum size iz 3 MB.", { 
+                    theme: "bubble",
+                    position: "top-center",
+                    duration: 2500
+                })
+                this.imageUrl = this.imageUrlOrg
+
+                this.btnUploadEnabled = false
+
+                return false
+            } 
+            return true
+        },
+        triggerFileInput() { 
+            let fileInput = document.getElementById('image-input')
+            fileInput.click()
+        },
+        validateInputs() { 
+            let inputs = document.querySelectorAll('.inputFields')
+            let valid = false
+            for (let element of inputs) { 
+                let responseMessage = this.$helpers.validateInput(element)
+                if (responseMessage != 'OK') {
+                    valid = false
+                    break
+                }
+                valid = true
+                }
+            return valid
+        },
+        async saveEdit() { 
+            if (!this.validateInputs()) {
+                Vue.toasted.show("Cannot edit profile. Some fields are not valid.", { 
+                    theme: "bubble",
+                    position: "top-center",
+                    duration: 2500
+                })
+                return
+            }
+            await this.$store.dispatch('updateProfile',this.user)
+        },
+        async saveImage() { 
+            let form = new FormData()
+            form.append('image',this.imageFile)
+            let imgInfo = { 
+                username: this.user.username,
+                image: form
+            }
+            await this.$store.dispatch('uploadUserImage',imgInfo)
+            Vue.toasted.show('Image uploaded.',{
+                theme: "bubble",
+                position: "bottom-center",
+                duration: 2000,
+            })
+        }
+
+    },
+  
+   
+})
+
+</script>
+
+<style scoped>
+
+#app{
+    margin-top: 0%;
+    overflow-x: hidden;
+
+}
+.mainDiv { 
+    background-color: rgb(216, 216, 216);
+    /* position: absolute;
+    padding:0;
+    margin:0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -999; */   
     
 }
-</script>
-<style >
+.cont-user-image { 
+    display: flex !important;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: flex-end;
+}
+.input-file { 
+    display: none;
+}
+.user-image { 
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-top: 1rem;
+}
+
+.edit-icon-cont { 
+    display: flex;
+    flex-direction: column;
+}
+.edit-icon { 
+    height: 30px !important;
+    width: 30px !important;
+    position: relative;
+    left: 8%;
+}
+.edit-button { 
+    background-color: gray;
+}
+.user-info-cont { 
+    background-color: white;
+    border-radius: 20px;
+}
+.user-info-rest { 
+    display: flex;
+    flex-direction: column;
     
+}
+[class^="cont-user"] { 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2% 0;
+}
+.cont-user-fullname { 
+    /* display: flex; */
+    flex-direction: column;
+    align-items: stretch;
+}
+.user-about { 
+    width: -webkit-fill-available;
+}
+
+
+
 </style>

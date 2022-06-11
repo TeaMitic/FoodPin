@@ -128,6 +128,23 @@ const getBoardsForUser = async (userID) => {
         throw error
     }
 }
+const getBoardsForUserNoImages = async (userID) => { 
+    try {
+        //getting boards with first few pins  
+        let result = await neo4j.readCypher(`
+            MATCH (b:Board) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}) 
+            RETURN  b ORDER BY b.name
+        `)
+        //user always has 'All pins' board
+        if (result.records.length == 0) { 
+            return null
+        }
+        let boards = dtoHelper.fromCypher(result)
+        return boards
+    } catch (error) {
+        throw error
+    }
+}
 
 module.exports = { 
     createBoard,
@@ -136,5 +153,6 @@ module.exports = {
     getBoardByName,
     connectWithUser,
     getBoardByID,
-    getBoardsForUser
+    getBoardsForUser,
+    getBoardsForUserNoImages
 }
