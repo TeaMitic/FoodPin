@@ -18,7 +18,8 @@ export default new Vuex.Store({
         user_boards_only: null,
         pin: null,
         pins_homepage: null,
-        user_followings: null,
+        // user_followings: null,
+        isFollowing: false,
     },
     actions: { 
         async login({commit}, loginObject) { 
@@ -50,7 +51,7 @@ export default new Vuex.Store({
                 commit('setBoardsForUser',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
@@ -67,7 +68,7 @@ export default new Vuex.Store({
                 commit('setBoardsOnlyForUser',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
@@ -100,11 +101,10 @@ export default new Vuex.Store({
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 })
-                console.log("PINS:",res.data);
                 commit('setPinsForHomepage', res.data)
             } catch (error) {
                 if (error.response.status == 500) {
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else {
                    toastedErrorMessage(error.response.data)
@@ -121,7 +121,7 @@ export default new Vuex.Store({
                 commit('setPin',res.data)
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
@@ -148,17 +148,42 @@ export default new Vuex.Store({
                 }
             }
         },
-        async uploadUserImage({commit},imgInfo) { 
+        async uploadUserImage({commit},obj) { 
             try {
+                let imgInfo = obj.imgInfo
                 let username = imgInfo.username
                 let form = imgInfo.image
-                await Api().post(`/api/user/addImage/${username}`,form, {
+                let res = await Api().post(`/api/user/addImage/${username}`,form, {
                     headers: { 
                         'Authorization' : Vue.$cookies.get('token'),
                         'Content-type': 'multipart/form-data'
                     }
                 })
                 commit('setNista')                
+                
+                if (res.status == 200) { 
+                    toastedOkMessage(obj.toastMessage)
+                }
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log("ERROR:",error.response)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async deleteUserImage({commit},obj) { 
+            try {
+                let res = await Api().delete(`/api/user/deleteImage/${obj.userID}`, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token'),
+                    }
+                })
+                commit('setNista') 
+                if (res.status == 200) { 
+                    toastedOkMessage(obj.toastMessage)
+                }
             } catch (error) {
                 if (error.response.status == 500) { 
                     console.log("ERROR:",error.response)
@@ -186,41 +211,61 @@ export default new Vuex.Store({
                 
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
                 }
             }
         },
-        async getFollowings({commit},userID) { 
+        // async getFollowings({commit},userID) { 
+        //     try {
+        //         let res = await Api().get(`/api/user/getFollowings/${userID}`,{
+        //             headers: { 
+        //                 'Authorization' : Vue.$cookies.get('token')
+        //             }
+        //         })
+        //         commit('setFollowings',res.data)
+        //     } catch (error) {
+        //         if (error.response.status == 500) { 
+        //             console.log("ERROR:",error.response)
+        //         }
+        //         else { 
+        //            toastedErrorMessage(error.response.data)
+        //         }
+        //     }
+        // },
+        async updateProfile({commit},obj) { 
             try {
-                let res = await Api().get(`/api/user/getFollowings/${userID}`,{
-                    headers: { 
-                        'Authorization' : Vue.$cookies.get('token')
-                    }
-                })
-                commit('setFollowings',res.data)
-            } catch (error) {
-                if (error.response.status == 500) { 
-                    console.log(error)
-                }
-                else { 
-                   toastedErrorMessage(error.response.data)
-                }
-            }
-        },
-        async updateProfile({commit},userInfo) { 
-            try {
-                let res = await Api().put(`/api/user/update/${userInfo.userID}`,userInfo,{
+                let res = await Api().put(`/api/user/update/${obj.userInfo.userID}`,obj.userInfo,{
                     headers: { 
                         'Authorization' : Vue.$cookies.get('token')
                     }
                 },)
-                commit('setFollowings',res.data)
+                commit('setNista')
+                if (res.status == 200) { 
+                    toastedOkMessage(obj.toastMessage)
+                }
             } catch (error) {
                 if (error.response.status == 500) { 
-                    console.log(error)
+                    console.log("ERROR:",error.response)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async isFollowing({commit},followInfo) { 
+            try {
+                let res = await Api().post('/api/user/isFollowing',followInfo,{
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                },)
+                commit('setIsFollowing',res.data)
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log("ERROR:",error.response)
                 }
                 else { 
                    toastedErrorMessage(error.response.data)
@@ -255,8 +300,11 @@ export default new Vuex.Store({
         setPinsForHomepage(state, pins){
             state.pins_homepage = pins
         },
-        setFollowings(state,followings) { 
-            state.user_followings = followings
+        // setFollowings(state,followings) { 
+        //     state.user_followings = followings
+        // }
+        setIsFollowing(state,value) { 
+            state.isFollowing = value
         }
     },
     getters: { 
@@ -275,8 +323,11 @@ export default new Vuex.Store({
         getPinsForHomepage(state){
             return state.pins_homepage
         },
-        getFollowings(state) { 
-            return state.user_followings
+        // getFollowings(state) { 
+        //     return state.user_followings
+        // }
+        getIsFollowing(state) { 
+            return state.isFollowing
         }
     }
 })
@@ -292,6 +343,14 @@ const toastedErrorMessage = (data) => {
         allowHtml: true
     })
 }
+const toastedOkMessage = (message) => {
+    Vue.toasted.show(`${message}`, { 
+        theme: "bubble",
+        position: "bottom-center",
+        duration: 2000,
+        allowHtml: true
+    })
+}
 const getUser = async (commit, path) => { 
     try {
         let res = await Api().get(path,{
@@ -302,7 +361,7 @@ const getUser = async (commit, path) => {
         commit('setUser',res.data)
     } catch (error) {
         if (error.response.status == 500) { 
-            console.log(error)
+            console.log("ERROR:",error.response)
         }
         else { 
            toastedErrorMessage(error.response.data)
@@ -329,7 +388,7 @@ const login_register = async (commit,path,userObject) => {
     }
     catch(error) { 
         if (error.response.status == 500) { 
-            console.log(error)
+            console.log("ERROR:",error.response)
         }
         else { 
             toastedErrorMessage(error.response.data)

@@ -67,11 +67,7 @@ export default {
       }
     }
   },
-  computed: { 
-    boards() { 
-      return this.$store.getters['getBoardsForUserNoImages']
-    }
-  },
+
   methods:{
     savePin(){
       if(this.selected_board != ""){

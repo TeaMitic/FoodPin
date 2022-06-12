@@ -5,47 +5,55 @@
         <!-- Navigation-->
         <UserHeader  v-if="!showBoardBuilder" />
         <!-- Main container -->
-        <div class="container my-3 py-5">
+        <div class="container my-3 py-5 ">
+           
             <!-- User info -->
             <div v-if="!this.isDataLoaded">
                 <AppSpinner />
             </div>
-            <div v-else>
-                <div class="user-info">
+            <div v-else class="profile-cont">
+                <div class="user-info ">
+                    
                     <div class="cont-user-image">
-                     <img v-if="!this.hasImage" class="user-image" src= "../assets/img/blank_profile.png" alt="User profile image">
-                     <img v-else class="user-image" :src= this.imageUrl alt="User profile image">
+                     <img v-if="!this.hasImage" class="user-image img-fluid rounded-circle" src= "../assets/img/blank_profile.png" alt="User profile image">
+                     <img v-else class="user-image img-fluid rounded-circle " :src= this.imageUrl alt="User profile image">
                     </div>
-                    <div class="cont-user-fullname">
+                    <div class="cont-user-fullname mt-1">
                         <h2 class="user-fullname">{{user.name}} {{user.surname != undefined ? user.surname : ""}}</h2>
                     </div>
                     <div class="cont-user-username">
-                        <p class="user-username"><b>@{{user.username}}</b></p>
+                        <p class="user-username m-0"><b>@{{user.username}}</b></p>
                     </div>
                     <div class="cont-user-follows row justify-content-center">
-                        <div class="cont-user-followers d-flex justify-content-center col-2 " >
+                        <span class="cont-user-followers d-flex justify-content-end col-2 " >
                             <p class="user-follows">Followers: <b>{{user.followers}}</b></p>
                             <!-- <FollowersField v-if="showFollowersField" :followersNum="user.followers" :userID="user.userID" /> -->
-                        </div>
-                        <div class="cont-user-following d-flex justify-content-center col-2 " >
+                        </span>
+                        <span class="cont-user-following d-flex justify-content-start col-2 " >
                             <p class="user-follows">Following: <b>{{user.following}}</b></p>
                             <!-- <FollowingField v-if="showFollowingField"  :followingNum="user.following" :userID="user.userID" /> -->
+                        </span>
+                    </div>
+                    <div class="cont-user-website mb-1" v-if="user.website != undefined">
+                        <a class="user-website link" v-bind:href="user.website" target="_blank" rel="noopener">
+                            <font-awesome-icon :icon="['fa','link']" class="mx-1 fa-lg" />
+                            <b>{{user.website | trim-web}}</b>
+                        </a>
+                    </div>
+                    <div class="cont-user-about row justify-content-center" v-if="user.about != undefined">
+                        <div class="col-6">
+                            <q class="user-about">{{user.about}}</q>
                         </div>
-                    </div>
-                    <div class="cont-user-website">
-                        <a class="user-website" v-bind:href="user.website" target="_blank" rel="noopener"><b>{{user.website | trim-web}}</b></a>
-                    </div>
-                    <div class="cont-user-about">
-                        <p class="user-about">{{user.about}}</p>
                     </div>
                     <div class="cont-user-buttons row justify-content-center">
                         <div v-if="this.editable" class=" col-2 p-2  ">
-                            <router-link :to="{name: 'settings'}" class="edit-button rounded link d-flex justify-content-center align-items-center">Edit profile
-                                <font-awesome-icon class=" mx-2 mb-1 edit-icon" :icon="['fa','edit']" />
+                            <router-link :to="{name: 'settings'}" class="edit-button rounded link d-flex justify-content-center align-items-center">
+                                <font-awesome-icon class=" mx-2 mb-1 fa-2x " :icon="['fa','user-edit']" />
                             </router-link>
                         </div>
                         <div v-else  class="edit-button col-6">
-                            <button class="follow-button mx-1">Follow/Unfollow</button>
+                            <button class="follow-button mx-1" v-if="!this.isFollowing">Follow</button>
+                            <button class="follow-button mx-1" v-else>Unfollow</button>
                             <button class="chat-button mx-1">Message</button>
                         </div>
                     </div>
@@ -55,7 +63,7 @@
                     <div class="cont-boards-add row justify-content-end" v-if="this.editable">
                         <!-- add board or pin ikonica -->
                         <button class="add-btn rounded-circle d-flex" v-on:click="toggleCreateField">
-                            <font-awesome-icon class="plus-icon" :icon="['fa','plus']"/>
+                            <font-awesome-icon class="icon-color fa-2x" :icon="['fa','plus']"/>
                         </button>
                         <div class="create-field" v-if="showCreateField">
                             <div class="row align-items-left ">
@@ -79,7 +87,6 @@
             </div>
             
         </div>
-    </div>
     </div>
 
 </template>
@@ -108,7 +115,7 @@ export default({
             user: null,
             boards: null,
             visiting: false,
-            editable: false,
+            editable: true,
             imageUrl:  null, 
             hasImage: false,
             // shownBoards: 'saved'
@@ -116,6 +123,7 @@ export default({
             showBoardBuilder: false,
             // showFollowersField: false,
             // showFollowingField: false
+            isFollowing: false,
 
 
         }
@@ -142,15 +150,27 @@ export default({
         // toggleFollowingField() { 
         //     this.showFollowingField = !this.showFollowingField
         // }
-
-        
-
+        isVisitor(usernameParam) { 
+            let usernameCookie = Vue.$cookies.get('username')
+            let isVisiting
+            usernameCookie !== usernameParam ? isVisiting = true : isVisiting = false //validating if personl acc 
+            return isVisiting
+        },
+        async isFollowingThem(usernameParam) { 
+            let followInfo = { 
+                user: Vue.$cookies.get('username'),
+                followed: usernameParam 
+            }
+            await this.$store.dispatch('isFollowing',followInfo)
+            return await this.$store.getters['getIsFollowing']
+        }
     },
     async created() {
-        let usernameCookie = Vue.$cookies.get('username')
         let usernameParam = this.$route.params.username 
-
-        usernameCookie === usernameParam ? this.editable = true : this.editable = false //validating if personl acc 
+        if (this.isVisitor(usernameParam)) { 
+            this.editable = false
+            this.isFollowing = await this.isFollowingThem(usernameParam)  
+        } 
         await this.$store.dispatch("getUserByUsername", usernameParam)
         this.user = this.$store.getters["getUser"]
         await this.$store.dispatch("getBoardsForUserWithImages", this.user.userID)
@@ -166,12 +186,17 @@ export default({
 
 </script>
 
-<style >
+<style scoped>
 
 #app{
     margin-top: 0%;
     overflow-x: hidden;
+}
 
+.profile-cont { 
+    background-color: #fff;
+    border-radius: 1%;
+    padding: 3%;
 }
 .nav-link { 
     font-size: 1.2rem !important;
@@ -188,12 +213,9 @@ export default({
     width: 30%;
 }
 .user-image { 
-    border-radius: 50%;
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
     margin-top: 1rem;
-
+    height: 15rem;
+    width: 15rem;
 }
 .add-btn { 
     height: 70px;
@@ -208,18 +230,13 @@ export default({
     background-color: rgb(209, 207, 207);
     transition: 0.2s ease-out;
 }
-.plus-icon { 
-    height: 50px !important;
-    width: 50px !important;
+.icon-color { 
     color: #f4623a;
 }
-.edit-icon { 
-    height: 30px !important;
-    width: 30px !important;
+.icon-color:hover { 
+    color: #c34e2e;
 }
-.edit-button { 
-    background-color: gray;
-}
+
 .create-field { 
     display:flex;
     align-items: flex-end;
