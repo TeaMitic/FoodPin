@@ -4,19 +4,12 @@ const neo4j = require("../config")
 const upload = async (imgInfo, connectorInfo) => { 
     //connectorInfo => userID/pinID, node type is User/Pin, relationship name is HAS_PHOTO (not in arguments)
     try {
-        let uuid = new Object()
-        if (connectorInfo.userID != undefined) { 
-            uuid.key = 'userID'
-            uuid.value = connectorInfo.userID
-        } 
-        else { 
-            uuid.key = 'pinID'
-            uuid.value = connectorInfo.pinID 
-        }
+        let uuid = generateUuid(connectorInfo)
+       
 
         //image creting 
         let img = dtoHelper.imgToModel(imgInfo)
-        let imgDB = await neo4j.model('Image').mecreate(img)
+        let imgDB = await neo4j.model('Image').merge(img)
         if (!imgDB) { 
             return null
         }
@@ -39,10 +32,38 @@ const upload = async (imgInfo, connectorInfo) => {
     }
 }
 
-const deleteRef = async (imgInfo) => { 
+const deleteImage = async (connectorInfo) => { 
+    try {
+        let uuid = generateUuid(connectorInfo)
 
+        await neo4j.writeCypher(`
+            MATCH (i:Image)<-[:HAS_PHOTO]-(n: ${connectorInfo.type} {${uuid.key}: '${uuid.value}'})
+            DETACH DELETE (i)
+        `)
+    } catch (error) {
+        throw error
+    }
 }
 
+//#region helper functions 
+const generateUuid = (connectorInfo) => { 
+    try {
+        let uuid = new Object()
+        if (connectorInfo.userID != undefined) { 
+            uuid.key = 'userID'
+            uuid.value = connectorInfo.userID
+        } 
+        else { 
+            uuid.key = 'pinID'
+            uuid.value = connectorInfo.pinID 
+        }
+        return uuid
+    } catch (error) {
+        throw error
+    }
+}
+//#endregion
 module.exports = { 
     upload,
+    deleteImage
 }

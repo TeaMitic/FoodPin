@@ -142,6 +142,17 @@ const countFollows = async(userID) => {
         throw error
     }
 }
+
+const isFollowing = async (user,followingFrined) => { 
+    try {
+        let result = await neo4j.readCypher(`
+        match (u:User {username: '${user}'})-[follows:FOLLOWS]->(f:User {username: '${followingFrined}'})
+        return follows`)
+        return result.records.length !== 0      
+    } catch (error) {
+        throw error
+    }
+}
 module.exports = { 
     create,
     getUserById,
@@ -149,5 +160,6 @@ module.exports = {
     followUser,
     unfollowUser,
     updateProfile,
-    countFollows
+    countFollows,
+    isFollowing
 }

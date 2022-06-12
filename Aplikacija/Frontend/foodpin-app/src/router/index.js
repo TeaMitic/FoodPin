@@ -84,7 +84,7 @@ const router = new Router({
             }
         },
         {
-            path: '/:username/:name',
+            path: '/board/:username/:name',
             name: 'boardpage',
             component: BoardPage,
             beforeEnter(to,from,next) { 
