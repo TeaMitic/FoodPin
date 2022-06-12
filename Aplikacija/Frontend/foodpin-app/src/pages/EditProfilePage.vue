@@ -8,7 +8,7 @@
             <div v-if="!this.isDataLoaded">
                 <AppSpinner />
             </div>
-            <div v-else class="col-6 p-4 user-info-cont ">
+            <div v-else class="col-lg-6 col-s-4 p-4 mt-4 user-info-cont ">
                 <div class="user-info">
                     <div class="contt-user-image d-flex flex-column align-content-center align-items-end flex-wrap my-3 p-3">
                         <div class="d-flex">
@@ -37,42 +37,36 @@
                     <div class="user-info-rest d-flex align-items-stretch">
                         <div class="cont-user-username">
                             <label>Username:</label>
-                            <input class="user-username " :placeholder="user.username" disabled >
+                            <input class="user-username form-control my-0" :placeholder="user.username" disabled >
                         </div>
                         <div class="cont-user-fullname">
                             <div class="cont-user-name">
                                 <label for="name">Name:</label>
-                                <input type="text" name="name" class="user-name inputFields " :placeholder="user.name" v-model="user.name">
+                                <input type="text" name="name" class="user-name inputFields form-control my-0" :placeholder="user.name" v-model="user.name">
                             </div>
                             <div class="cont-user-surname">
                                 <label for="surname">Surname:</label>
-                                <input type="text" name="surname" class="user-surname inputFields " :placeholder="user.surname" v-model="user.surname">
+                                <input type="text" name="surname" class="user-surname inputFields form-control my-0" :placeholder="user.surname" v-model="user.surname">
                             </div>
                         </div>
                         <div class="cont-user-website">
                             <label for="website">Website:</label>
-                            <input type="text" name="website" class="user-website " :placeholder="user.website" v-model="user.website">
+                            <input type="text" name="website" class="user-website form-control my-0 " :placeholder="user.website" v-model="user.website">
                             <!-- <a class="user-website" v-bind:href="user.website" target="_blank" rel="noopener"><b>{{user.website | trim-web}}</b></a> -->
                         </div>
                         <div class="cont-user-about">
                             <label for="about">About you:</label>
-                            <textarea name="about"  rows="3" class="user-about " :placeholder="user.about" v-model="user.about"></textarea>
+                            <textarea name="about"  rows="3" class="user-about form-control my-0" :placeholder="user.about" v-model="user.about"></textarea>
                         </div>
                     </div>
                     <div class="save-cont p-3">
-                        <button class="btn-save " @click="saveEdit">Save</button>
+                        <button class="btn-save btn btn-lg btn-primary text-white" @click="saveEdit">Save</button>
                     </div>
                 </div>
             </div>
             
         </div>
 
-        <!-- Footer-->
-        <footer class="bg-light py-5 row ">
-            <div class="  container px-4 px-lg-5 ">
-                <div class="small text-center text-muted">Copyright &copy; 2022 - FoodPin</div>
-            </div>
-        </footer>
     </div>
 
 </template>
@@ -202,10 +196,13 @@ export default({
                 password: this.user.password,
                 username: this.user.username
             }
+            this.isDataLoaded = false
             await this.$store.dispatch('updateProfile',{ 
                 userInfo: userInfo, 
                 toastMessage: 'Profile updated.'
             })
+            this.isDataLoaded = true
+
         },
         async saveImage() { 
             let form = new FormData()
@@ -235,11 +232,7 @@ export default({
     overflow-x: hidden;
 
 }
-.mainDiv { 
-    background-color: rgb(216, 216, 216);
-     
-    
-}
+
 .cont-user-image { 
     display: flex !important;
     flex-direction: column;
@@ -301,6 +294,14 @@ export default({
 }
 .cursor-pointer { 
     cursor: pointer;
+}
+.form-control {
+    width: 70% !important;
+    border-radius: 0.5rem;
+
+}
+.form-control.user-about {
+    width: 100% !important;
 }
 
 
