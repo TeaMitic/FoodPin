@@ -1,30 +1,23 @@
 <template>
-  <div v-if="isDataLoaded" class="card col-2" :style="cssProps">
-  <!-- { 'background-image': `url(${require(imageUrl)})`} -->
-    <div class="card-content">
-      <div class="row row1">
-        <div class="col-6">
-          <!-- Treba da bude selectbox -->
-          <!-- <h2 class="card-title">Board</h2>  -->
-          <!-- <select name="board">
-            <option value="Paste">Paste</option>
-            <option value="Smoothies">Smoothies</option>
-            <option value="Salads">Salads</option>
-            <option value="Sweets">Sweets</option>
-          </select> -->
-            <select v-model="selected_board" class="select">
-              <option v-for="board in boards" :key="board.boardID" :value="board.name">{{board.name}}</option>
-            </select>
+  <router-link :to="{name:'pinpage', params:{pinID:pin.pinID}}" class="router">
+    <div v-if="isDataLoaded" class="card col-2" :style="cssProps">
+      <div class="card-content">
+        <div class="row row1">
+          <div class="col-6">
+              <select v-model="selected_board" class="select">
+                <option v-for="board in boards" :key="board.boardID" :value="board.name">{{board.name}}</option>
+              </select>
+          </div>
+          <div class="col-6">
+            <button class="button" @click= "savePin">Save pin</button>
+          </div>
         </div>
-        <div class="col-6">
-          <button class="button" @click= "savePin">Save pin</button>
+        <div class="row row2">
+          <h4 class="card-title">{{pin.title}}</h4>
         </div>
-      </div>
-      <div class="row row2">
-        <h4 class="card-title">{{pin.title}}</h4>
       </div>
     </div>
-  </div>
+  </router-link>
   <!-- <div class="col mb-5"> -->
         <!-- <router-link :to="{name:'StoreMenu',params:{id:store.uuid}}"> -->
           <!-- class="card h-100" @click="open" v-bind:id="store.uuid" -->
@@ -60,7 +53,7 @@ export default {
   data(){
     return{
       isDataLoaded: false,
-      selected_board: '',
+      selected_board: 'All pins',
       imageUrl: null,
       cssProps: {
         backgroundImage: ''
@@ -180,6 +173,11 @@ export default {
 
 .row2{
   margin-top: 10%;
+}
+
+.router{
+  text-decoration: none;
+  color:white;
 }
 
 

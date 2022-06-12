@@ -7,7 +7,7 @@ import store from './api-services/data'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
 import Validation from '../src/helper/validation'
-import {faPlus, faEdit, faTrash, faLink, faUserEdit} from '@fortawesome/free-solid-svg-icons'
+import {faPlus,faEdit, faTrash,  faLink, faUserEdit,faHeart, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import ('bootstrap')
@@ -45,6 +45,8 @@ library.add(faTrash)
 library.add(faLink)
 library.add(faEdit)
 
+library.add(faHeart)
+library.add(faArrowLeft)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

@@ -38,8 +38,26 @@ export default new Vuex.Store({
         async getUserByUsername({commit},username) { 
             await getUser(commit,`/api/user/getByUsername/${username}`)
         },
-        async getUserByID({commit}, userID) { 
-            await getUser(commit, `/api/user/get/${userID}`)
+    //    async getUserByID({commit}, userID) { 
+    //         await getUser(commit, `/api/user/get/${userID}`)
+    //     }, 
+        async getUserById({commit}, userID){
+            try {
+                let res = await Api().get(`/api/user/get/${userID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setUser', res.data)
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
         },
         async getBoardsForUserWithImages({commit},userID) { 
             try {
@@ -235,6 +253,60 @@ export default new Vuex.Store({
         //         }
         //     }
         // },
+       
+        async getPinById({commit}, pinID){
+            try {
+                let res = await Api().get(`/api/pin/get/${pinID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setPin', res.data) 
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+
+        async getFollowings({commit},userID) { 
+            try {
+                let res = await Api().get(`/api/user/getFollowings/${userID}`,{
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setFollowings',res.data)
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async likePin({commit},pinID){
+            try {
+                console.log(pinID);
+                await Api().put(`/api/pin/like/${pinID}`,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
         async updateProfile({commit},obj) { 
             try {
                 let res = await Api().put(`/api/user/update/${obj.userInfo.userID}`,obj.userInfo,{
@@ -271,7 +343,55 @@ export default new Vuex.Store({
                    toastedErrorMessage(error.response.data)
                 }
             }
+        },
+        async follow({commit}, info){
+            try {
+                await Api().post('api/user/follow',info, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async unfollow({commit}, info){
+            try {
+                await Api().post('api/user/unfollow',info, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
         }
+        // async commentPin({commit},pinID, comment){
+        //     try {
+                
+        //     } catch (error) {
+        //         if (error.response.status == 500) { 
+        //             console.log(error)
+        //         }
+        //         else { 
+        //            toastedErrorMessage(error.response.data)
+        //         }
+        //     }
+        // }
     },
         
     mutations: { 

@@ -73,7 +73,7 @@ const unfollowAsync=async(ids)=>{
             senderID: ids.currentUser,
             receiverID: ids.followedUser
         } 
-        let validate = validation.forNotification(obj)
+        let validate = validation.forUserNotification(obj)
         if (validate != 'ok') { 
             return dtoHelper.createResObject({
                 name: "Validation failed",
