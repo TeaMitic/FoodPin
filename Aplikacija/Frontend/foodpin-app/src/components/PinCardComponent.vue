@@ -107,7 +107,7 @@ export default {
   object-fit:fill;
   max-width: 40ch;
   height: 15rem; /*auto */
-  width: inherit; /*auto */
+  width: auto; /*auto - pre bilo inherit*/ 
   margin-bottom: 2.5%;
   margin-left: 2.5%;
   overflow: hidden;

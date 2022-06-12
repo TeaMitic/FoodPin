@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col-1 "> 
                             <router-link :to="{name: 'userpage'}">
-                                <button class="btn-back justify-content-start"><font-awesome-icon :icon="['fa','arrow-left']"  class="back" @click="back" /></button>
+                                <button class="btn-back justify-content-start"><font-awesome-icon :icon="['fa','arrow-left']"  class="back"/></button>
                             </router-link>                           
                         </div>
                         <div class="pin col-9">
@@ -178,7 +178,7 @@ export default {
             this.liked = !this.liked
             if(this.liked){
                 this.cssLike.color = 'rgb(255,0,0)'
-                await this.$store.dispatch('likePin',this.pin.pinID)
+                // await this.$store.dispatch('likePin',this.pin.pinID)
                 //api like
             }
             else{
@@ -249,6 +249,9 @@ export default {
     color:#f1334f;
     /* text-decoration: overline; */
     
+}
+.board-save{
+    padding-top:2%;
 }
 .info{
     background-color: white;
