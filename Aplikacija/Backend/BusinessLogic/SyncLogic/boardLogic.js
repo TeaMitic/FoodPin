@@ -47,6 +47,39 @@ const createBoard = async (boardInfo) => {
     }
 }
 
+const getByName = async (boardInfo) => { 
+    try {
+        //objects validation 
+        let validateString = validation.forBoardGet(boardInfo)
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject(
+                resHelper.ValidationError(validateString),
+                false
+            )
+        }  
+        let boardName = boardInfo.boardName
+        let userID  = boardInfo.userID
+        //user validation
+        let user = await userDataProvider.getUserById(userID)
+        if (!user) { 
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID),
+                false
+            )
+        }
+        let board = await boardDataProvider.getBoardByName(boardName,userID)
+        if (!board) {    
+            return dtoHelper.createResObject(
+                resHelper.NoBoardError(userID,boardName),
+                false
+            )
+        } 
+        return dtoHelper.createResObject(board,true)
+    } catch (error) {
+        throw error
+    }
+}
+
 const updateBoard = async (boardInfo,boardID) => { 
     try {
         //body validation 
@@ -195,5 +228,6 @@ module.exports = {
     updateBoard,
     deleteBoard,
     getBoardsForUserWithImages,
-    getBoardsForUserNoImages
+    getBoardsForUserNoImages,
+    getByName
 }

@@ -17,6 +17,22 @@ const create = async (req,res) => {
     }  
 }
 
+const getByName = async (req,res) => { 
+    try {
+        let result = await logic.getByName(req.body)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 const update = async (req,res) => { 
     try {
         let result = await logic.updateBoard(req.body,req.params.id)
@@ -91,5 +107,6 @@ module.exports = {
     update,
     deleteBoard,
     getForUserWithImages,
-    getForUserNoImages
+    getForUserNoImages,
+    getByName
 }

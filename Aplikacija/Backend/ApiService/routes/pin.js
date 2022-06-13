@@ -11,6 +11,7 @@ let middlewares = [
 
 router.get('/getWithSkip/:skip', auth, pin.getPins)
 router.get('/get/:id',auth,pin.getByID)
+router.get('/getForBoard/:id',auth, pin.getForBoard)
 
 router.post('/',auth,pin.create);
 router.post('/addImage/:id',middlewares,pin.addImage)

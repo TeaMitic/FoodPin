@@ -116,6 +116,7 @@ export default {
             let size = image.size
             var i = parseInt(Math.floor(Math.log(size) / Math.log(1024)));
             let sizeInMB = size / Math.pow(1024, i)
+            console.log(sizeInMB,i)
             if (sizeInMB > 3) { 
                 Vue.toasted.show("Image size to large. Maximum size iz 3 MB.", { 
                     theme: "bubble",

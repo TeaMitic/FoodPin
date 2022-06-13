@@ -20,6 +20,8 @@ export default new Vuex.Store({
         pins_homepage: null,
         // user_followings: null,
         isFollowing: false,
+        board: null,
+        board_pins: null,
     },
     actions: { 
         async login({commit}, loginObject) { 
@@ -93,6 +95,19 @@ export default new Vuex.Store({
                 }
             }
         },
+        async getBoardByName({commit},boardInfo) { 
+            try {
+                
+                let res = await Api().post('/api/board/getByName',boardInfo,{
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setCurrentBoard',res.data)
+            } catch (error) {
+                toastedErrorMessage(error.response.data)
+            }
+        }, 
         async createBoard({commit},board) { 
             try {
                 await Api().post('/api/board',board,{
@@ -379,8 +394,30 @@ export default new Vuex.Store({
                    toastedErrorMessage(error.response.data)
                 }
             }
+        },
+        async getPinsForBoard({commit}, boardID) { 
+            try {
+                let res = await Api().get(`api/pin/getForBoard/${boardID}`, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setPinsForBoard', res.data)
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        setChosenBoard({commit},board) {
+            commit('setCurrentBoard',board)
+            
         }
-        // async commentPin({commit},pinID, comment){
+        // async commentPin({commit},pinID, comment) {
         //     try {
                 
         //     } catch (error) {
@@ -425,6 +462,12 @@ export default new Vuex.Store({
         // }
         setIsFollowing(state,value) { 
             state.isFollowing = value
+        },
+        setCurrentBoard(state,board) {
+            state.board = board
+        },
+        setPinsForBoard(state,pins) { 
+            state.board_pins = pins
         }
     },
     getters: { 
@@ -448,6 +491,12 @@ export default new Vuex.Store({
         // }
         getIsFollowing(state) { 
             return state.isFollowing
+        },
+        getCurrentBoard(state) { 
+            return state.board
+        },
+        getPinsForBoard(state) { 
+            return state.board_pins
         }
     }
 })

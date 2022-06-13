@@ -80,7 +80,7 @@
                             </div>
                         </div>
                     </div>  
-                    <div class="cont-boards-all row">
+                    <div class="cont-boards-all row flex-wrap justify-content-center">
                         <BoardCard v-for="board in allBoards" :key="board.boardID" :board="board" class= "col-3 m-3"/>
                     </div>
                 </div>
@@ -214,8 +214,8 @@ export default({
 }
 .user-image { 
     margin-top: 1rem;
-    height: 15rem;
-    width: 15rem;
+    height: 15em;
+    width: 15em;
 }
 .add-btn { 
     height: 70px;
@@ -273,6 +273,9 @@ export default({
     background-color: antiquewhite;
 }
 
+@media screen {
+    
+}
 
 
 </style>

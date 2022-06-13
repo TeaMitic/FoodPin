@@ -72,6 +72,7 @@ export default({
 
 </script>
 <style scoped>
+
 .nav-link { 
     font-size: 1.2rem !important;
 }

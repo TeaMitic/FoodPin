@@ -59,10 +59,10 @@ const getBoardByName = async (name,userID) => {
         if (result.records.length == 0) { 
             return null
         }
-
-        let board = dtoHelper.fromCypher(result)
         
-        return board
+        let boards = dtoHelper.fromCypher(result)
+        
+        return boards[0]
     } catch (error) {
         throw  error      
     }

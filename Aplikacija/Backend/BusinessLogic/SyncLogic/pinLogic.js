@@ -73,6 +73,29 @@ const createPin = async (pinInfo) => {
     }
 }
 
+const getForBoard = async (boardID) => { 
+    try {
+        
+        let board = await boardDataProvider.getBoardByID(boardID)
+        if(!board){
+            return dtoHelper.createResObject(
+                resHelper.NoBoardError(boardID), false
+            )
+        } 
+        
+        let pins = await pinDataProvider.getForBoard(boardID)
+        pinsImages = []
+        pins.forEach(pin => {
+            pin.hasImage = true
+            pinsImages.push(imageHelper.attachImage(pin))
+        });
+
+        return dtoHelper.createResObject(pins,true)
+    } catch (error) {
+        throw error
+    }
+}
+
 const   addImage = async(imgFile,pinID) => { 
     try {
         //creates image node and connect with pinID
@@ -83,7 +106,6 @@ const   addImage = async(imgFile,pinID) => {
                 resHelper.NoPinError(pinID), false
             )
         } 
-        console.log(pin)
         //add image 
         return await imageHelper.addImage(imgFile,{
             pinID: pinID,
@@ -384,6 +406,7 @@ module.exports = {
     getByID,
     addImage,
     commentPin,
-    getPins
+    getPins,
+    getForBoard
 
 }

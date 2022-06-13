@@ -19,6 +19,22 @@ const create = async (req,res) => {
         
 }
 
+const getForBoard = async (req,res) => { 
+    try {
+        let result = await syncLogic.getForBoard(req.params.id)
+        if (result.success) { 
+            resHelper.OkResponse(result.content,res)
+        }
+        else { 
+            console.log(result)
+            resHelper.BadRequestResponse(result.content,res)
+        }
+    } catch (error) {
+        console.log(error);
+        resHelper.ErrorResponse(error,res)
+    }
+}
+
 const addImage = async (req,res) => { 
     try {
         let result = await syncLogic.addImage(req.file,req.params.id)
@@ -187,5 +203,6 @@ module.exports = {
     getByID,
     addImage,
     commentPin,
-    getPins
+    getPins,
+    getForBoard 
 }

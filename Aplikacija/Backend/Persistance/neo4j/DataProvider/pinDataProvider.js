@@ -78,6 +78,22 @@ const deletePin = async (pinID) => {
         throw error
     }
 }
+
+const getForBoard = async (boardID) => { 
+    try {
+        let result = await neo4j.readCypher(`
+        MATCH (p:Pin)-[:BELONGS]->(b:Board {boardID: '${boardID}'})
+        RETURN p`)
+        if (result.records.length === 0) { 
+            return null
+        }
+        let pins = dtoHelper.fromCypher(result) 
+        return pins
+    } catch (error) {
+        throw error
+    }
+}
+
 const likePin = async (pinID) => { 
     try {
         let result = await neo4j.writeCypher(`
@@ -232,5 +248,6 @@ module.exports = {
     getPinById,
     getPinWithTags,
     commentPin,
-    getPins
+    getPins,
+    getForBoard
 }

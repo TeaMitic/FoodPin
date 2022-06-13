@@ -1,5 +1,6 @@
 <template >
-    <router-link class="card border-0 link"  :to="{name: 'boardpage', params: {username: this.username, name: board.name} }">
+<!-- , params: {username: this.username, name: board.name} } -->
+    <div class="card border-0 link"   @click="chosenBoard" >
         <div class="card-body d-flex ">
             <div class="card-body-left">
                 <img class= "pin-image image-bigger" :src="this.images[0]" >
@@ -14,7 +15,7 @@
             </div>
         </div>
         <h5 class="card-title">{{board.name}}</h5>  
-    </router-link>
+    </div>
 </template>
 <script>
 import ImageConverter from '../helper/imageConverter' 
@@ -42,7 +43,10 @@ export default {
         });
     },
     methods: {
-      
+        chosenBoard() { 
+            this.$store.dispatch('setChosenBoard', this.board)
+            this.$router.push(`/board/${this.username}/${this.board.name}`)
+        }
     },
 }
 </script>
@@ -55,7 +59,7 @@ export default {
     margin: 1px;
 }
 .image-bigger { 
-    width: 12rem;
+    width: 9rem;
     height: 12rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

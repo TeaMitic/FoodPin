@@ -57,6 +57,13 @@ module.exports = {
         if (object.public == null) return "Public board cannot be null."
         return 'ok'
     },
+    forBoardGet(object) { 
+        let validateString = this.forBoard(object)
+        if (validateString != 'ok') return validateString
+        if (object.boardName == undefined) return "Board name field not found."
+        if (object.boardName == null || object.boardName == "") return "Board name be cannot null or  empty string."
+        return 'ok'
+    },
     forBoardDelete(object)  { 
         if (object.userID == undefined) return "UserID field not found."
         let validateString = this.forString(object.userID,"userID")
