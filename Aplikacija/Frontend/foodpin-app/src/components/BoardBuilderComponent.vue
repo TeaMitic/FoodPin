@@ -66,6 +66,20 @@ export default {
 }
 </script>
 <style scoped>
+.board-builder { 
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    padding:0;
+    margin:0;
+    z-index: 1000;
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
 
 .input-name { 
     width: 100%;
@@ -81,24 +95,10 @@ export default {
 .text { 
     font-size:x-large;
 }
-.btn-create { 
 
-}
 .content { 
     background-color: rgb(248, 245, 245);
     border-radius: 10px;
     height: 50%;
-}
-.board-builder { 
-    background-color: rgba(0, 0, 0, 0.8);
-    position: fixed;
-    padding:0;
-    margin:0;
-    z-index: 1000;
-    top:0;
-    left:0;
-
-    width: 100%;
-    height: 100%;
 }
 </style>

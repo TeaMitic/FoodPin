@@ -128,7 +128,6 @@ const getUserByUsername = async (username) => {
        
         //followers and following
         user = await attachFollows(user)
-        
         return dtoHelper.createResObject(attachImage(user),true)
         
     } catch (error) {
@@ -221,6 +220,72 @@ const unfollowUser = async(ids)=>{
         
 //     }   
 // }
+
+const isFollowing = async(followingInfo) => { 
+    try {
+        let user_username = followingInfo.user
+        let followingFrined = followingInfo.followed
+        let validateString = validation.forString(user_username, "User username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        validateString = validation.forString(followingFrined, "Friend username")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        let user = await userDataProvider.getUserByUsername(user_username)
+        if(!user){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(user_username), false
+            )
+        } 
+        let user_followed = await userDataProvider.getUserByUsername(followingFrined)
+        if(!user_followed){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(followingFrined, false)
+            )
+        } 
+        let isFollowing = await userDataProvider.isFollowing(user_username,followingFrined)
+        return dtoHelper.createResObject(isFollowing,true) 
+        
+
+    } catch (error) {
+        throw error
+    }
+}
+
+const deleteUserImage = async(userID) => { 
+    try {
+        let validateString = validation.forString(userID, "UserID")
+        if (validateString != 'ok') { 
+            return dtoHelper.createResObject({
+                name: "Validation failed",
+                text: validateString
+            },false)         
+        }
+        let user = await userDataProvider.getUserById(userID)
+        if(!user){
+            return dtoHelper.createResObject(
+                resHelper.NoUserError(userID), false
+            )
+        } 
+        if (user.hasImage) { 
+            await logicHelper.deleteUserImage(user)
+        }
+        return dtoHelper.createResObject({},true) 
+       
+
+    } catch (error) {
+        throw error
+    }
+}
+
 const   addImage = async(imgFile,username) => { 
     try {
         let validateString = validation.forString(username, "Username")
@@ -243,8 +308,7 @@ const   addImage = async(imgFile,username) => {
                 type: 'User'
             })
         }
-        return dtoHelper.createResObject(user,true) 
-       
+        return dtoHelper.createResObject({},true)
 
     } catch (error) {
         throw error
@@ -317,8 +381,8 @@ const attachImage = (user) => {
                 user.hasImage = true
             }
 
-            return user
         }
+        return user
     } catch (error) {
         throw error 
     }
@@ -335,5 +399,7 @@ module.exports = {
     unfollowUser,
     addImage,
     updateProfile,
-    getUserByUsername
+    getUserByUsername,
+    isFollowing,
+    deleteUserImage
 }

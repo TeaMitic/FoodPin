@@ -21,6 +21,26 @@ const addImage = async (imgFile,connectorInfo) => {
     return dtoHelper.createResObject(image, true)
 
 }
+const deleteUserImage = async (user) => { 
+    try {
+        let filePath,image
+        filePath = path.join(__dirname,'..','images','profiles',user.username + '.jpg')
+        if (fs.existsSync(filePath)) {
+            image= fs.unlink(filePath,(err) => {
+                if (err) throw err
+            })
+        }
+        let connectorInfo = { 
+            userID: user.userID,
+            type: 'User'
+        }
+        return await imageDataProvider.deleteImage(connectorInfo)
+        
+    } catch (error) {
+        throw error
+    }
+}
+
 const attachImage = (pin) => {
     //loads image from FS and attach it to pin object 
     try {
@@ -47,6 +67,7 @@ const attachImage = (pin) => {
 const copyImage = async(imgFilePath, pinCopyID) => {
     try {
         let copyFilePath = path.join(__dirname,'..','images','pins',pinCopyID + '.jpg')
+        fs
         fs.copyFile(imgFilePath, copyFilePath, (err) => {
             if (err) {
                 console.log("Error Found:", err);
@@ -70,7 +91,6 @@ const copyImage = async(imgFilePath, pinCopyID) => {
             type: 'Pin'
         }
         let result = await addImage(imgObj, connectorInfo)
-        console.log(result.success);
         return  result.success
 
     } catch (error) {
@@ -82,5 +102,6 @@ const copyImage = async(imgFilePath, pinCopyID) => {
 module.exports = { 
     addImage,
     attachImage,
-    copyImage
+    copyImage,
+    deleteUserImage
 }
