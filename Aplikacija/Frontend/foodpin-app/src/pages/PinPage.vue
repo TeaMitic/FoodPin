@@ -187,28 +187,21 @@ export default {
                 this.cssLike.color = 'rgb(255,0,0)'
                 this.pin.likes = this.pin.likes + 1
                 await this.$store.dispatch('likePin',obj)
-                // const obj ={
-                //     pinID: this.pin.pinID,
-                //     likeInfo: {
-                //         senderID: Vue.$cookies.get('userID'),
-                //         receiverID: this.user.userID
-                //     }
-                // }
-                //api like
             }
             else{
                 this.cssLike.color = 'rgb(0,0,0)'
                 this.pin.likes = this.pin.likes - 1
                 await this.$store.dispatch('unlikePin',obj)
-                //api unlike
             }
-            //like - red
-            // unlike - black
-            //ovde treba css logika i api poziv
         },
-        // back(){
-        //     this.$route.push('/userpage')
-        // }
+        async isFollowingThem(usernameParam) { 
+            let followInfo = { 
+                user: Vue.$cookies.get('username'),
+                followed: usernameParam
+            }
+            await this.$store.dispatch('isFollowing',followInfo)
+            return await this.$store.getters['getIsFollowing']
+        }
     },
     computed:{
         pin(){
@@ -221,14 +214,12 @@ export default {
     async created(){
         let pinParams = this.$route.params.pinID 
         await this.$store.dispatch('getPinById', pinParams)
-
         await this.$store.dispatch('getUserById', this.pin.creatorID)
-        // this.user = this.$store.getters['getUser']
+
         if (this.user.hasImage) { 
             this.imageUrlUser =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true
         }
-
         if(this.pin.hasImage){
             this.imageUrlPin =ImageConverter.fromByteArray(this.pin.image.data)
             this.cssProps.backgroundImage = `url(${this.imageUrlPin})`
@@ -239,6 +230,18 @@ export default {
         const userID = Vue.$cookies.get('userID')
         await this.$store.dispatch('getBoardsForUserNoImages', userID)
         this.boards = this.$store.getters['getBoardsForUserNoImages']
+
+        this.isFollowing =await this.isFollowingThem(this.user.username)
+        if(this.isFollowing){
+            this.followString = 'Unfollow'
+            this.cssFollow.backgroundColor= 'rgb(190 188 188 / 0.7)'
+        }
+        else{
+            this.followString = 'Follow'
+            this.cssFollow.backgroundColor = 'rgb(241,51,79)'
+        }
+
+
         this.isDataLoaded = true
         // this.imageUrl = imageConverter.fromByteArray(this.pin.image.data)
         // console.log(this.imageUrl);
@@ -280,7 +283,7 @@ export default {
     /* background-color: blueviolet; */
     /* background-image: url("../assets/img/foodpin2.jpg"); */
     background-size: 100% 100%;
-    object-fit: fill;
+    object-fit: cover;
     /* width: 100%; */
     /* height: inherit; */
 }
