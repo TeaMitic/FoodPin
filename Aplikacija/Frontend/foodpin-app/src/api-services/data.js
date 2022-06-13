@@ -213,6 +213,8 @@ export default new Vuex.Store({
         },
         async getPinById({commit}, pinID){
             try {
+                let token = Vue.$cookies.get('token')
+                console.log("Token",token);
                 let res = await Api().get(`/api/pin/get/${pinID}`,{
                     headers: {
                         'Authorization' : Vue.$cookies.get('token')
@@ -248,7 +250,9 @@ export default new Vuex.Store({
         },
         async likePin({commit},pinID){
             try {
-                console.log(pinID);
+                let token = Vue.$cookies.get('token')
+                console.log("Token",token);
+                // console.log(pinID);
                 await Api().put(`/api/pin/like/${pinID}`,{
                     headers: {
                         'Authorization' : Vue.$cookies.get('token')
