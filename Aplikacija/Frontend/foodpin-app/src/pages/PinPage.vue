@@ -178,7 +178,7 @@ export default {
             this.liked = !this.liked
             if(this.liked){
                 this.cssLike.color = 'rgb(255,0,0)'
-                // await this.$store.dispatch('likePin',this.pin.pinID)
+                await this.$store.dispatch('likePin',this.pin.pinID)
                 //api like
             }
             else{
