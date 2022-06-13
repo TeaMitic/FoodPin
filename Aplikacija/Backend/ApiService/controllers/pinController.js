@@ -41,7 +41,7 @@ const like = async (req,res) => {
         let result = await syncLogic.likePin(req.params.id)
         if (result.success) { 
             // ? ne znam da li nam req.body ima podatke
-            result= await asyncLogic.likePin(req.params.id, req.body)
+            // result= await asyncLogic.likePin(req.params.id, req.body)
             resHelper.OkResponse(result.content,res)
         }
         else { 
@@ -74,7 +74,7 @@ const dislike = async (req,res) => {
         let result = await syncLogic.dislikePin(req.params.id)
         if (result.success) { 
             //mysql
-            result= await asyncLogic.dislikePin(req.params.id, req.body)
+            // result= await asyncLogic.dislikePin(req.params.id, req.body)
             resHelper.OkResponse(result.content,res)
         }
         else { 

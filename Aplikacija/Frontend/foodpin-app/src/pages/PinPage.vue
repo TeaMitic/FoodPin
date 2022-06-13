@@ -104,7 +104,7 @@ export default {
             comment: "",
             boards: null,
             // pin: null,
-            user: null,
+            // user: null,
             imageUrlUser:  null, 
             imageUrlPin: null,
             hasImage: false,
@@ -176,13 +176,30 @@ export default {
         },
         async like(){
             this.liked = !this.liked
+            const obj ={
+                pinID: this.pin.pinID,
+                likeInfo: {
+                    senderID: Vue.$cookies.get('userID'),
+                    receiverID: this.user.userID
+                }
+            }
             if(this.liked){
                 this.cssLike.color = 'rgb(255,0,0)'
-                await this.$store.dispatch('likePin',this.pin.pinID)
+                this.pin.likes = this.pin.likes + 1
+                await this.$store.dispatch('likePin',obj)
+                // const obj ={
+                //     pinID: this.pin.pinID,
+                //     likeInfo: {
+                //         senderID: Vue.$cookies.get('userID'),
+                //         receiverID: this.user.userID
+                //     }
+                // }
                 //api like
             }
             else{
                 this.cssLike.color = 'rgb(0,0,0)'
+                this.pin.likes = this.pin.likes - 1
+                await this.$store.dispatch('unlikePin',obj)
                 //api unlike
             }
             //like - red
@@ -196,6 +213,9 @@ export default {
     computed:{
         pin(){
             return this.$store.getters['getPin']
+        },
+        user(){
+            return this.$store.getters['getUser']
         }
     },
     async created(){
@@ -203,7 +223,7 @@ export default {
         await this.$store.dispatch('getPinById', pinParams)
 
         await this.$store.dispatch('getUserById', this.pin.creatorID)
-        this.user = this.$store.getters['getUser']
+        // this.user = this.$store.getters['getUser']
         if (this.user.hasImage) { 
             this.imageUrlUser =  ImageConverter.fromByteArray(this.user.image.data)
             this.hasImage = true

@@ -291,12 +291,26 @@ export default new Vuex.Store({
                 }
             }
         },
-        async likePin({commit},pinID){
+        async likePin({commit},obj){
             try {
-                let token = Vue.$cookies.get('token')
-                console.log("Token",token);
-                // console.log(pinID);
-                await Api().put(`/api/pin/like/${pinID}`,{
+                await Api().put(`/api/pin/like/${obj.pinID}`,obj.likeInfo,{
+                    headers: {
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                commit('setNista')
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async unlikePin({commit},obj){
+            try {
+                await Api().put(`/api/pin/dislike/${obj.pinID}`,obj.likeInfo,{
                     headers: {
                         'Authorization' : Vue.$cookies.get('token')
                     }
