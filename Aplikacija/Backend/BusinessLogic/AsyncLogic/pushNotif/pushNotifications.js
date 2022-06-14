@@ -21,7 +21,7 @@ const like = (payload) => {
             content: `${payload.emitterUsername} liked your pin.`,
             pinID: payload.pinID 
         }
-        sendNotification(receiverID,'pin-notif',likeNotification)
+        sendNotification(payload.receiverID,'pin-notif',likeNotification)
     } catch (error) {
         throw error
     }
