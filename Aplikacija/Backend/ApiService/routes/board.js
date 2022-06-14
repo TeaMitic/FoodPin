@@ -9,5 +9,5 @@ router.post('/getByName', board.getByName)
 
 router.post('/',auth,board.create);
 router.put('/update/:id',auth,board.update);
-router.delete('/delete/',auth,board.deleteBoard);
+router.delete('/delete/:id',auth,board.deleteBoard);
 module.exports = router;

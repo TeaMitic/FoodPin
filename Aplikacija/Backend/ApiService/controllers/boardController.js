@@ -52,7 +52,7 @@ const update = async (req,res) => {
 
 const deleteBoard = async (req,res) => { 
     try {
-        let result = await logic.deleteBoard(req.body)
+        let result = await logic.deleteBoard(req.params.id)
         if (result.success) { 
             resHelper.OkResponse(result.content,res)
         }

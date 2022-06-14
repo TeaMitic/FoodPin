@@ -36,11 +36,10 @@ const updateBoard = async (boardID,boardInfo) => {
     }
 }
 
-const deleteBoard = async (userID,boardName) => { 
+const deleteBoard = async (boardID) => { 
     try {
-        
         let result = await neo4j.writeCypher(`
-            MATCH (b:Board {name: '${boardName}'}) <-[:HAS_BOARD]- (u:User {userID: '${userID}'}) 
+            MATCH (b:Board {boardID: '${boardID}'})  
             DETACH DELETE b
         `)
         return dtoHelper.createResObject({},true)

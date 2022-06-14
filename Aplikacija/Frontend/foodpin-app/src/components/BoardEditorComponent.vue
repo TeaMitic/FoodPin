@@ -9,18 +9,18 @@
                 <label for="name" class="label-name" >Name</label>
                 <input type="text" class="input-name" v-model.trim="name" name="name" placeholder="Pizza, Sweets, Icecreams..." required>
             </div>
-            <div class="cont-public d-flex my py-2 align-items-center" v-on:click="isPublic = !isPublic">
+            <div class="cont-public d-inline-flex my py-2 align-items-center" v-on:click="isPublic = !isPublic">
                 <div class="cursor-pointer p-2 rounded-circle d-flex align-items-center justify-content-center">
                     <font-awesome-icon class=" mx-2 mb-1 icon-color fa-2x" :icon="['fa','lock-open']" v-if="isPublic"/>
                     <font-awesome-icon class=" mx-2 mb-1 icon-color fa-2x" :icon="['fa','lock']" v-else/>
                 </div>
-                <input type="checkbox" class="checkbox-public" v-model="isPublic" >
+                <input type="checkbox" class="checkbox-public " v-model="isPublic" >
                 <p v-if="isPublic" class="m-0 text">Make my board <b>private</b>.</p>
                 <p v-else class="m-0 text">Make my board <b>public</b>.</p>
             </div>
-            <div class="buttons-cont">
-                <div class="cont-btn-delete">
-                    <button class="btn-delete btn btn-lg btn-outline-danger" v-on:click="deleteBoard">Delete</button>
+            <div class="buttons-cont d-flex justify-content-around mt-5">
+                <div class="cont-btn-delete" v-if="name !== 'All pins'">
+                    <button class="btn-delete btn btn-lg btn-outline-danger bortder-0" v-on:click="deleteBoard">Delete</button>
                 </div>
                 <div class="cont-btn-save">
                     <button class="btn-create btn btn-lg btn-primary text-white" v-on:click="saveBoard">Save</button>
@@ -59,29 +59,37 @@ export default {
                 })
                 return
             }
-            let boardInfo = { 
+            
+            let boardEdited = { 
                 boardName: this.name,
                 public: this.isPublic,
                 userID: Vue.$cookies.get('userID')
             }
-            // this.isDataLoaded = false
-            await this.$store.dispatch('editBoard',boardInfo)
-            // this.isDataLoaded = true
+            await this.$store.dispatch('editBoard',{
+                boardInfo: boardEdited,
+                boardID: this.board.boardID
+            })
+
+            boardEdited = { 
+                name: this.name,
+                public: this.isPublic,
+                boardID: this.board.boardID
+            }
+            this.$store.dispatch('setChosenBoard',boardEdited)
+            this.$router.replace({name: 'boardpage', params: {username: this.$route.params.username, name: this.name}})
             this.$emit('toggleBoardEditor')
         },
-        deleteBoard() { 
+        async deleteBoard() { 
             let htmlMessage = 
-                `<p>Are you sure you want to delete this board?
-                <br>
-                Pins are connected to 'All pins' board and will not be deleted.`
+                `Are you sure you want to delete this board?\nPins are connected to 'All pins' board and will not be deleted.`
             let ans = confirm(htmlMessage)
             if (ans) { 
                 let boardInfo = { 
                     toastMessage: "Board deleted.",
                     boardID: this.board.boardID
                 }
-                this.$store.dispatch('deleteBoard',boardInfo)
-                this.$emit('toggleBoardEditor')
+                await this.$store.dispatch('deleteBoard',boardInfo)
+                this.$router.push({name: 'profilepage', params: {username: Vue.$cookies.get('username')}})
             }
         },
         hideComponent(event) { 
@@ -116,6 +124,7 @@ export default {
     height: 20px;
     width: 20px;
     margin-right: 1rem;
+    display:  none;
 }
 .cont-public:hover, .checkbox-public:hover { 
     cursor: pointer;
@@ -128,5 +137,9 @@ export default {
     background-color: rgb(248, 245, 245);
     border-radius: 10px;
     height: 50%;
+}
+
+.btn-delete { 
+    border-color: transparent;
 }
 </style>

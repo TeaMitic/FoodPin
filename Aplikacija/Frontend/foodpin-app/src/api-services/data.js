@@ -413,6 +413,51 @@ export default new Vuex.Store({
                 }
             }
         },
+        async editBoard({commit},boardObj) { 
+            try {
+                let boardInfo = boardObj.boardInfo
+                let  boardID = boardObj.boardID
+                let res = await Api().put(`api/board/update/${boardID}`,boardInfo, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                if (res.status == 200) { 
+                    toastedOkMessage('Board updated.')
+                }
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
+        async deleteBoard({commit},boardObj) { 
+            try {
+                let  boardID = boardObj.boardID
+                let res = await Api().delete(`api/board/delete/${boardID}`, {
+                    headers: { 
+                        'Authorization' : Vue.$cookies.get('token')
+                    }
+                })
+                if (res.status == 200) { 
+                    toastedOkMessage(boardObj.toastMessage)
+                }
+                commit('setNista')
+                
+            } catch (error) {
+                if (error.response.status == 500) { 
+                    console.log(error)
+                }
+                else { 
+                   toastedErrorMessage(error.response.data)
+                }
+            }
+        },
         setChosenBoard({commit},board) {
             commit('setCurrentBoard',board)
             

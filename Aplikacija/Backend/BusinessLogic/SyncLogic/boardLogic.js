@@ -70,10 +70,11 @@ const getByName = async (boardInfo) => {
         let board = await boardDataProvider.getBoardByName(boardName,userID)
         if (!board) {    
             return dtoHelper.createResObject(
-                resHelper.NoBoardError(userID,boardName),
+                resHelper.NoBoardError(boardName),
                 false
             )
         } 
+        console.log("BOARD:",board)
         return dtoHelper.createResObject(board,true)
     } catch (error) {
         throw error
@@ -101,17 +102,18 @@ const updateBoard = async (boardInfo,boardID) => {
             )
         }
         //board validation 
-        let board = await boardDataProvider.getBoardByName(boardName,userID)
-        if (board) { 
+        let board = await boardDataProvider.getBoardByID(boardID)
+        if (!board) { 
             return dtoHelper.createResObject(
-                resHelper.ExistingBoardError(userID,boardName),
+                resHelper.NoBoardError(boardID),
                 false
             )
         }
 
         let result = await boardDataProvider.updateBoard(boardID,boardInfo) 
         if (result) { 
-            dtoHelper.createResObject({},true)
+            return dtoHelper.createResObject({},true)
+            
         }
         throw new Error(`Couldn't update board with id:'${boardID}'.`)
     } catch (error) {
@@ -120,42 +122,29 @@ const updateBoard = async (boardInfo,boardID) => {
 }
 
 
-const deleteBoard = async (boardInfo) => { 
+const deleteBoard = async (boardID) => { 
     try {
         //objects validation 
-        let validateString = validation.forBoardDelete(boardInfo)
+        let validateString = validation.forString(boardID,"boarID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject(
                 resHelper.ValidationError(validateString),
                 false
             )
         }  
-        let boardName = boardInfo.boardName
-        let userID  = boardInfo.userID
-        //user validation
-        let user = await userDataProvider.getUserById(userID)
-        if (!user) { 
+       
+        let board = await boardDataProvider.getBoardByID(boardID)
+        if (!board) {
+            if (board.name === 'All pins') { 
+                return dtoHelper.createResObject("Board 'All pins' cannot be deleted.",false)
+            }
             return dtoHelper.createResObject(
-                resHelper.NoUserError(userID),
-                false
-            )
-        }
-        //board validation
-        if (boardName == 'All pins') { 
-            return dtoHelper.createResObject(
-                resHelper.AllPinsBoardError(userID,boardName),
-                false
-            )
-        }
-        let board = await boardDataProvider.getBoardByName(boardName,userID)
-        if (!board) {    
-            return dtoHelper.createResObject(
-                resHelper.NoBoardError(userID,boardName),
+                resHelper.NoBoardError(boardName),
                 false
             )
         } 
         //deletion
-        return await boardDataProvider.deleteBoard(userID,boardName)
+        return await boardDataProvider.deleteBoard(boardID)
     } catch (error) {
         throw error
     }

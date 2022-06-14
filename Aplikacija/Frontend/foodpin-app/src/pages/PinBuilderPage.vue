@@ -165,12 +165,14 @@ export default {
             }
             await this.$store.dispatch('uploadPinImage',imgInfo)
             this.isDataLoaded = true
-            this.$router.push(`/profile/${Vue.$cookies.get('username')}`)
+            this.$router.go(-1)
+            // this.$router.push(`/profile/${Vue.$cookies.get('username')}`)
             Vue.toasted.show('Pin created.',{
                  theme: "bubble",
                 position: "bottom-center",
                 duration: 2000,
             })
+            
 
         },
         triggerFileInput() { 

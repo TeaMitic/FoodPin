@@ -85,7 +85,7 @@ const getForBoard = async (boardID) => {
         MATCH (p:Pin)-[:BELONGS]->(b:Board {boardID: '${boardID}'})
         RETURN p`)
         if (result.records.length === 0) { 
-            return null
+            return []
         }
         let pins = dtoHelper.fromCypher(result) 
         return pins

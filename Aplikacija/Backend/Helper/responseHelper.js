@@ -41,10 +41,10 @@ module.exports = {
             text: `User with id: '${userID}' not found in database.`
         }
     },
-    NoBoardError(userID,boardName) { 
+    NoBoardError(boardName) { 
         return { 
             name: "Client error.",
-            text: `Board with name '${boardName}' for user with id: '${userID}' not found in database.`
+            text: `Board with name '${boardName}' .`
         }
     },
     AllPinsBoardError() { 
