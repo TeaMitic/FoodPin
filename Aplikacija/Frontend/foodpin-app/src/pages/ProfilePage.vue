@@ -81,7 +81,7 @@
                         </div>
                     </div>  
                     <div class="cont-boards-all row flex-wrap justify-content-center">
-                        <BoardCard v-for="board in allBoards" :key="board.boardID" :board="board" class= "col-3 m-3"/>
+                        <BoardCard v-for="board in allBoards" :key="board.boardID" :board="board"  class= "col-3 m-3"/>
                     </div>
                 </div>
             </div>

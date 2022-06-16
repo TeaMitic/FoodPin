@@ -100,9 +100,9 @@ export default {
     methods: {
         onFileSelected(event) { 
             this.imageFile = event.target.files[0];
-            if (!this.checkImageSize(this.imageFile)) { 
-                return
-            }
+            // if (!this.checkImageSize(this.imageFile)) { 
+            //     return
+            // }
             var reader = new FileReader();
 
             reader.onload = (event)  => {

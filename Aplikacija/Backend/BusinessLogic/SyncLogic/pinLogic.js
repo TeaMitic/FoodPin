@@ -7,7 +7,6 @@ const resHelper = require('../../Helper/responseHelper')
 const imageHelper = require('../../Helper/imageHelper')
 const fs = require('fs')
 const path = require('path')
-const dataProviderHelper = require('../../Persistance/neo4j/DataProvider/dataProviderHelper')
 
 
 const createPin = async (pinInfo) => { 
@@ -119,15 +118,8 @@ const   addImage = async(imgFile,pinID) => {
 
 const likePin = async (pinID) => {
     try {
-        /*
-            Left room for notifying pin's user 
-            And 
-            For updating some metadata for user who liked the photos for recommendation system
-            And 
-            For logging data in SQL 
-        */
+       
       
-        //TODO Tea refaktorisi kod 
         let validateString = validation.forString(pinID,"pinID")
         if (validateString != 'ok') { 
             return dtoHelper.createResObject({
@@ -289,7 +281,6 @@ const  savePin = async (info) => {
             throw new Error("Couldn't add image to the saved pin.")
         }
 
-        /*SQL logging and push notification */
         return dtoHelper.createResObject({},true)
 
     } catch (error) {
@@ -308,7 +299,6 @@ const getByID =async(pinID)=>{
         let pin =await pinDataProvider.getPinById(pinID)
 
         let filePath, image
-        //it is not pin.imgName, it is relationship with image node 
         if (pin.hasImage) { 
             filePath = path.join(__dirname,'..','..','images','pins',pinID + '.jpg')
             image= fs.readFileSync(filePath)
@@ -360,7 +350,6 @@ const getPins=async(skip)=>{
         let pinsImages = []
         
         for await (let pin of pins){
-            // pin.hasImage = await dataProviderHelper.hasImage(pin.pinID) //!not needed 
             pin.hasImage = true
             pinsImages.push(imageHelper.attachImage(pin))
         } 

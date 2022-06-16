@@ -37,9 +37,7 @@ const comment = (payload) => {
         // }
         let commentNotification = { 
             content: `${payload.emitterUsername} commented on your pin.`,
-            pinID: payload.pinID,
-            // comment: payload.comment
-            //? da li nam treba sadrzaj komentara, ili cemo da ga pribavimo iz mysql-a? 
+            pinID: payload.pinID,            
         }
         sendNotification(receiverID,'pin-notif',commentNotification)
     } catch (error) {
@@ -87,7 +85,6 @@ const message = (payload) => {
         //     text
         // }
         let messageNotification = { 
-            // * Neka ga ovako za sada 
             content: `${payload.emitterUsername} sent you a message.`,
             meesage: payload.text
         }

@@ -1,5 +1,6 @@
 const validation = require("../../Helper/validation")
 const pinDataProvider  = require( '../../Persistance/neo4j/DataProvider/pinDataProvider')
+const userDataProvider  = require( '../../Persistance/neo4j/DataProvider/userDataProvider')
 const resHelper = require('../../Helper/responseHelper')
 const dtoHelper = require('../../Helper/dtoHelper')
 const likeDataProvider = require('../../Persistance/mySql/DataProvider/likeDataProvider')
@@ -11,7 +12,6 @@ const likePin = async(pinID, likeInfo)=>{
     //     pinID,
     //     senderID,
     //     receiverID,
-    //     * senderUsername new prop
     // }
     try {
         // TODO validation for likeInfo needed

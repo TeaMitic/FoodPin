@@ -51,17 +51,11 @@ const followAsync = async (followInfo) => {
         let result = await followDataProvider.follow(fMSG)
 
         
-        // if(!rabbit.send(msg, followedUser.userID)){
-        //     return dtoHelper.createResObject(
-        //         resHelper.NotificationError(followedUser.userID), false
-        //     )
-        // }
+
         return dtoHelper.createResObject({},true)
 
 
-        //fje getUserByID - provera
-        //sklopi json message za notif
-        //pozovi rabbit send
+
         
     } catch (error) {
         throw error

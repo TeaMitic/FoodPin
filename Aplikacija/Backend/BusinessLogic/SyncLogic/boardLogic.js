@@ -74,7 +74,6 @@ const getByName = async (boardInfo) => {
                 false
             )
         } 
-        console.log("BOARD:",board)
         return dtoHelper.createResObject(board,true)
     } catch (error) {
         throw error

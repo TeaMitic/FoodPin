@@ -1,6 +1,6 @@
 <template >
 <!-- , params: {username: this.username, name: board.name} } -->
-    <div class="card border-0 link"   @click="chosenBoard" >
+    <div v-if="board.public " class="card border-0 link"   @click="chosenBoard" >
         <div class="card-body d-flex ">
             <div class="card-body-left">
                 <img class= "pin-image image-bigger" :src="this.images[0]" >
@@ -27,7 +27,8 @@ export default {
         board: { 
             required: true,
             type: Object
-        }
+        },
+        
     },
     data() {
         return {

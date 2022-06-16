@@ -80,10 +80,7 @@ const copyImage = async(imgFilePath, pinCopyID) => {
             pinID: pinCopyID,
             type: 'Pin'
         }
-        //! found bug 
-        /*posto addImage prihvata fajl objekat 
-          taj fajl ima atribute basename i ext a ne imgName i imgExt
-          lose prepisivanje */
+
         let imgObj = { 
             basename: pinCopyID,
             ext: 'jpg',
